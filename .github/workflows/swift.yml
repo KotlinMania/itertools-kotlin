@@ -36,13 +36,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6.1.0
 
-      # The canonical apply.sh template adds a `maxim-lobanov/setup-xcode@v1`
-      # step pinning Xcode 26.4.1 to guard against image-default drift. This
-      # org's enterprise GitHub Actions policy does not whitelist third-party
-      # actions, and dispatches that include this step fail at startup with
-      # zero jobs spawned. The macos-26 image's default Xcode is in the 26.x
-      # line and satisfies the Kotlin/Native 2.3.x platform-cache SDK symbol
-      # requirements described above, so the explicit pin is omitted here.
+      # NOTE: do not add a `maxim-lobanov/setup-xcode` step here. KotlinMania's
+      # enterprise GitHub Actions policy does not whitelist third-party actions;
+      # such workflows return startup_failure with zero jobs spawned. The macos-26
+      # image's default Xcode is already in the 26.x line and supplies the macOS
+      # 26 SDK symbols the Kotlin/Native 2.3.x platform caches expect.
       - name: Print Swift / Xcode versions
         run: |
           swift --version
