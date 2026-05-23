@@ -216,7 +216,11 @@ kotlin {
         }
     }
     iosX64 {
-        binaries.framework { baseName = "Itertools"; xcf.add(this) }
+        binaries.framework {
+            baseName = "Itertools"
+            isStatic = true
+            xcf.add(this)
+        }
     }
 
     tvosArm64 {
