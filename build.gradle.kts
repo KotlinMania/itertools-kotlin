@@ -217,7 +217,16 @@ kotlin {
         }
     }
     iosX64 {
-        binaries.framework { baseName = "Itertools"; xcf.add(this) }
+        binaries.framework {
+            baseName = "Itertools"
+            // Match iosSimulatorArm64's static linkage so the iOS Simulator
+            // fat framework can combine the two slices. Swift Export flipped
+            // iosSimulatorArm64 to static; leaving iosX64 dynamic makes
+            // assembleDebug/ReleaseIosSimulatorFatFrameworkForItertoolsXCFramework
+            // fail with "All input frameworks must be either static or dynamic".
+            isStatic = true
+            xcf.add(this)
+        }
     }
 
     tvosArm64 {
