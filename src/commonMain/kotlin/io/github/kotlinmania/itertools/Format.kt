@@ -2,6 +2,19 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * Public, non-generic carrier returned by [newFormat] and [newFormatDefault].
+ *
+ * Swift Export's Kotlin->Swift bridge cannot safely round-trip a generic
+ * iterator/wrapper through `Any?`, so the generic [Format] and [FormatWith]
+ * implementations stay `internal` and are exposed through this non-generic
+ * façade. Callers stringify it with `toString()` exactly once; the
+ * once-only contract is preserved on the underlying implementation.
+ */
+public class Formatted internal constructor(private val producer: () -> String) {
+    override fun toString(): String = producer()
+}
+
+/**
  * Format all iterator elements lazily, separated by `sep`.
  *
  * The format value can only be formatted once, after that the iterator is
@@ -9,7 +22,7 @@ package io.github.kotlinmania.itertools
  *
  * See `Itertools.formatWith` for more information.
  */
-public class FormatWith<T> internal constructor(
+internal class FormatWith<T> internal constructor(
     private val sep: String,
     iter: Iterator<T>,
     f: (T, (Any?) -> Unit) -> Unit,
@@ -46,7 +59,7 @@ public class FormatWith<T> internal constructor(
  *
  * See `Itertools.format` for more information.
  */
-public class Format<T> internal constructor(
+internal class Format<T> internal constructor(
     private val sep: String,
     iter: Iterator<T>,
 ) {
@@ -75,7 +88,7 @@ public class Format<T> internal constructor(
 }
 
 /**
- * Construct a [FormatWith] that lazily renders the iterator using the supplied
+ * Construct a lazy renderer that walks the iterator using the supplied
  * formatter callback when its `toString` is invoked.
  *
  * The callback receives each item plus an emit function that writes its
@@ -86,13 +99,19 @@ public fun <T> newFormat(
     iter: Iterator<T>,
     separator: String,
     f: (T, (Any?) -> Unit) -> Unit,
-): FormatWith<T> = FormatWith(separator, iter, f)
+): Formatted {
+    val impl = FormatWith(separator, iter, f)
+    return Formatted { impl.toString() }
+}
 
 /**
- * Construct a [Format] that lazily renders the iterator using each item's
- * `toString` when its `toString` is invoked.
+ * Construct a lazy renderer that walks the iterator and stringifies each item
+ * via its own `toString` when its `toString` is invoked.
  */
 public fun <T> newFormatDefault(
     iter: Iterator<T>,
     separator: String,
-): Format<T> = Format(separator, iter)
+): Formatted {
+    val impl = Format(separator, iter)
+    return Formatted { impl.toString() }
+}
