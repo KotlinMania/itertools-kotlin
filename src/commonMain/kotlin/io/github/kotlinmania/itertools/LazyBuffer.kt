@@ -10,7 +10,7 @@ package io.github.kotlinmania.itertools
  * Used by the combinations/permutations adaptors that need stable, indexed
  * access to a prefix of an otherwise once-passable iterator.
  */
-class LazyBuffer<T> internal constructor(
+internal class LazyBuffer<T>(
     private val it: Iterator<T>,
     private val sourceHint: SizeHint,
 ) {

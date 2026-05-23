@@ -6,7 +6,7 @@ package io.github.kotlinmania.itertools
  *
  * Iterator element type is the source iterator's element type.
  */
-class PutBackN<T> internal constructor(
+internal class PutBackN<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
 ) : Iterator<T> {
@@ -66,7 +66,7 @@ class PutBackN<T> internal constructor(
  *
  * Iterator element type is the source's element type.
  */
-fun <T> putBackN(iterable: Iterable<T>): PutBackN<T> =
+fun <T> putBackN(iterable: Iterable<T>): Iterator<T> =
     PutBackN(iterable.iterator(), sizeHintOfIterable(iterable))
 
 private fun sizeHintOfIterable(it: Iterable<*>): SizeHint = when (it) {

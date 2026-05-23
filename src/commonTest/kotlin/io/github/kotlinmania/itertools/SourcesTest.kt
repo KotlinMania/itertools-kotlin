@@ -25,9 +25,13 @@ class SourcesTest {
         assertTrue(iter.hasNext())
     }
 
+    // The .state and .sizeHint() accessors live on the internal Iterate class;
+    // the public iterate(...) factory returns Iterator<St>. Construct the
+    // internal class directly to exercise those.
+
     @Test
     fun iterateAdvancesStateOneAhead() {
-        val iter = iterate(25) { x -> x - 10 }
+        val iter = Iterate(25) { x -> x - 10 }
         assertEquals(25, iter.next())
         assertEquals(15, iter.state)
         assertEquals(15, iter.next())
@@ -38,7 +42,7 @@ class SourcesTest {
 
     @Test
     fun iterateSizeHintIsMaxAndUnbounded() {
-        val iter = iterate(0) { x -> x + 1 }
+        val iter = Iterate(0) { x -> x + 1 }
         val sh = iter.sizeHint()
         assertEquals(Int.MAX_VALUE, sh.first)
         assertEquals(null, sh.second)

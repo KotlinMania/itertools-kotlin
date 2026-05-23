@@ -38,9 +38,12 @@ class WithPositionTest {
         )
     }
 
+    // sizeHint / fold live on the internal WithPosition class; construct directly.
+
     @Test
     fun sizeHintMirrorsRemaining() {
-        val it = withPosition(listOf(1, 2, 3))
+        val src = listOf(1, 2, 3)
+        val it = WithPosition(src.iterator(), src.size to src.size)
         assertEquals(3 to 3, it.sizeHint())
         it.next()
         assertEquals(2 to 2, it.sizeHint())
@@ -53,7 +56,8 @@ class WithPositionTest {
 
     @Test
     fun foldVisitsEveryPositionOnce() {
-        val it = withPosition(listOf("x", "y", "z"))
+        val src = listOf("x", "y", "z")
+        val it = WithPosition(src.iterator(), src.size to src.size)
         val collected = it.fold(mutableListOf<Pair<Position, String>>()) { acc, p ->
             acc.add(p); acc
         }

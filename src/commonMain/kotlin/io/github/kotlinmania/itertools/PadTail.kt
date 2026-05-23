@@ -9,7 +9,7 @@ package io.github.kotlinmania.itertools
  *
  * See [padUsing] for more information.
  */
-class PadUsing<T> internal constructor(
+internal class PadUsing<T>(
     private val iter: Iterator<T>,
     private var min: Int,
     private val sourceHint: SizeHint,
@@ -71,7 +71,7 @@ class PadUsing<T> internal constructor(
  * // padded == [1, 2, 20, 30, 40]
  * ```
  */
-fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): PadUsing<T> =
+fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
     PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
 
 private fun padTailIterableHint(it: Iterable<*>): SizeHint = when (it) {
