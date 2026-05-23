@@ -1,0 +1,60 @@
+// port-lint: source src/take_while_inclusive.rs
+package io.github.kotlinmania.itertools
+
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+
+class TakeWhileInclusiveTest {
+    @Test
+    fun includesStoppingElement() {
+        val out = takeWhileInclusive(listOf(1, 2, 3, 4, 5)) { it < 3 }
+            .asSequence().toList()
+        assertEquals(listOf(1, 2, 3), out)
+    }
+
+    @Test
+    fun stopsAfterFirstFalse() {
+        val out = takeWhileInclusive(listOf(10, 20, 30, 40)) { it < 1 }
+            .asSequence().toList()
+        assertEquals(listOf(10), out)
+    }
+
+    @Test
+    fun fullySatisfiedRunsToEnd() {
+        val out = takeWhileInclusive(listOf(1, 2, 3)) { true }
+            .asSequence().toList()
+        assertEquals(listOf(1, 2, 3), out)
+    }
+
+    @Test
+    fun emptySource() {
+        val it = takeWhileInclusive(emptyList<Int>()) { true }
+        assertFalse(it.hasNext())
+    }
+
+    @Test
+    fun sizeHintShrinksToZeroOnceDone() {
+        val it = takeWhileInclusive(listOf(1, 2, 3, 4)) { it < 2 }
+        assertEquals(0, it.sizeHint().first)
+        assertEquals(4, it.sizeHint().second)
+        assertEquals(1, it.next())
+        assertEquals(2, it.next())
+        assertFalse(it.hasNext())
+        assertEquals(0 to 0, it.sizeHint())
+    }
+
+    @Test
+    fun foldRespectsInclusiveStop() {
+        val it = takeWhileInclusive(listOf(1, 2, 3, 4, 5)) { it < 3 }
+        val total = it.fold(0) { acc, x -> acc + x }
+        assertEquals(6, total)
+    }
+
+    @Test
+    fun nullableElementsRoundTrip() {
+        val out = takeWhileInclusive(listOf<Int?>(1, null, 3, 4)) { it != null }
+            .asSequence().toList()
+        assertEquals(listOf<Int?>(1, null), out)
+    }
+}
