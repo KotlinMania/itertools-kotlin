@@ -60,7 +60,7 @@ except according to those terms.
 
 ```kotlin
 dependencies {
-    implementation("io.github.kotlinmania:itertools-kotlin:0.1.0")
+    implementation("io.github.kotlinmania:itertools-kotlin:0.1.1")
 }
 ```
 
