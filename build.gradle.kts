@@ -209,7 +209,11 @@ kotlin {
         binaries.framework { baseName = "Itertools"; xcf.add(this) }
     }
     iosSimulatorArm64 {
-        binaries.framework { baseName = "Itertools"; xcf.add(this) }
+        binaries.framework {
+            baseName = "Itertools"
+            isStatic = true
+            xcf.add(this)
+        }
     }
     iosX64 {
         binaries.framework { baseName = "Itertools"; xcf.add(this) }
