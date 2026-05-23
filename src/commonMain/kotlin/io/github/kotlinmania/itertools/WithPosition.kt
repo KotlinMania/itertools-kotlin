@@ -8,7 +8,7 @@ package io.github.kotlinmania.itertools
  *
  * See [withPosition] for more information.
  */
-class WithPosition<T> internal constructor(
+internal class WithPosition<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
 ) : Iterator<Pair<Position, T>> {
@@ -111,7 +111,7 @@ enum class Position {
  * // tagged == [(First, "a"), (Middle, "b"), (Last, "c")]
  * ```
  */
-fun <T> withPosition(iterable: Iterable<T>): WithPosition<T> =
+fun <T> withPosition(iterable: Iterable<T>): Iterator<Pair<Position, T>> =
     WithPosition(iterable.iterator(), iterableSizeHint(iterable))
 
 private fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {

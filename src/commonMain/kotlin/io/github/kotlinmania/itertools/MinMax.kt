@@ -6,18 +6,18 @@ package io.github.kotlinmania.itertools
  *
  * See [Itertools.minmax] for more detail.
  */
-sealed class MinMaxResult<out T> {
+internal sealed class MinMaxResult<out T> {
     /** Empty iterator. */
-    object NoElements : MinMaxResult<Nothing>()
+    internal object NoElements : MinMaxResult<Nothing>()
 
     /** Iterator with one element, so the minimum and maximum are the same. */
-    data class OneElement<T>(val value: T) : MinMaxResult<T>()
+    internal data class OneElement<T>(val value: T) : MinMaxResult<T>()
 
     /**
      * More than one element in the iterator, the first element is not larger
      * than the second.
      */
-    data class MinMax<T>(val min: T, val max: T) : MinMaxResult<T>()
+    internal data class MinMax<T>(val min: T, val max: T) : MinMaxResult<T>()
 
     /**
      * `toOption` creates a nullable `Pair<T, T>`. The returned value is `null`
@@ -46,7 +46,7 @@ sealed class MinMaxResult<out T> {
 }
 
 /** Implementation guts for `minmax` and `minmaxBy`. */
-fun <I, K> minmaxImpl(
+internal fun <I, K> minmaxImpl(
     it: Iterator<I>,
     keyFor: (I) -> K,
     lt: (I, I, K, K) -> Boolean,

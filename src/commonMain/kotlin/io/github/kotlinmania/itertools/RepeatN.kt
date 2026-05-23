@@ -6,7 +6,7 @@ package io.github.kotlinmania.itertools
  *
  * See [repeatN] for more information.
  */
-class RepeatN<A> internal constructor(
+internal class RepeatN<A>(
     internal var elt: A?,
     private var n: Int,
 ) : Iterator<A> {
@@ -55,5 +55,5 @@ class RepeatN<A> internal constructor(
 }
 
 /** Create an iterator that produces `n` repetitions of `element`. */
-fun <A> repeatN(element: A, n: Int): RepeatN<A> =
+fun <A> repeatN(element: A, n: Int): Iterator<A> =
     if (n == 0) RepeatN(elt = null, n = 0) else RepeatN(elt = element, n = n)

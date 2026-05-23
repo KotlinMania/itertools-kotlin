@@ -33,9 +33,13 @@ class TakeWhileInclusiveTest {
         assertFalse(it.hasNext())
     }
 
+    // sizeHint / fold are on the internal TakeWhileInclusive class, not on the
+    // public Iterator<T> returned by takeWhileInclusive(...). Construct directly.
+
     @Test
     fun sizeHintShrinksToZeroOnceDone() {
-        val it = takeWhileInclusive(listOf(1, 2, 3, 4)) { it < 2 }
+        val src = listOf(1, 2, 3, 4)
+        val it = TakeWhileInclusive(src.iterator(), { it < 2 }, src.size to src.size)
         assertEquals(0, it.sizeHint().first)
         assertEquals(4, it.sizeHint().second)
         assertEquals(1, it.next())
@@ -46,7 +50,8 @@ class TakeWhileInclusiveTest {
 
     @Test
     fun foldRespectsInclusiveStop() {
-        val it = takeWhileInclusive(listOf(1, 2, 3, 4, 5)) { it < 3 }
+        val src = listOf(1, 2, 3, 4, 5)
+        val it = TakeWhileInclusive(src.iterator(), { it < 3 }, src.size to src.size)
         val total = it.fold(0) { acc, x -> acc + x }
         assertEquals(6, total)
     }

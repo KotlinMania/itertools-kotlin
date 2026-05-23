@@ -7,9 +7,13 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PutBackNImplTest {
+    // The public factory putBackN(...) returns Iterator<T>; tests that exercise
+    // putBack / sizeHint / fold construct the internal PutBackN class directly
+    // (visible from commonTest because it's in the same module).
+
     @Test
     fun putBackNDocExample() {
-        val it = putBackN(listOf(1, 2, 3, 4))
+        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), 4 to 4)
         it.next()
         it.putBack(1)
         it.putBack(0)
@@ -18,13 +22,13 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNDrainsWithoutPutBack() {
-        val it = putBackN(listOf("a", "b", "c"))
-        assertEquals(listOf("a", "b", "c"), it.asSequence().toList())
+        val out = putBackN(listOf("a", "b", "c")).asSequence().toList()
+        assertEquals(listOf("a", "b", "c"), out)
     }
 
     @Test
     fun putBackNMostRecentComesFirst() {
-        val it = putBackN(emptyList<Int>())
+        val it = PutBackN(emptyList<Int>().iterator(), 0 to 0)
         it.putBack(10)
         it.putBack(20)
         it.putBack(30)
@@ -36,7 +40,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNSizeHintReflectsStackAndSource() {
-        val it = putBackN(listOf(1, 2, 3, 4))
+        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), 4 to 4)
         assertEquals(4 to 4, it.sizeHint())
         it.next()
         assertEquals(3 to 3, it.sizeHint())
@@ -48,7 +52,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNFoldYieldsStackThenSource() {
-        val it = putBackN(listOf(2, 3, 4))
+        val it = PutBackN(listOf(2, 3, 4).iterator(), 3 to 3)
         it.next()
         it.putBack(1)
         it.putBack(0)
@@ -60,7 +64,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNHasNextHandlesEmpty() {
-        val it = putBackN(emptyList<Int>())
+        val it = PutBackN(emptyList<Int>().iterator(), 0 to 0)
         assertFalse(it.hasNext())
         it.putBack(7)
         assertTrue(it.hasNext())

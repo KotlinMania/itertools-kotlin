@@ -12,7 +12,7 @@ package io.github.kotlinmania.itertools
  * Very similar to [PutBackN] except this iterator only supports 0-2
  * pre-buffered elements and does not use a backing list.
  */
-class ExactlyOneError<T> internal constructor(
+internal class ExactlyOneError<T>(
     firstTwo: FirstTwo<T>?,
     private val inner: Iterator<T>,
     private val innerHint: SizeHint,
@@ -26,9 +26,9 @@ class ExactlyOneError<T> internal constructor(
      * before discovering the error. Modelled as a sealed type, mirroring the
      * upstream `Either<[T; 2], T>`.
      */
-    sealed class FirstTwo<out T> {
-        class Both<T>(val first: T, val second: T) : FirstTwo<T>()
-        class JustSecond<T>(val second: T) : FirstTwo<T>()
+    internal sealed class FirstTwo<out T> {
+        internal class Both<T>(val first: T, val second: T) : FirstTwo<T>()
+        internal class JustSecond<T>(val second: T) : FirstTwo<T>()
     }
 
     private fun additionalLen(): Int = when (firstTwo) {

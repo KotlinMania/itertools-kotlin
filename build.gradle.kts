@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootEnvSpec
 import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootEnvSpec
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     kotlin("multiplatform") version "2.3.21"
@@ -310,24 +309,6 @@ kotlin {
     jvmToolchain(21)
 }
 
-// SWIFT_EXPORT_ROLLOUT.md gap #8: the Kotlin Multiplatform Swift Export
-// plugin generates a per-target bridge file at
-// `build/SwiftExport/<target>/<config>/files/<Module>/<Module>.kt` whose
-// body contains unchecked casts of `Any?` to public generic types
-// (`ZipEq<Any?, Any?>`, `WithPosition<Any?>`, `Unfold<Any?, Any?>`, ...).
-// Under the workspace-canonical `allWarningsAsErrors.set(true)` those
-// warnings become errors and `compileSwiftExportMainKotlin<Target>` fails.
-//
-// Workspace-canonical workaround: scope the relaxation to the
-// `compileSwiftExportMain*` task family only, so user code on every other
-// compile path stays under the strict gate but the plugin-generated bridge
-// gets a pass. Same idiom ember-ml-kotlin uses for the KotlinMetadata
-// duplicate-name warning.
-tasks.matching { it.name.startsWith("compileSwiftExportMain") }
-    .withType<KotlinCompilationTask<*>>()
-    .configureEach {
-        compilerOptions.allWarningsAsErrors.set(false)
-    }
 
 tasks.withType<AbstractTestTask>().configureEach {
     testLogging {

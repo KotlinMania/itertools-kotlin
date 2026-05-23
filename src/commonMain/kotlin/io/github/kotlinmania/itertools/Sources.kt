@@ -14,7 +14,7 @@ package io.github.kotlinmania.itertools
  * surfaced as a [StateRef] whose [value] the closure assigns when it advances
  * the iteration.
  */
-class StateRef<St>(var value: St)
+internal class StateRef<St>(var value: St)
 
 /**
  * Creates a new unfold source with the specified closure as the "iterator
@@ -40,7 +40,7 @@ class StateRef<St>(var value: St)
  * ```
  */
 @Deprecated("Use kotlin.sequences.generateSequence(seed) { f(it) } instead.")
-fun <A, St> unfold(initialState: St, f: (StateRef<St>) -> A?): Unfold<St, A> =
+internal fun <A, St> unfold(initialState: St, f: (StateRef<St>) -> A?): Unfold<St, A> =
     Unfold(f, initialState)
 
 /**
@@ -49,7 +49,7 @@ fun <A, St> unfold(initialState: St, f: (StateRef<St>) -> A?): Unfold<St, A> =
  * The `unfold` builder is deprecated upstream; instances are normally obtained
  * only by calling [unfold], so the deprecation lives on that builder.
  */
-class Unfold<St, A> internal constructor(
+internal class Unfold<St, A>(
     private val f: (StateRef<St>) -> A?,
     initialState: St,
 ) : Iterator<A> {
@@ -95,7 +95,7 @@ class Unfold<St, A> internal constructor(
  * This `class` is created by the [iterate] function.
  * See its documentation for more.
  */
-class Iterate<St> internal constructor(
+internal class Iterate<St>(
     initialState: St,
     private val f: (St) -> St,
 ) : Iterator<St> {
@@ -135,5 +135,5 @@ class Iterate<St> internal constructor(
  * You can alternatively use [kotlin.sequences.generateSequence] as it better
  * describes a finite iterator.
  */
-fun <St> iterate(initialValue: St, f: (St) -> St): Iterate<St> =
+fun <St> iterate(initialValue: St, f: (St) -> St): Iterator<St> =
     Iterate(initialValue, f)

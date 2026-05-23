@@ -46,9 +46,13 @@ class ZipEqImplTest {
 
     @Test
     fun zipEqSizeHintMatchesRemaining() {
+        // sizeHint is on the internal ZipEq class, not on the public Iterator<Pair<A, B>>
+        // returned by zipEq(...). Use the internal constructor directly for the size-hint
+        // round-trip assertions; the user-facing iteration shape is covered by the other
+        // tests above against the public factory.
         val a = listOf(1, 2, 3, 4)
         val b = listOf("a", "b", "c", "d")
-        val it = zipEq(a, b)
+        val it = ZipEq(a.iterator(), b.iterator(), a.size to a.size, b.size to b.size)
         assertEquals(4 to 4, it.sizeHint())
         it.next()
         assertEquals(3 to 3, it.sizeHint())

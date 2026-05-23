@@ -7,7 +7,7 @@ package io.github.kotlinmania.itertools
  *
  * See [zipEq] for more information.
  */
-class ZipEq<A, B> internal constructor(
+internal class ZipEq<A, B>(
     private val a: Iterator<A>,
     private val b: Iterator<B>,
     private val aHint: SizeHint,
@@ -67,7 +67,7 @@ class ZipEq<A, B> internal constructor(
  * }
  * ```
  */
-fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): ZipEq<A, B> =
+fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Pair<A, B>> =
     ZipEq(i.iterator(), j.iterator(), sizeHintOf(i), sizeHintOf(j))
 
 private fun sizeHintOf(it: Iterable<*>): SizeHint = when (it) {
