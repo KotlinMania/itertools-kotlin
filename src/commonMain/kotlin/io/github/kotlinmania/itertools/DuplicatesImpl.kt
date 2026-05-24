@@ -1,5 +1,9 @@
 // port-lint: source src/duplicates_impl.rs
+@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
+
 package io.github.kotlinmania.itertools
+
+import kotlin.native.HiddenFromObjC
 
 /**
  * Holds a key together with the value it was derived from, and yields one or
@@ -96,7 +100,12 @@ internal class Meta<K, V>(
  * An iterator adapter to filter for duplicate elements.
  *
  * See `Itertools.duplicatesBy` for more information.
+ *
+ * Hidden from the Swift Export bridge: the plugin would otherwise erase `T`
+ * and `K` to `Any?` and emit unchecked casts inside the generated bridge
+ * file. The Kotlin surface stays strongly typed.
  */
+@HiddenFromObjC
 class DuplicatesBy<T, K> internal constructor(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,

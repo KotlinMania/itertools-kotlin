@@ -1,5 +1,9 @@
 // port-lint: source src/intersperse.rs
+@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
+
 package io.github.kotlinmania.itertools
+
+import kotlin.native.HiddenFromObjC
 
 /**
  * Strategy that supplies the value to insert between adapted iterator
@@ -8,7 +12,14 @@ package io.github.kotlinmania.itertools
  * Declared as a `fun interface` so Kotlin lambdas convert to it directly; this
  * also keeps the public surface compatible with the Swift Export gap #8b
  * recipe for `() -> T` function types in public APIs.
+ *
+ * Hidden from the Swift Export bridge: a `fun interface` SAM dodges the
+ * Kotlin-function-type variant of gap #8, but the SAM's own `<T>` parameter
+ * still triggers the generic-class variant. Hiding the type from the bridge
+ * keeps the Kotlin surface strongly typed while avoiding the unchecked-cast
+ * warnings the plugin emits when it erases `T` to `Any?`.
  */
+@HiddenFromObjC
 public fun interface IntersperseElement<T> {
     public fun generate(): T
 }
