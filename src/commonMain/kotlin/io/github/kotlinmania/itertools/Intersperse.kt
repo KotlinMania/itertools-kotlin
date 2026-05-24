@@ -7,17 +7,17 @@ import kotlin.native.HiddenFromObjC
 
 /**
  * Strategy that supplies the value to insert between adapted iterator
- * elements. Translated from the upstream `IntersperseElement<Item>` trait.
+ * elements.
  *
  * Declared as a `fun interface` so Kotlin lambdas convert to it directly; this
- * also keeps the public surface compatible with the Swift Export gap #8b
- * recipe for `() -> T` function types in public APIs.
+ * also keeps the public surface compatible with the Swift Export function-type
+ * gap recipe.
  *
- * Hidden from the Swift Export bridge: a `fun interface` SAM dodges the
- * Kotlin-function-type variant of gap #8, but the SAM's own `<T>` parameter
- * still triggers the generic-class variant. Hiding the type from the bridge
- * keeps the Kotlin surface strongly typed while avoiding the unchecked-cast
- * warnings the plugin emits when it erases `T` to `Any?`.
+ * Hidden from the Swift Export bridge: a SAM interface avoids exposing a
+ * Kotlin function type directly, but the SAM's own generic parameter still
+ * triggers the generic-class bridge gap. Hiding the type keeps the Kotlin
+ * surface strongly typed while avoiding bridge casts when the plugin erases
+ * the element type.
  */
 @HiddenFromObjC
 public fun interface IntersperseElement<T> {
@@ -28,10 +28,9 @@ public fun interface IntersperseElement<T> {
  * Strategy that yields the same supplied value between every pair of source
  * elements.
  *
- * The upstream Rust type bounds this constructor to `Item: Clone` and clones
- * the stored value on every call. In Kotlin there is no general `Clone`
- * mechanism; for immutable element types (primitives, [String], data classes
- * treated as values) returning the stored reference is equivalent.
+ * The upstream type clones the stored separator on every call. Kotlin has no
+ * general clone mechanism; for immutable element types, returning the stored
+ * reference is equivalent.
  */
 internal class IntersperseElementSimple<T>(private val item: T) : IntersperseElement<T> {
     override fun generate(): T = item
@@ -43,7 +42,7 @@ internal class IntersperseElementSimple<T>(private val item: T) : IntersperseEle
  *
  * Iterator element type is the source iterator's element type.
  *
- * This iterator is *fused*.
+ * This iterator is fused.
  *
  * See [intersperse] for more information.
  */
@@ -62,23 +61,18 @@ public fun <T> intersperse(iterable: Iterable<T>, elt: T): Iterator<T> =
  *
  * Iterator element type is the source iterator's element type.
  *
- * This iterator is *fused*.
+ * This iterator is fused.
  *
  * See [intersperseWith] for more information.
  *
- * Upstream marks this `#[must_use = "iterator adaptors are lazy and do nothing
- * unless consumed"]`; Kotlin has no equivalent attribute, so callers carry the
- * same responsibility.
+ * Upstream marks this adaptor as lazy; Kotlin callers carry the same
+ * responsibility to consume it.
  */
 internal class IntersperseWith<T>(
     private val element: IntersperseElement<T>,
     private val iter: Iterator<T>,
     private val initialSourceHint: SizeHint = 0 to null,
 ) : Iterator<T> {
-    // Three-state machine mirroring upstream's `Option<Option<I::Item>>`:
-    //   `peek == null`               — no item has been taken out of `iter` yet
-    //   `peek == Empty`              — the last emit was a source item; next is a separator
-    //   `peek == Filled(item)`       — a source item is buffered for the next emit
     private sealed class Slot<out T> {
         data object Empty : Slot<Nothing>()
         class Filled<T>(val value: T) : Slot<T>()
@@ -130,7 +124,7 @@ internal class IntersperseWith<T>(
         return ready.value
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Equivalent to upstream iterator size hint calculation. */
     public fun sizeHint(): SizeHint {
         val sh = subScalar(initialSourceHint, consumed)
         val doubled = add(sh, sh)
@@ -143,7 +137,7 @@ internal class IntersperseWith<T>(
 
     /**
      * Consumes the adaptor with a left fold, mirroring upstream's specialized
-     * `Iterator::fold` impl.
+     * fold implementation.
      */
     public fun <B> fold(initial: B, operation: (B, T) -> B): B {
         var accum = initial
