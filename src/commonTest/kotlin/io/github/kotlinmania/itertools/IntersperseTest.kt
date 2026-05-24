@@ -9,8 +9,30 @@ import kotlin.test.assertTrue
 
 class IntersperseTest {
     @Test
+    fun intersperseBasic() {
+        val xs = listOf(1, 2, 3)
+        val ys = listOf(1, 0, 2, 0, 3)
+        assertEquals(ys, intersperse(xs, 0).asSequence().toList())
+    }
+
+    @Test
+    fun intersperseWithLambda() {
+        val xs = listOf(1, 2, 3)
+        val ys = listOf(1, 10, 2, 10, 3)
+        val i = 10
+        assertEquals(ys, intersperseWith(xs) { i }.asSequence().toList())
+    }
+
+    @Test
     fun emptySourceYieldsNothing() {
         val it = intersperse(emptyList<Int>().iterator(), 0)
+        assertFalse(it.hasNext())
+        assertFailsWith<NoSuchElementException> { it.next() }
+    }
+
+    @Test
+    fun iterableEmptySourceYieldsNothing() {
+        val it = intersperse(emptyList<Int>(), 99)
         assertFalse(it.hasNext())
         assertFailsWith<NoSuchElementException> { it.next() }
     }
@@ -25,6 +47,12 @@ class IntersperseTest {
     fun separatorBetweenEveryPair() {
         val out = intersperse(listOf(1, 2, 3, 4).iterator(), 0).asSequence().toList()
         assertEquals(listOf(1, 0, 2, 0, 3, 0, 4), out)
+    }
+
+    @Test
+    fun twoElementsHaveNoTrailingSeparator() {
+        val out = intersperse(listOf("a", "b"), "-").asSequence().toList()
+        assertEquals(listOf("a", "-", "b"), out)
     }
 
     @Test
@@ -61,7 +89,8 @@ class IntersperseTest {
     fun foldVisitsEveryEmittedElement() {
         val it = IntersperseWith(IntersperseElementSimple(0), listOf(1, 2, 3).iterator())
         val collected = it.fold(mutableListOf<Int>()) { acc, x ->
-            acc.add(x); acc
+            acc.add(x)
+            acc
         }
         assertEquals(listOf(1, 0, 2, 0, 3), collected)
     }
@@ -70,13 +99,17 @@ class IntersperseTest {
     fun sizeHintDoublesAndCarriesPeekState() {
         val src = listOf(1, 2, 3)
         val it = IntersperseWith(IntersperseElementSimple(0), src.iterator(), src.size to src.size)
-        // Before any next(), peek is null → subScalar(double, 1).
         assertEquals(5 to 5, it.sizeHint())
         assertEquals(1, it.next())
-        // Now peek holds a buffered source item → addScalar(double, 1).
         assertEquals(4 to 4, it.sizeHint())
         assertEquals(0, it.next())
-        // peek went back to Empty after consuming the buffered source item.
         assertEquals(3 to 3, it.sizeHint())
+    }
+
+    @Test
+    fun nonCollectionSourceHasUnknownHint() {
+        val it = IntersperseWith(IntersperseElementSimple(0), sequenceOf(1, 2, 3).iterator())
+        assertEquals(0 to null, it.sizeHint())
+        assertEquals(listOf(1, 0, 2, 0, 3), it.asSequence().toList())
     }
 }
