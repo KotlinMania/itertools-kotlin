@@ -1,23 +1,40 @@
 // port-lint: source src/intersperse.rs
+@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
+
 package io.github.kotlinmania.itertools
 
+import kotlin.native.HiddenFromObjC
+
 /**
- * Strategy used by [IntersperseWith] to materialize the separator value placed
- * between adjacent source elements.
+ * Strategy that supplies the value to insert between adapted iterator
+ * elements. Translated from the upstream `IntersperseElement<Item>` trait.
+ *
+ * Declared as a `fun interface` so Kotlin lambdas convert to it directly; this
+ * also keeps the public surface compatible with the Swift Export gap #8b
+ * recipe for `() -> T` function types in public APIs.
+ *
+ * Hidden from the Swift Export bridge: a `fun interface` SAM dodges the
+ * Kotlin-function-type variant of gap #8, but the SAM's own `<T>` parameter
+ * still triggers the generic-class variant. Hiding the type from the bridge
+ * keeps the Kotlin surface strongly typed while avoiding the unchecked-cast
+ * warnings the plugin emits when it erases `T` to `Any?`.
  */
-fun interface IntersperseElement<T> {
-    fun generate(): T
+@HiddenFromObjC
+public fun interface IntersperseElement<T> {
+    public fun generate(): T
 }
 
 /**
- * Cloning separator strategy: yields the held value on every call. The
- * upstream Rust `IntersperseElementSimple<Item: Clone>` clones the seed each
- * time; in Kotlin the value is shared by reference, matching the behavior for
- * immutable element types (which is the only kind upstream `Clone` callers
- * meaningfully use).
+ * Strategy that yields the same supplied value between every pair of source
+ * elements.
+ *
+ * The upstream Rust type bounds this constructor to `Item: Clone` and clones
+ * the stored value on every call. In Kotlin there is no general `Clone`
+ * mechanism; for immutable element types (primitives, [String], data classes
+ * treated as values) returning the stored reference is equivalent.
  */
-class IntersperseElementSimple<T>(private val value: T) : IntersperseElement<T> {
-    override fun generate(): T = value
+internal class IntersperseElementSimple<T>(private val item: T) : IntersperseElement<T> {
+    override fun generate(): T = item
 }
 
 /**
@@ -28,18 +45,16 @@ class IntersperseElementSimple<T>(private val value: T) : IntersperseElement<T> 
  *
  * This iterator is *fused*.
  *
- * See `Itertools.intersperse` for more information.
+ * See [intersperse] for more information.
  */
-// Upstream defines `Intersperse<I>` as a type alias for
-// `IntersperseWith<I, IntersperseElementSimple<I::Item>>`. Kotlin expresses
-// the same shape with a typealias.
-typealias Intersperse<T> = IntersperseWith<T, IntersperseElementSimple<T>>
 
-/**
- * Create a new [Intersperse] iterator.
- */
-fun <T> intersperse(iter: Iterator<T>, elt: T): Intersperse<T> =
+/** Create a new Intersperse iterator. */
+public fun <T> intersperse(iter: Iterator<T>, elt: T): Iterator<T> =
     intersperseWith(iter, IntersperseElementSimple(elt))
+
+/** Convenience overload that derives a source size hint from [iterable]. */
+public fun <T> intersperse(iterable: Iterable<T>, elt: T): Iterator<T> =
+    intersperseWith(iterable, IntersperseElementSimple(elt))
 
 /**
  * An iterator adaptor to insert a particular value created by a function
@@ -49,113 +64,108 @@ fun <T> intersperse(iter: Iterator<T>, elt: T): Intersperse<T> =
  *
  * This iterator is *fused*.
  *
- * See `Itertools.intersperseWith` for more information.
+ * See [intersperseWith] for more information.
+ *
+ * Upstream marks this `#[must_use = "iterator adaptors are lazy and do nothing
+ * unless consumed"]`; Kotlin has no equivalent attribute, so callers carry the
+ * same responsibility.
  */
-class IntersperseWith<T, E : IntersperseElement<T>> internal constructor(
-    private val element: E,
+internal class IntersperseWith<T>(
+    private val element: IntersperseElement<T>,
     private val iter: Iterator<T>,
-    private val sourceHint: SizeHint,
+    private val initialSourceHint: SizeHint = 0 to null,
 ) : Iterator<T> {
-
-    // The upstream Rust crate models its lookahead state with an
-    // `Option<Option<I::Item>>`:
-    //  * `None`             — no element pulled yet (we have not started)
-    //  * `Some(None)`       — the previous yield was a source element; next is
-    //                         the separator slot
-    //  * `Some(Some(item))` — separator was just yielded; the buffered source
-    //                         element comes next
-    // Kotlin's `Iterator` has a separate `hasNext`/`next` pair, so we express
-    // the same machine with a one-slot `ArrayDeque` (the buffered source item)
-    // plus two flags. `started` distinguishes the initial state from the
-    // separator-slot state; `iterExhausted` records that the source has been
-    // drained.
-    private val buffered: ArrayDeque<T> = ArrayDeque()
-    private var started: Boolean = false
-    private var iterExhausted: Boolean = false
-    private var iterConsumed: Int = 0
-
-    override fun hasNext(): Boolean {
-        if (buffered.isNotEmpty()) return true
-        if (!started) return sourceHasNext()
-        // Separator slot: only yields a separator if the source has another
-        // value to follow it. A trailing separator is never emitted.
-        return sourceHasNext()
+    // Three-state machine mirroring upstream's `Option<Option<I::Item>>`:
+    //   `peek == null`               — no item has been taken out of `iter` yet
+    //   `peek == Empty`              — the last emit was a source item; next is a separator
+    //   `peek == Filled(item)`       — a source item is buffered for the next emit
+    private sealed class Slot<out T> {
+        data object Empty : Slot<Nothing>()
+        class Filled<T>(val value: T) : Slot<T>()
     }
+
+    private var peek: Slot<T>? = null
+    private var pending: Slot.Filled<T>? = null
+    private var consumed: Int = 0
+
+    private fun pullSource(): Slot<T> {
+        if (!iter.hasNext()) return Slot.Empty
+        consumed += 1
+        return Slot.Filled(iter.next())
+    }
+
+    private fun fillNext(): Slot.Filled<T>? {
+        val pre = pending
+        if (pre != null) return pre
+        val current = peek
+        val produced: Slot.Filled<T>? = when (current) {
+            is Slot.Filled -> {
+                peek = Slot.Empty
+                current
+            }
+            Slot.Empty -> when (val n = pullSource()) {
+                is Slot.Filled -> {
+                    peek = n
+                    Slot.Filled(element.generate())
+                }
+                Slot.Empty -> null
+            }
+            null -> {
+                peek = Slot.Empty
+                when (val n = pullSource()) {
+                    is Slot.Filled -> n
+                    Slot.Empty -> null
+                }
+            }
+        }
+        pending = produced
+        return produced
+    }
+
+    override fun hasNext(): Boolean = fillNext() != null
 
     override fun next(): T {
-        if (buffered.isNotEmpty()) {
-            return buffered.removeFirst()
-        }
-        if (!started) {
-            started = true
-            return pullSource()
-        }
-        // Separator slot: pull the next source element first so we know whether
-        // a separator is even warranted; on success buffer it for the next
-        // call.
-        if (!sourceHasNext()) {
-            throw NoSuchElementException()
-        }
-        val next = pullSource()
-        buffered.addLast(next)
-        return element.generate()
-    }
-
-    private fun sourceHasNext(): Boolean {
-        if (iterExhausted) return false
-        if (iter.hasNext()) return true
-        iterExhausted = true
-        return false
-    }
-
-    private fun pullSource(): T {
-        val v = iter.next()
-        iterConsumed += 1
-        return v
+        val ready = fillNext() ?: throw NoSuchElementException("IntersperseWith exhausted")
+        pending = null
+        return ready.value
     }
 
     /** Equivalent to upstream `Iterator::size_hint`. */
-    fun sizeHint(): SizeHint {
-        val sourceRemaining = subScalar(sourceHint, iterConsumed)
-        // Upstream forms `sh = iter.size_hint(); sh = add(sh, sh);` (i.e. 2x)
-        // then adjusts for the peek state.
-        var sh = add(sourceRemaining, sourceRemaining)
-        sh = when {
-            buffered.isNotEmpty() -> addScalar(sh, 1) // Filled: one extra yield queued
-            started -> sh                              // EmptySlot
-            else -> subScalar(sh, 1)                   // Unset: first yield is a source item, no leading separator
+    public fun sizeHint(): SizeHint {
+        val sh = subScalar(initialSourceHint, consumed)
+        val doubled = add(sh, sh)
+        return when (peek) {
+            is Slot.Filled -> addScalar(doubled, 1)
+            Slot.Empty -> doubled
+            null -> subScalar(doubled, 1)
         }
-        return sh
+    }
+
+    /**
+     * Consumes the adaptor with a left fold, mirroring upstream's specialized
+     * `Iterator::fold` impl.
+     */
+    public fun <B> fold(initial: B, operation: (B, T) -> B): B {
+        var accum = initial
+        if (hasNext()) {
+            accum = operation(accum, next())
+        }
+        while (hasNext()) {
+            accum = operation(accum, next())
+        }
+        return accum
     }
 }
 
-/**
- * Create a new [IntersperseWith] iterator.
- */
-fun <T, E : IntersperseElement<T>> intersperseWith(
-    iter: Iterator<T>,
-    elt: E,
-    sourceHint: SizeHint = 0 to null,
-): IntersperseWith<T, E> = IntersperseWith(elt, iter, sourceHint)
+/** Create a new `IntersperseWith` iterator. */
+public fun <T> intersperseWith(iter: Iterator<T>, elt: IntersperseElement<T>): Iterator<T> =
+    IntersperseWith(elt, iter)
 
-/**
- * Convenience overload that derives a size hint from [iterable] when possible.
- */
-fun <T> intersperse(iterable: Iterable<T>, elt: T): Intersperse<T> {
-    val hint = hintOfIterable(iterable)
-    return intersperseWith(iterable.iterator(), IntersperseElementSimple(elt), hint)
-}
+/** Convenience overload that derives a source size hint from [iterable]. */
+public fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
+    IntersperseWith(elt, iterable.iterator(), iterableSizeHint(iterable))
 
-/**
- * Convenience overload that derives a size hint from [iterable] and accepts a
- * lambda separator factory.
- */
-fun <T> intersperseWith(iterable: Iterable<T>, eltFn: () -> T): IntersperseWith<T, IntersperseElement<T>> {
-    val hint = hintOfIterable(iterable)
-    return intersperseWith(iterable.iterator(), IntersperseElement { eltFn() }, hint)
-}
-
-private fun hintOfIterable(it: Iterable<*>): SizeHint = when (it) {
+private fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {
     is Collection<*> -> it.size to it.size
     else -> 0 to null
 }
