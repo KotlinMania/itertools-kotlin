@@ -1,5 +1,9 @@
 // port-lint: source src/tee.rs
+@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
+
 package io.github.kotlinmania.itertools
+
+import kotlin.native.HiddenFromObjC
 
 /**
  * Common buffer object for the two tee halves.
@@ -28,7 +32,13 @@ internal class TeeBuffer<T>(
  * One half of an iterator pair where both return the same elements.
  *
  * See `Itertools.tee()` for more information.
+ *
+ * Hidden from the Swift Export bridge: the plugin would otherwise erase `T`
+ * to `Any?` and emit unchecked casts inside the generated bridge file. The
+ * Kotlin surface stays strongly typed; Swift consumers reach Tee handles
+ * through whatever public factory the consuming code chooses to expose.
  */
+@HiddenFromObjC
 class Tee<T> internal constructor(
     private val buffer: TeeBuffer<T>,
     private val id: Boolean,
