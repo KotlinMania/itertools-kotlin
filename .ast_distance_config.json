@@ -1,5 +1,6 @@
 {
   "type": "port",
+  "parity_mode": false,
   "name": "itertools-kotlin",
   "source": {
     "path": "tmp/itertools/src",
