@@ -61,18 +61,18 @@ class TeeTest {
         val xs = listOf(0, 1, 2, 3, 4)
         val (t1, t2) = tee(xs)
         // Initial: nothing consumed.
-        assertEquals(5 to 5, t1.sizeHint())
-        assertEquals(5 to 5, t2.sizeHint())
+        assertEquals(SizeHint(5, 5), t1.sizeHint())
+        assertEquals(SizeHint(5, 5), t2.sizeHint())
 
         // Pull two from t1; t2 owns the backlog now (owner flipped to !id of
         // puller). t2's hint should include backlog; t1's should not.
         repeat(2) { t1.next() }
         val t1Hint = t1.sizeHint()
         val t2Hint = t2.sizeHint()
-        assertEquals(3, t1Hint.first)
-        assertEquals(3, t1Hint.second)
-        assertEquals(5, t2Hint.first)
-        assertEquals(5, t2Hint.second)
+        assertEquals(3, t1Hint.lower)
+        assertEquals(3, t1Hint.upper)
+        assertEquals(5, t2Hint.lower)
+        assertEquals(5, t2Hint.upper)
     }
 
     /** A fresh tee over an empty source yields no elements on either half. */
@@ -87,8 +87,8 @@ class TeeTest {
     @Test
     fun teeNonCollectionSourceHasUnknownHint() {
         val (t1, t2) = teeNew(sequenceOf(10, 20, 30).iterator())
-        assertEquals(0 to null, t1.sizeHint())
-        assertEquals(0 to null, t2.sizeHint())
+        assertEquals(SizeHint(0, null), t1.sizeHint())
+        assertEquals(SizeHint(0, null), t2.sizeHint())
         assertEquals(listOf(10, 20, 30), t1.asSequence().toList())
         assertEquals(listOf(10, 20, 30), t2.asSequence().toList())
     }

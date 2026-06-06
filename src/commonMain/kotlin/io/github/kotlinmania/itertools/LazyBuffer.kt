@@ -21,8 +21,8 @@ internal class LazyBuffer<T>(
     constructor(iterable: Iterable<T>) : this(
         iterable.iterator(),
         when (iterable) {
-            is Collection<*> -> iterable.size to iterable.size
-            else -> 0 to null
+            is Collection<*> -> SizeHint(iterable.size, iterable.size)
+            else -> SizeHint(0, null)
         },
     )
 

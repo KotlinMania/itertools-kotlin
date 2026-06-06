@@ -49,23 +49,23 @@ class PadTailTest {
     @Test
     fun sizeHintReflectsMinAndRemaining() {
         val src = listOf(1, 2)
-        val it = PadUsing(src.iterator(), 5, src.size to src.size) { i -> i }
-        assertEquals(5 to 5, it.sizeHint())
+        val it = PadUsing(src.iterator(), 5, SizeHint(src.size, src.size)) { i -> i }
+        assertEquals(SizeHint(5, 5), it.sizeHint())
         it.next()
-        assertEquals(4 to 4, it.sizeHint())
+        assertEquals(SizeHint(4, 4), it.sizeHint())
         it.next()
-        assertEquals(3 to 3, it.sizeHint())
+        assertEquals(SizeHint(3, 3), it.sizeHint())
         it.next()
         it.next()
         it.next()
         assertFalse(it.hasNext())
-        assertEquals(0 to 0, it.sizeHint())
+        assertEquals(SizeHint(0, 0), it.sizeHint())
     }
 
     @Test
     fun foldVisitsSourceThenFiller() {
         val src = listOf("a", "b")
-        val it = PadUsing(src.iterator(), 4, src.size to src.size) { i -> "f$i" }
+        val it = PadUsing(src.iterator(), 4, SizeHint(src.size, src.size)) { i -> "f$i" }
         val out = it.fold(mutableListOf<String>()) { acc, x ->
             acc.add(x); acc
         }

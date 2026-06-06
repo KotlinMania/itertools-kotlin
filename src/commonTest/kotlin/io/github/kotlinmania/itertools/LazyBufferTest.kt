@@ -49,13 +49,13 @@ class LazyBufferTest {
     @Test
     fun sizeHintCombinesBufferAndSourceRemaining() {
         val lb = LazyBuffer(listOf(1, 2, 3, 4, 5))
-        assertEquals(5 to 5, lb.sizeHint())
+        assertEquals(SizeHint(5, 5), lb.sizeHint())
         lb.getNext()
-        assertEquals(5 to 5, lb.sizeHint())
+        assertEquals(SizeHint(5, 5), lb.sizeHint())
         lb.getNext()
-        assertEquals(5 to 5, lb.sizeHint())
+        assertEquals(SizeHint(5, 5), lb.sizeHint())
         lb.prefill(5)
-        assertEquals(5 to 5, lb.sizeHint())
+        assertEquals(SizeHint(5, 5), lb.sizeHint())
     }
 
     @Test

@@ -13,7 +13,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNDocExample() {
-        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), 4 to 4)
+        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), SizeHint(4, 4))
         it.next()
         it.putBack(1)
         it.putBack(0)
@@ -28,7 +28,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNMostRecentComesFirst() {
-        val it = PutBackN(emptyList<Int>().iterator(), 0 to 0)
+        val it = PutBackN(emptyList<Int>().iterator(), SizeHint(0, 0))
         it.putBack(10)
         it.putBack(20)
         it.putBack(30)
@@ -40,19 +40,19 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNSizeHintReflectsStackAndSource() {
-        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), 4 to 4)
-        assertEquals(4 to 4, it.sizeHint())
+        val it = PutBackN(listOf(1, 2, 3, 4).iterator(), SizeHint(4, 4))
+        assertEquals(SizeHint(4, 4), it.sizeHint())
         it.next()
-        assertEquals(3 to 3, it.sizeHint())
+        assertEquals(SizeHint(3, 3), it.sizeHint())
         it.putBack(99)
-        assertEquals(4 to 4, it.sizeHint())
+        assertEquals(SizeHint(4, 4), it.sizeHint())
         it.putBack(98)
-        assertEquals(5 to 5, it.sizeHint())
+        assertEquals(SizeHint(5, 5), it.sizeHint())
     }
 
     @Test
     fun putBackNFoldYieldsStackThenSource() {
-        val it = PutBackN(listOf(2, 3, 4).iterator(), 3 to 3)
+        val it = PutBackN(listOf(2, 3, 4).iterator(), SizeHint(3, 3))
         it.next()
         it.putBack(1)
         it.putBack(0)
@@ -64,7 +64,7 @@ class PutBackNImplTest {
 
     @Test
     fun putBackNHasNextHandlesEmpty() {
-        val it = PutBackN(emptyList<Int>().iterator(), 0 to 0)
+        val it = PutBackN(emptyList<Int>().iterator(), SizeHint(0, 0))
         assertFalse(it.hasNext())
         it.putBack(7)
         assertTrue(it.hasNext())

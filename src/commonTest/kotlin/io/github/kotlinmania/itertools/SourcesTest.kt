@@ -44,7 +44,7 @@ class SourcesTest {
     fun iterateSizeHintIsMaxAndUnbounded() {
         val iter = Iterate(0) { x -> x + 1 }
         val sh = iter.sizeHint()
-        assertEquals(Int.MAX_VALUE, sh.first)
-        assertEquals(null, sh.second)
+        assertEquals(Int.MAX_VALUE, sh.lower)
+        assertEquals(null, sh.upper)
     }
 }

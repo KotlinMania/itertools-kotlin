@@ -15,13 +15,13 @@ class WithPositionTest {
     @Test
     fun singleElementIsOnly() {
         val out = withPosition(listOf(42)).asSequence().toList()
-        assertEquals(listOf(Position.Only to 42), out)
+        assertEquals(listOf(Positioned(Position.Only, 42)), out)
     }
 
     @Test
     fun twoElementsFirstThenLast() {
         val out = withPosition(listOf("a", "b")).asSequence().toList()
-        assertEquals(listOf(Position.First to "a", Position.Last to "b"), out)
+        assertEquals(listOf(Positioned(Position.First, "a"), Positioned(Position.Last, "b")), out)
     }
 
     @Test
@@ -29,10 +29,10 @@ class WithPositionTest {
         val out = withPosition(listOf(1, 2, 3, 4)).asSequence().toList()
         assertEquals(
             listOf(
-                Position.First to 1,
-                Position.Middle to 2,
-                Position.Middle to 3,
-                Position.Last to 4,
+                Positioned(Position.First, 1),
+                Positioned(Position.Middle, 2),
+                Positioned(Position.Middle, 3),
+                Positioned(Position.Last, 4),
             ),
             out,
         )
@@ -43,29 +43,29 @@ class WithPositionTest {
     @Test
     fun sizeHintMirrorsRemaining() {
         val src = listOf(1, 2, 3)
-        val it = WithPosition(src.iterator(), src.size to src.size)
-        assertEquals(3 to 3, it.sizeHint())
+        val it = WithPosition(src.iterator(), SizeHint(src.size, src.size))
+        assertEquals(SizeHint(3, 3), it.sizeHint())
         it.next()
-        assertEquals(2 to 2, it.sizeHint())
+        assertEquals(SizeHint(2, 2), it.sizeHint())
         it.next()
-        assertEquals(1 to 1, it.sizeHint())
+        assertEquals(SizeHint(1, 1), it.sizeHint())
         it.next()
-        assertEquals(0 to 0, it.sizeHint())
+        assertEquals(SizeHint(0, 0), it.sizeHint())
         assertFalse(it.hasNext())
     }
 
     @Test
     fun foldVisitsEveryPositionOnce() {
         val src = listOf("x", "y", "z")
-        val it = WithPosition(src.iterator(), src.size to src.size)
-        val collected = it.fold(mutableListOf<Pair<Position, String>>()) { acc, p ->
+        val it = WithPosition(src.iterator(), SizeHint(src.size, src.size))
+        val collected = it.fold(mutableListOf<Positioned<String>>()) { acc, p ->
             acc.add(p); acc
         }
         assertEquals(
             listOf(
-                Position.First to "x",
-                Position.Middle to "y",
-                Position.Last to "z",
+                Positioned(Position.First, "x"),
+                Positioned(Position.Middle, "y"),
+                Positioned(Position.Last, "z"),
             ),
             collected,
         )
@@ -76,9 +76,9 @@ class WithPositionTest {
         val out = withPosition(listOf<Int?>(null, 1, null)).asSequence().toList()
         assertEquals(
             listOf(
-                Position.First to null,
-                Position.Middle to 1,
-                Position.Last to null,
+                Positioned(Position.First, null),
+                Positioned(Position.Middle, 1),
+                Positioned(Position.Last, null),
             ),
             out,
         )

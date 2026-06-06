@@ -98,18 +98,18 @@ class IntersperseTest {
     @Test
     fun sizeHintDoublesAndCarriesPeekState() {
         val src = listOf(1, 2, 3)
-        val it = IntersperseWith(IntersperseElementSimple(0), src.iterator(), src.size to src.size)
-        assertEquals(5 to 5, it.sizeHint())
+        val it = IntersperseWith(IntersperseElementSimple(0), src.iterator(), SizeHint(src.size, src.size))
+        assertEquals(SizeHint(5, 5), it.sizeHint())
         assertEquals(1, it.next())
-        assertEquals(4 to 4, it.sizeHint())
+        assertEquals(SizeHint(4, 4), it.sizeHint())
         assertEquals(0, it.next())
-        assertEquals(3 to 3, it.sizeHint())
+        assertEquals(SizeHint(3, 3), it.sizeHint())
     }
 
     @Test
     fun nonCollectionSourceHasUnknownHint() {
         val it = IntersperseWith(IntersperseElementSimple(0), sequenceOf(1, 2, 3).iterator())
-        assertEquals(0 to null, it.sizeHint())
+        assertEquals(SizeHint(0, null), it.sizeHint())
         assertEquals(listOf(1, 0, 2, 0, 3), it.asSequence().toList())
     }
 }

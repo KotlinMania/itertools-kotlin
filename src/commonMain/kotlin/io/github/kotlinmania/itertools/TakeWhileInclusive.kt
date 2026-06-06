@@ -55,9 +55,9 @@ internal class TakeWhileInclusive<T>(
      * adaptor is exhausted.
      */
     fun sizeHint(): SizeHint {
-        if (done && slot == null) return 0 to 0
+        if (done && slot == null) return SizeHint(0, 0)
         val remaining = subScalar(sourceHint, consumed)
-        return 0 to remaining.second
+        return SizeHint(0, remaining.upper)
     }
 
     /**
@@ -84,10 +84,10 @@ internal class TakeWhileInclusive<T>(
  * // out == [1, 2, 3]
  * ```
  */
-fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
+internal fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
     TakeWhileInclusive(iterable.iterator(), predicate, sourceSizeHint(iterable))
 
 private fun sourceSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

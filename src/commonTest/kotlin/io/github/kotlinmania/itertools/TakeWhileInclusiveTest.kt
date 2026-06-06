@@ -39,19 +39,19 @@ class TakeWhileInclusiveTest {
     @Test
     fun sizeHintShrinksToZeroOnceDone() {
         val src = listOf(1, 2, 3, 4)
-        val it = TakeWhileInclusive(src.iterator(), { it < 2 }, src.size to src.size)
-        assertEquals(0, it.sizeHint().first)
-        assertEquals(4, it.sizeHint().second)
+        val it = TakeWhileInclusive(src.iterator(), { it < 2 }, SizeHint(src.size, src.size))
+        assertEquals(0, it.sizeHint().lower)
+        assertEquals(4, it.sizeHint().upper)
         assertEquals(1, it.next())
         assertEquals(2, it.next())
         assertFalse(it.hasNext())
-        assertEquals(0 to 0, it.sizeHint())
+        assertEquals(SizeHint(0, 0), it.sizeHint())
     }
 
     @Test
     fun foldRespectsInclusiveStop() {
         val src = listOf(1, 2, 3, 4, 5)
-        val it = TakeWhileInclusive(src.iterator(), { it < 3 }, src.size to src.size)
+        val it = TakeWhileInclusive(src.iterator(), { it < 3 }, SizeHint(src.size, src.size))
         val total = it.fold(0) { acc, x -> acc + x }
         assertEquals(6, total)
     }
