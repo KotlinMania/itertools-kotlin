@@ -228,6 +228,12 @@ tasks.matching { it.name == "compileAndroidMain" }.configureEach {
     dependsOn(ensureAndroidSdk)
 }
 
+// KGP-generated bridge and coroutine-support code under build/SwiftExport/
+// produces warnings (unchecked casts, unused expressions, opt-in requirements)
+// that are not present in our own source. Compiling that generated code with
+// allWarningsAsErrors=true would make the Swift Export gate impossible to
+// satisfy. Our own bridge correctness is verified separately by the gap-#8
+// audit (grep for kotlin.Pair/Triple/Result/Function in the generated Package).
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
     if (name.startsWith("compileSwiftExport")) {
         compilerOptions.allWarningsAsErrors.set(false)
