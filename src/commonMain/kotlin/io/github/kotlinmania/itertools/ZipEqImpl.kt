@@ -3,13 +3,8 @@ package io.github.kotlinmania.itertools
 
 /**
  * A pair of elements produced by [zipEq].
- *
- * Instead of exposing [kotlin.Pair] through the public Swift Export surface,
- * [zipEq] yields [Zipped] so the Swift bridge gets a concrete nominal type
- * with typed properties instead of the erased `Any?` that unconstrained
- * generic [Pair] would produce.
  */
-data class Zipped<A, B>(val first: A, val second: B)
+internal data class Zipped<A, B>(val first: A, val second: B)
 
 /**
  * An iterator which iterates two other iterators simultaneously
@@ -77,8 +72,11 @@ internal class ZipEq<A, B>(
  * }
  * ```
  */
-fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
+internal fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
     ZipEq(i.iterator(), j.iterator(), sizeHintOf(i), sizeHintOf(j))
+
+internal fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
+    ZipEq(i, j, aHint, bHint)
 
 private fun sizeHintOf(it: Iterable<*>): SizeHint = when (it) {
     is Collection<*> -> SizeHint(it.size, it.size)

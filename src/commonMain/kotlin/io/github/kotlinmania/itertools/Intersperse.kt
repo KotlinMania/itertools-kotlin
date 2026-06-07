@@ -7,7 +7,7 @@ package io.github.kotlinmania.itertools
  *
  * Declared as a `fun interface` so Kotlin lambdas convert to it directly.
  */
-fun interface IntersperseElement<T> {
+internal fun interface IntersperseElement<T> {
     fun generate(): T
 }
 
@@ -19,7 +19,7 @@ fun interface IntersperseElement<T> {
  * general clone mechanism; for immutable element types, returning the stored
  * reference is equivalent.
  */
-class IntersperseElementSimple<T>(private val item: T) : IntersperseElement<T> {
+internal class IntersperseElementSimple<T>(private val item: T) : IntersperseElement<T> {
     override fun generate(): T = item
 }
 
@@ -143,7 +143,7 @@ internal fun <T> intersperseWith(iter: Iterator<T>, elt: IntersperseElement<T>):
     IntersperseWith(elt, iter)
 
 /** Convenience overload that derives a source size hint from [iterable]. */
-fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
+internal fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
     IntersperseWith(elt, iterable.iterator(), iterableSizeHint(iterable))
 
 internal fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {

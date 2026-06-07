@@ -3,12 +3,8 @@ package io.github.kotlinmania.itertools
 
 /**
  * A positioned element yielded by [withPosition].
- *
- * Instead of exposing [kotlin.Pair] through the public Swift Export surface,
- * [withPosition] yields [Positioned] so the Swift bridge gets a concrete
- * nominal type with typed properties.
  */
-data class Positioned<T>(val position: Position, val value: T)
+internal data class Positioned<T>(val position: Position, val value: T)
 
 /**
  * An iterator adaptor that wraps each element in a [Position].
@@ -120,7 +116,7 @@ enum class Position {
  * // tagged == [Positioned(Position.First, "a"), Positioned(Position.Middle, "b"), Positioned(Position.Last, "c")]
  * ```
  */
-fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
+internal fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
     WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
 
 private fun withPositionSizeHint(it: Iterable<*>): SizeHint = when (it) {
