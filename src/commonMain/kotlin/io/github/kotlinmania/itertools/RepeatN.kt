@@ -30,7 +30,7 @@ internal class RepeatN<A>(
         get() = n
 
     /** `(n, n)` size hint. */
-    fun sizeHint(): SizeHint = n to n
+    fun sizeHint(): SizeHint = SizeHint(n, n)
 
     /** Fold over the remaining elements, consuming the iterator. */
     fun <B> fold(initial: B, operation: (B, A) -> B): B {

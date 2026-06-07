@@ -5,8 +5,14 @@ package io.github.kotlinmania.itertools
  * Arithmetic on `Iterator.sizeHint()` values.
  */
 
-/** `SizeHint` is the return type of `Iterator.sizeHint()`. */
-typealias SizeHint = Pair<Int, Int?>
+/**
+ * The result of an [Iterator.sizeHint] call.
+ *
+ * [lower] is the minimum number of elements remaining; [upper] is the
+ * maximum, or `null` when the upper bound is unknown (infinite or
+ * uncomputable).
+ */
+data class SizeHint(val lower: Int, val upper: Int?)
 
 private fun saturatingAdd(a: Int, b: Int): Int {
     val sum = a.toLong() + b.toLong()
@@ -35,74 +41,69 @@ private fun checkedMul(a: Int, b: Int): Int? {
 
 /** Add `SizeHint` correctly. */
 fun add(a: SizeHint, b: SizeHint): SizeHint {
-    val min = saturatingAdd(a.first, b.first)
-    val max = if (a.second != null && b.second != null) {
-        checkedAdd(a.second!!, b.second!!)
+    val lo = saturatingAdd(a.lower, b.lower)
+    val hi = if (a.upper != null && b.upper != null) {
+        checkedAdd(a.upper, b.upper)
     } else {
         null
     }
-    return min to max
+    return SizeHint(lo, hi)
 }
 
 /** Add `x` correctly to a `SizeHint`. */
 fun addScalar(sh: SizeHint, x: Int): SizeHint {
-    val low = saturatingAdd(sh.first, x)
-    val hi = sh.second?.let { checkedAdd(it, x) }
-    return low to hi
+    val lo = saturatingAdd(sh.lower, x)
+    val hi = sh.upper?.let { checkedAdd(it, x) }
+    return SizeHint(lo, hi)
 }
 
 /** Subtract `x` correctly from a `SizeHint`. */
 fun subScalar(sh: SizeHint, x: Int): SizeHint {
-    val low = saturatingSub(sh.first, x)
-    val hi = sh.second?.let { saturatingSub(it, x) }
-    return low to hi
+    val lo = saturatingSub(sh.lower, x)
+    val hi = sh.upper?.let { saturatingSub(it, x) }
+    return SizeHint(lo, hi)
 }
 
 /** Multiply `SizeHint` correctly */
 fun mul(a: SizeHint, b: SizeHint): SizeHint {
-    val low = saturatingMul(a.first, b.first)
-    val au = a.second
-    val bu = b.second
+    val lo = saturatingMul(a.lower, b.lower)
+    val au = a.upper
+    val bu = b.upper
     val hi = when {
         au != null && bu != null -> checkedMul(au, bu)
         (au == 0 && bu == null) || (au == null && bu == 0) -> 0
         else -> null
     }
-    return low to hi
+    return SizeHint(lo, hi)
 }
 
 /** Multiply `x` correctly with a `SizeHint`. */
 fun mulScalar(sh: SizeHint, x: Int): SizeHint {
-    val low = saturatingMul(sh.first, x)
-    val hi = sh.second?.let { checkedMul(it, x) }
-    return low to hi
+    val lo = saturatingMul(sh.lower, x)
+    val hi = sh.upper?.let { checkedMul(it, x) }
+    return SizeHint(lo, hi)
 }
 
 /** Return the maximum */
 fun max(a: SizeHint, b: SizeHint): SizeHint {
-    val (aLower, aUpper) = a
-    val (bLower, bUpper) = b
+    val lower = kotlin.math.max(a.lower, b.lower)
 
-    val lower = kotlin.math.max(aLower, bLower)
-
-    val upper = if (aUpper != null && bUpper != null) {
-        kotlin.math.max(aUpper, bUpper)
+    val upper = if (a.upper != null && b.upper != null) {
+        kotlin.math.max(a.upper, b.upper)
     } else {
         null
     }
 
-    return lower to upper
+    return SizeHint(lower, upper)
 }
 
 /** Return the minimum */
 fun min(a: SizeHint, b: SizeHint): SizeHint {
-    val (aLower, aUpper) = a
-    val (bLower, bUpper) = b
-    val lower = kotlin.math.min(aLower, bLower)
-    val upper = if (aUpper != null && bUpper != null) {
-        kotlin.math.min(aUpper, bUpper)
+    val lower = kotlin.math.min(a.lower, b.lower)
+    val upper = if (a.upper != null && b.upper != null) {
+        kotlin.math.min(a.upper, b.upper)
     } else {
-        aUpper ?: bUpper
+        a.upper ?: b.upper
     }
-    return lower to upper
+    return SizeHint(lower, upper)
 }

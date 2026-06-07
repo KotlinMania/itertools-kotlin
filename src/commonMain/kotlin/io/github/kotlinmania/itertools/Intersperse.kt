@@ -1,27 +1,14 @@
 // port-lint: source src/intersperse.rs
-@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
-
 package io.github.kotlinmania.itertools
-
-import kotlin.native.HiddenFromObjC
 
 /**
  * Strategy that supplies the value to insert between adapted iterator
  * elements.
  *
- * Declared as a `fun interface` so Kotlin lambdas convert to it directly; this
- * also keeps the public surface compatible with the Swift Export function-type
- * gap recipe.
- *
- * Hidden from the Swift Export bridge: a SAM interface avoids exposing a
- * Kotlin function type directly, but the SAM's own generic parameter still
- * triggers the generic-class bridge gap. Hiding the type keeps the Kotlin
- * surface strongly typed while avoiding bridge casts when the plugin erases
- * the element type.
+ * Declared as a `fun interface` so Kotlin lambdas convert to it directly.
  */
-@HiddenFromObjC
-public fun interface IntersperseElement<T> {
-    public fun generate(): T
+internal fun interface IntersperseElement<T> {
+    fun generate(): T
 }
 
 /**
@@ -71,7 +58,7 @@ public fun <T> intersperse(iterable: Iterable<T>, elt: T): Iterator<T> =
 internal class IntersperseWith<T>(
     private val element: IntersperseElement<T>,
     private val iter: Iterator<T>,
-    private val initialSourceHint: SizeHint = 0 to null,
+    private val initialSourceHint: SizeHint = SizeHint(0, null),
 ) : Iterator<T> {
     private sealed class Slot<out T> {
         data object Empty : Slot<Nothing>()
@@ -125,7 +112,7 @@ internal class IntersperseWith<T>(
     }
 
     /** Equivalent to upstream iterator size hint calculation. */
-    public fun sizeHint(): SizeHint {
+    internal fun sizeHint(): SizeHint {
         val sh = subScalar(initialSourceHint, consumed)
         val doubled = add(sh, sh)
         return when (peek) {
@@ -139,7 +126,7 @@ internal class IntersperseWith<T>(
      * Consumes the adaptor with a left fold, mirroring upstream's specialized
      * fold implementation.
      */
-    public fun <B> fold(initial: B, operation: (B, T) -> B): B {
+    internal fun <B> fold(initial: B, operation: (B, T) -> B): B {
         var accum = initial
         if (hasNext()) {
             accum = operation(accum, next())
@@ -152,14 +139,14 @@ internal class IntersperseWith<T>(
 }
 
 /** Create a new `IntersperseWith` iterator. */
-public fun <T> intersperseWith(iter: Iterator<T>, elt: IntersperseElement<T>): Iterator<T> =
+internal fun <T> intersperseWith(iter: Iterator<T>, elt: IntersperseElement<T>): Iterator<T> =
     IntersperseWith(elt, iter)
 
 /** Convenience overload that derives a source size hint from [iterable]. */
-public fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
+internal fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
     IntersperseWith(elt, iterable.iterator(), iterableSizeHint(iterable))
 
-private fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+internal fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

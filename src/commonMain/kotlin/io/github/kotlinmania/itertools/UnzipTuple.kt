@@ -16,12 +16,8 @@ package io.github.kotlinmania.itertools
  * check(b == listOf(2, 5, 8))
  * check(c == listOf(3, 6, 9))
  * ```
- *
- * Kotlin only ships built-in tuple types for 2-ary [Pair] and 3-ary [Triple] columns. The upstream
- * Rust file uses the `impl_unzip_iter!` macro to generate `MultiUnzip` impls for every arity from
- * 0 to 12; the realisable Kotlin counterparts are the [Pair] and [Triple] overloads below.
  */
-fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
+internal fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
     val resA = mutableListOf<A>()
     val resB = mutableListOf<B>()
     for ((a, b) in i) {
@@ -32,7 +28,7 @@ fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
 }
 
 /** [Triple] overload of [multiUnzip]. */
-fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
+internal fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
     val resA = mutableListOf<A>()
     val resB = mutableListOf<B>()
     val resC = mutableListOf<C>()

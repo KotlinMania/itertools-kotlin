@@ -113,7 +113,7 @@ internal class Iterate<St>(
     }
 
     /** `(Int.MAX_VALUE, null)` — the upstream `(usize::MAX, None)` size hint. */
-    fun sizeHint(): SizeHint = Int.MAX_VALUE to null
+    fun sizeHint(): SizeHint = SizeHint(Int.MAX_VALUE, null)
 }
 
 /**
@@ -135,5 +135,5 @@ internal class Iterate<St>(
  * You can alternatively use [kotlin.sequences.generateSequence] as it better
  * describes a finite iterator.
  */
-fun <St> iterate(initialValue: St, f: (St) -> St): Iterator<St> =
+internal fun <St> iterate(initialValue: St, f: (St) -> St): Iterator<St> =
     Iterate(initialValue, f)

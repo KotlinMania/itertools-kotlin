@@ -2,6 +2,11 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * A pair of elements produced by [zipEq].
+ */
+internal data class Zipped<A, B>(val first: A, val second: B)
+
+/**
  * An iterator which iterates two other iterators simultaneously
  * and throws if they have different lengths.
  *
@@ -12,9 +17,9 @@ internal class ZipEq<A, B>(
     private val b: Iterator<B>,
     private val aHint: SizeHint,
     private val bHint: SizeHint,
-) : Iterator<Pair<A, B>> {
+) : Iterator<Zipped<A, B>> {
 
-    private var peeked: Pair<A, B>? = null
+    private var peeked: Zipped<A, B>? = null
     private var exhausted: Boolean = false
     private var consumed: Int = 0
 
@@ -27,7 +32,7 @@ internal class ZipEq<A, B>(
                 exhausted = true
             }
             aHas && bHas -> {
-                peeked = a.next() to b.next()
+                peeked = Zipped(a.next(), b.next())
             }
             else -> {
                 throw IllegalStateException(
@@ -42,7 +47,7 @@ internal class ZipEq<A, B>(
         return peeked != null
     }
 
-    override fun next(): Pair<A, B> {
+    override fun next(): Zipped<A, B> {
         advance()
         val current = peeked
             ?: throw NoSuchElementException("ZipEq exhausted")
@@ -62,15 +67,18 @@ internal class ZipEq<A, B>(
  *
  * ```
  * val data = listOf(1, 2, 3, 4, 5)
- * for ((a, b) in zipEq(data.subList(0, data.size - 1), data.subList(1, data.size))) {
- *     // loop body
+ * for (z in zipEq(data.subList(0, data.size - 1), data.subList(1, data.size))) {
+ *     // z.first and z.second are adjacent elements
  * }
  * ```
  */
-fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Pair<A, B>> =
+internal fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
     ZipEq(i.iterator(), j.iterator(), sizeHintOf(i), sizeHintOf(j))
 
+internal fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
+    ZipEq(i, j, aHint, bHint)
+
 private fun sizeHintOf(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

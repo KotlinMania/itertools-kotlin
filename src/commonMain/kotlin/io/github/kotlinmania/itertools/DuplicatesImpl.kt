@@ -1,9 +1,5 @@
 // port-lint: source src/duplicates_impl.rs
-@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
-
 package io.github.kotlinmania.itertools
-
-import kotlin.native.HiddenFromObjC
 
 /**
  * Holds a key together with the value it was derived from, and yields one or
@@ -100,13 +96,8 @@ internal class Meta<K, V>(
  * An iterator adapter to filter for duplicate elements.
  *
  * See `Itertools.duplicatesBy` for more information.
- *
- * Hidden from the Swift Export bridge: the plugin would otherwise erase `T`
- * and `K` to `Any?` and emit unchecked casts inside the generated bridge
- * file. The Kotlin surface stays strongly typed.
  */
-@HiddenFromObjC
-class DuplicatesBy<T, K> internal constructor(
+internal class DuplicatesBy<T, K> internal constructor(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
     keyMethod: KeyMethod<K, T>,
@@ -143,33 +134,27 @@ class DuplicatesBy<T, K> internal constructor(
      * collapses based on how many first-sightings are still pending.
      */
     fun sizeHint(): SizeHint {
-        val iterRemainingHi = sourceHint.second?.let { hi ->
+        val iterRemainingHi = sourceHint.upper?.let { hi ->
             val remaining = hi - iterConsumed
             if (remaining < 0) 0 else remaining
         }
         val hi = iterRemainingHi?.let { remaining ->
             if (remaining <= meta.pending) {
-                // fewer or equally many iter-remaining elements than pending
-                // elements => at most, each iter-remaining element is matched
                 remaining
             } else {
-                // fewer pending elements than iter-remaining elements
-                // => at most:
-                //    * each pending element is matched
-                //    * the other iter-remaining elements come in pairs
                 meta.pending + (remaining - meta.pending) / 2
             }
         }
-        return 0 to hi
+        return SizeHint(0, hi)
     }
 }
 
 /** Create a new `DuplicatesBy` iterator. */
-fun <T, K> duplicatesBy(iter: Iterator<T>, sourceHint: SizeHint = 0 to null, f: (T) -> K): DuplicatesBy<T, K> =
+internal fun <T, K> duplicatesBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> K): DuplicatesBy<T, K> =
     DuplicatesBy(iter, sourceHint, ByFn(f))
 
-/** Convenience overload that derives a size hint from [iterable]. */
-fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): DuplicatesBy<T, K> =
+/** Filter duplicate elements from [iterable], keeping only elements seen more than once, compared by key produced by [f]. */
+fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): Iterator<T> =
     duplicatesBy(iterable.iterator(), hintOfIterable(iterable), f)
 
 /**
@@ -177,17 +162,17 @@ fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): DuplicatesBy<T, K> 
  *
  * See `Itertools.duplicates` for more information.
  */
-typealias Duplicates<T> = DuplicatesBy<T, T>
+internal typealias Duplicates<T> = DuplicatesBy<T, T>
 
 /** Create a new `Duplicates` iterator. */
-fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = 0 to null): Duplicates<T> =
+internal fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Duplicates<T> =
     DuplicatesBy(iter, sourceHint, ById())
 
-/** Convenience overload that derives a size hint from [iterable]. */
-fun <T> duplicates(iterable: Iterable<T>): Duplicates<T> =
+/** Filter duplicate elements from [iterable], keeping only elements seen more than once. */
+fun <T> duplicates(iterable: Iterable<T>): Iterator<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

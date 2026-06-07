@@ -2,16 +2,21 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * A positioned element yielded by [withPosition].
+ */
+internal data class Positioned<T>(val position: Position, val value: T)
+
+/**
  * An iterator adaptor that wraps each element in a [Position].
  *
- * Iterator element type is `Pair<Position, T>`.
+ * Iterator element type is [Positioned].
  *
  * See [withPosition] for more information.
  */
 internal class WithPosition<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
-) : Iterator<Pair<Position, T>> {
+) : Iterator<Positioned<T>> {
 
     private var handledFirst: Boolean = false
     private var consumed: Int = 0
@@ -47,7 +52,7 @@ internal class WithPosition<T>(
         return headSlot != null
     }
 
-    override fun next(): Pair<Position, T> {
+    override fun next(): Positioned<T> {
         primeHead()
         val head = headSlot ?: throw NoSuchElementException("WithPosition exhausted")
         primeTail()
@@ -61,7 +66,7 @@ internal class WithPosition<T>(
         // Advance: tail becomes new head.
         headSlot = tailSlot
         tailSlot = null
-        return position to head.value
+        return Positioned(position, head.value)
     }
 
     /** Equivalent to upstream `Iterator::size_hint`. */
@@ -74,7 +79,7 @@ internal class WithPosition<T>(
      * Consumes the adaptor with a left fold, tagging the first, middle, and
      * last elements per upstream's `fold` impl.
      */
-    fun <B> fold(initial: B, operation: (B, Pair<Position, T>) -> B): B {
+    fun <B> fold(initial: B, operation: (B, Positioned<T>) -> B): B {
         var acc = initial
         while (hasNext()) {
             acc = operation(acc, next())
@@ -84,7 +89,7 @@ internal class WithPosition<T>(
 }
 
 /**
- * The first component of the value yielded by [WithPosition].
+ * The first component of the value yielded by [withPosition].
  * Indicates the position of this element in the iterator results.
  *
  * See [withPosition] for more information.
@@ -108,13 +113,13 @@ enum class Position {
  *
  * ```
  * val tagged = withPosition(listOf("a", "b", "c")).asSequence().toList()
- * // tagged == [(First, "a"), (Middle, "b"), (Last, "c")]
+ * // tagged == [Positioned(Position.First, "a"), Positioned(Position.Middle, "b"), Positioned(Position.Last, "c")]
  * ```
  */
-fun <T> withPosition(iterable: Iterable<T>): Iterator<Pair<Position, T>> =
-    WithPosition(iterable.iterator(), iterableSizeHint(iterable))
+internal fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
+    WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
 
-private fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+private fun withPositionSizeHint(it: Iterable<*>): SizeHint = when (it) {
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

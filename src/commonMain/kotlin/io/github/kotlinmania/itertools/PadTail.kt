@@ -45,7 +45,7 @@ internal class PadUsing<T>(
     fun sizeHint(): SizeHint {
         val tail = if (pos < min) min - pos else 0
         val remaining = subScalar(sourceHint, pos)
-        return max(remaining, tail to tail)
+        return max(remaining, SizeHint(tail, tail))
     }
 
     /** Consumes the adaptor with a left fold. */
@@ -71,10 +71,10 @@ internal class PadUsing<T>(
  * // padded == [1, 2, 20, 30, 40]
  * ```
  */
-fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
+internal fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
     PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
 
 private fun padTailIterableHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

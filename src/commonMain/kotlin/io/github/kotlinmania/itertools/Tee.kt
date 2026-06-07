@@ -1,9 +1,5 @@
 // port-lint: source src/tee.rs
-@file:OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
-
 package io.github.kotlinmania.itertools
-
-import kotlin.native.HiddenFromObjC
 
 /**
  * Common buffer object for the two tee halves.
@@ -32,14 +28,8 @@ internal class TeeBuffer<T>(
  * One half of an iterator pair where both return the same elements.
  *
  * See `Itertools.tee()` for more information.
- *
- * Hidden from the Swift Export bridge: the plugin would otherwise erase `T`
- * to `Any?` and emit unchecked casts inside the generated bridge file. The
- * Kotlin surface stays strongly typed; Swift consumers reach Tee handles
- * through whatever public factory the consuming code chooses to expose.
  */
-@HiddenFromObjC
-class Tee<T> internal constructor(
+internal class Tee<T> internal constructor(
     private val buffer: TeeBuffer<T>,
     private val id: Boolean,
     private val sourceHint: SizeHint,
@@ -77,7 +67,7 @@ class Tee<T> internal constructor(
  *
  * Mirrors `itertools::tee::new` from upstream Rust.
  */
-fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = 0 to null): Pair<Tee<T>, Tee<T>> {
+internal fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Pair<Tee<T>, Tee<T>> {
     val buffer = TeeBuffer(ArrayDeque<T>(), iter, owner = false, iterConsumed = 0)
     val t1 = Tee(buffer, id = true, sourceHint = sourceHint)
     val t2 = Tee(buffer, id = false, sourceHint = sourceHint)
@@ -87,10 +77,10 @@ fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = 0 to null): Pair<Tee<T>
 /**
  * Convenience overload that derives a size hint from [iterable] when possible.
  */
-fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
+internal fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
     val hint: SizeHint = when (iterable) {
-        is Collection<*> -> iterable.size to iterable.size
-        else -> 0 to null
+        is Collection<*> -> SizeHint(iterable.size, iterable.size)
+        else -> SizeHint(0, null)
     }
     return teeNew(iterable.iterator(), hint)
 }

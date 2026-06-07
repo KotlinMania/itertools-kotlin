@@ -70,6 +70,6 @@ fun <T> putBackN(iterable: Iterable<T>): Iterator<T> =
     PutBackN(iterable.iterator(), sizeHintOfIterable(iterable))
 
 private fun sizeHintOfIterable(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> it.size to it.size
-    else -> 0 to null
+    is Collection<*> -> SizeHint(it.size, it.size)
+    else -> SizeHint(0, null)
 }

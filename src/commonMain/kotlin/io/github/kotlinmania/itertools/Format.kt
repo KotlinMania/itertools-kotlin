@@ -95,7 +95,7 @@ internal class Format<T> internal constructor(
  * stringified form into the underlying buffer; this mirrors the upstream
  * `&mut dyn FnMut(&dyn Display) -> Result` callback shape.
  */
-public fun <T> newFormat(
+internal fun <T> newFormat(
     iter: Iterator<T>,
     separator: String,
     f: (T, (Any?) -> Unit) -> Unit,
