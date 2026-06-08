@@ -7,7 +7,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TeeTest {
-
     /**
      * Mirror of `tests/test_std.rs::tee` — the canonical upstream interleaving
      * test for `tee`. The Kotlin port keeps the same call order; because

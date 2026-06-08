@@ -34,7 +34,6 @@ internal class Tee<T> internal constructor(
     private val id: Boolean,
     private val sourceHint: SizeHint,
 ) : Iterator<T> {
-
     override fun hasNext(): Boolean {
         if (buffer.owner == id && buffer.backlog.isNotEmpty()) return true
         return buffer.iter.hasNext()
@@ -78,9 +77,10 @@ internal fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, nu
  * Convenience overload that derives a size hint from [iterable] when possible.
  */
 internal fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
-    val hint: SizeHint = when (iterable) {
-        is Collection<*> -> SizeHint(iterable.size, iterable.size)
-        else -> SizeHint(0, null)
-    }
+    val hint: SizeHint =
+        when (iterable) {
+            is Collection<*> -> SizeHint(iterable.size, iterable.size)
+            else -> SizeHint(0, null)
+        }
     return teeNew(iterable.iterator(), hint)
 }

@@ -79,7 +79,8 @@ internal fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, nu
 fun <T> unique(iterable: Iterable<T>): Iterator<T> =
     unique(iterable.iterator(), hintOfIterable(iterable))
 
-private fun hintOfIterable(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun hintOfIterable(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

@@ -33,24 +33,27 @@ class FormatTest {
 
     @Test
     fun formatWithUsesCustomFormatterCallback() {
-        val rendered = newFormat(listOf(1, 2, 3).iterator(), "-") { item, emit ->
-            emit("0x")
-            emit(item)
-        }.toString()
+        val rendered =
+            newFormat(listOf(1, 2, 3).iterator(), "-") { item, emit ->
+                emit("0x")
+                emit(item)
+            }.toString()
         assertEquals("0x1-0x2-0x3", rendered)
     }
 
     @Test
     fun formatWithEmptyIteratorIsEmptyString() {
-        val rendered = newFormat(emptyList<Int>().iterator(), ", ") { _, emit -> emit("nope") }
-            .toString()
+        val rendered =
+            newFormat(emptyList<Int>().iterator(), ", ") { _, emit -> emit("nope") }
+                .toString()
         assertEquals("", rendered)
     }
 
     @Test
     fun formatWithSingleElementHasNoSeparator() {
-        val rendered = newFormat(listOf(42).iterator(), ", ") { item, emit -> emit(item) }
-            .toString()
+        val rendered =
+            newFormat(listOf(42).iterator(), ", ") { item, emit -> emit(item) }
+                .toString()
         assertEquals("42", rendered)
     }
 

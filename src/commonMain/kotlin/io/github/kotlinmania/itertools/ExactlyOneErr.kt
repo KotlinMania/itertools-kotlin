@@ -17,7 +17,6 @@ internal class ExactlyOneError<T>(
     private val inner: Iterator<T>,
     private val innerHint: SizeHint,
 ) : Iterator<T> {
-
     private var firstTwo: FirstTwo<T>? = firstTwo
     private var consumed: Int = 0
 
@@ -27,15 +26,22 @@ internal class ExactlyOneError<T>(
      * upstream `Either<[T; 2], T>`.
      */
     internal sealed class FirstTwo<out T> {
-        internal class Both<T>(val first: T, val second: T) : FirstTwo<T>()
-        internal class JustSecond<T>(val second: T) : FirstTwo<T>()
+        internal class Both<T>(
+            val first: T,
+            val second: T,
+        ) : FirstTwo<T>()
+
+        internal class JustSecond<T>(
+            val second: T,
+        ) : FirstTwo<T>()
     }
 
-    private fun additionalLen(): Int = when (firstTwo) {
-        is FirstTwo.Both<*> -> 2
-        is FirstTwo.JustSecond<*> -> 1
-        null -> 0
-    }
+    private fun additionalLen(): Int =
+        when (firstTwo) {
+            is FirstTwo.Both<*> -> 2
+            is FirstTwo.JustSecond<*> -> 1
+            null -> 0
+        }
 
     override fun hasNext(): Boolean = firstTwo != null || inner.hasNext()
 

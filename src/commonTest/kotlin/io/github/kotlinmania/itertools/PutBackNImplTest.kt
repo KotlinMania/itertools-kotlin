@@ -56,9 +56,11 @@ class PutBackNImplTest {
         it.next()
         it.putBack(1)
         it.putBack(0)
-        val out = it.fold(mutableListOf<Int>()) { acc, x ->
-            acc.add(x); acc
-        }
+        val out =
+            it.fold(mutableListOf<Int>()) { acc, x ->
+                acc.add(x)
+                acc
+            }
         assertEquals(listOf(0, 1, 3, 4), out)
     }
 

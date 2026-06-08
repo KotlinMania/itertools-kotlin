@@ -12,7 +12,10 @@ package io.github.kotlinmania.itertools
  * maximum, or `null` when the upper bound is unknown (infinite or
  * uncomputable).
  */
-data class SizeHint(val lower: Int, val upper: Int?)
+data class SizeHint(
+    val lower: Int,
+    val upper: Int?,
+)
 
 private fun saturatingAdd(a: Int, b: Int): Int {
     val sum = a.toLong() + b.toLong()
@@ -42,11 +45,12 @@ private fun checkedMul(a: Int, b: Int): Int? {
 /** Add `SizeHint` correctly. */
 fun add(a: SizeHint, b: SizeHint): SizeHint {
     val lo = saturatingAdd(a.lower, b.lower)
-    val hi = if (a.upper != null && b.upper != null) {
-        checkedAdd(a.upper, b.upper)
-    } else {
-        null
-    }
+    val hi =
+        if (a.upper != null && b.upper != null) {
+            checkedAdd(a.upper, b.upper)
+        } else {
+            null
+        }
     return SizeHint(lo, hi)
 }
 
@@ -69,11 +73,12 @@ fun mul(a: SizeHint, b: SizeHint): SizeHint {
     val lo = saturatingMul(a.lower, b.lower)
     val au = a.upper
     val bu = b.upper
-    val hi = when {
-        au != null && bu != null -> checkedMul(au, bu)
-        (au == 0 && bu == null) || (au == null && bu == 0) -> 0
-        else -> null
-    }
+    val hi =
+        when {
+            au != null && bu != null -> checkedMul(au, bu)
+            (au == 0 && bu == null) || (au == null && bu == 0) -> 0
+            else -> null
+        }
     return SizeHint(lo, hi)
 }
 
@@ -88,11 +93,12 @@ fun mulScalar(sh: SizeHint, x: Int): SizeHint {
 fun max(a: SizeHint, b: SizeHint): SizeHint {
     val lower = kotlin.math.max(a.lower, b.lower)
 
-    val upper = if (a.upper != null && b.upper != null) {
-        kotlin.math.max(a.upper, b.upper)
-    } else {
-        null
-    }
+    val upper =
+        if (a.upper != null && b.upper != null) {
+            kotlin.math.max(a.upper, b.upper)
+        } else {
+            null
+        }
 
     return SizeHint(lower, upper)
 }
@@ -100,10 +106,11 @@ fun max(a: SizeHint, b: SizeHint): SizeHint {
 /** Return the minimum */
 fun min(a: SizeHint, b: SizeHint): SizeHint {
     val lower = kotlin.math.min(a.lower, b.lower)
-    val upper = if (a.upper != null && b.upper != null) {
-        kotlin.math.min(a.upper, b.upper)
-    } else {
-        a.upper ?: b.upper
-    }
+    val upper =
+        if (a.upper != null && b.upper != null) {
+            kotlin.math.min(a.upper, b.upper)
+        } else {
+            a.upper ?: b.upper
+        }
     return SizeHint(lower, upper)
 }

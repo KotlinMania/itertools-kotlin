@@ -58,9 +58,11 @@ class WithPositionTest {
     fun foldVisitsEveryPositionOnce() {
         val src = listOf("x", "y", "z")
         val it = WithPosition(src.iterator(), SizeHint(src.size, src.size))
-        val collected = it.fold(mutableListOf<Positioned<String>>()) { acc, p ->
-            acc.add(p); acc
-        }
+        val collected =
+            it.fold(mutableListOf<Positioned<String>>()) { acc, p ->
+                acc.add(p)
+                acc
+            }
         assertEquals(
             listOf(
                 Positioned(Position.First, "x"),

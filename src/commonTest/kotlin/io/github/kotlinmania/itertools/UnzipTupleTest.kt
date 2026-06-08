@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class UnzipTupleTest {
-
     @Test
     fun unzipPair() {
         val inputs = listOf(1 to 'a', 2 to 'b', 3 to 'c')

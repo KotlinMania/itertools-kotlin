@@ -19,7 +19,9 @@ internal fun interface IntersperseElement<T> {
  * general clone mechanism; for immutable element types, returning the stored
  * reference is equivalent.
  */
-internal class IntersperseElementSimple<T>(private val item: T) : IntersperseElement<T> {
+internal class IntersperseElementSimple<T>(
+    private val item: T,
+) : IntersperseElement<T> {
     override fun generate(): T = item
 }
 
@@ -62,7 +64,10 @@ internal class IntersperseWith<T>(
 ) : Iterator<T> {
     private sealed class Slot<out T> {
         data object Empty : Slot<Nothing>()
-        class Filled<T>(val value: T) : Slot<T>()
+
+        class Filled<T>(
+            val value: T,
+        ) : Slot<T>()
     }
 
     private var peek: Slot<T>? = null
@@ -79,26 +84,28 @@ internal class IntersperseWith<T>(
         val pre = pending
         if (pre != null) return pre
         val current = peek
-        val produced: Slot.Filled<T>? = when (current) {
-            is Slot.Filled -> {
-                peek = Slot.Empty
-                current
-            }
-            Slot.Empty -> when (val n = pullSource()) {
+        val produced: Slot.Filled<T>? =
+            when (current) {
                 is Slot.Filled -> {
-                    peek = n
-                    Slot.Filled(element.generate())
+                    peek = Slot.Empty
+                    current
                 }
-                Slot.Empty -> null
-            }
-            null -> {
-                peek = Slot.Empty
-                when (val n = pullSource()) {
-                    is Slot.Filled -> n
-                    Slot.Empty -> null
+                Slot.Empty ->
+                    when (val n = pullSource()) {
+                        is Slot.Filled -> {
+                            peek = n
+                            Slot.Filled(element.generate())
+                        }
+                        Slot.Empty -> null
+                    }
+                null -> {
+                    peek = Slot.Empty
+                    when (val n = pullSource()) {
+                        is Slot.Filled -> n
+                        Slot.Empty -> null
+                    }
                 }
             }
-        }
         pending = produced
         return produced
     }
@@ -146,7 +153,8 @@ internal fun <T> intersperseWith(iter: Iterator<T>, elt: IntersperseElement<T>):
 internal fun <T> intersperseWith(iterable: Iterable<T>, elt: IntersperseElement<T>): Iterator<T> =
     IntersperseWith(elt, iterable.iterator(), iterableSizeHint(iterable))
 
-internal fun iterableSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+internal fun iterableSizeHint(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

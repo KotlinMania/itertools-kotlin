@@ -10,7 +10,6 @@ internal class PutBackN<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
 ) : Iterator<T> {
-
     private val top: ArrayDeque<T> = ArrayDeque()
     private var consumed: Int = 0
 
@@ -69,7 +68,8 @@ internal class PutBackN<T>(
 fun <T> putBackN(iterable: Iterable<T>): Iterator<T> =
     PutBackN(iterable.iterator(), sizeHintOfIterable(iterable))
 
-private fun sizeHintOfIterable(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun sizeHintOfIterable(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

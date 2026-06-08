@@ -25,6 +25,7 @@ private fun <T> Iterator<T>.itTake(n: Int): Iterator<T> {
     val source = this
     return object : Iterator<T> {
         override fun hasNext(): Boolean = remaining > 0 && source.hasNext()
+
         override fun next(): T {
             if (remaining <= 0) throw NoSuchElementException()
             remaining -= 1
@@ -48,7 +49,10 @@ private fun <T> Iterator<T>.itSkip(n: Int): Iterator<T> {
  * The Kotlin port uses [Int] for the upstream `usize`; [start] is inclusive and
  * [end] is exclusive, matching `core::ops::Range<usize>`.
  */
-public data class Range(public val start: Int, public val end: Int) : IteratorIndex {
+public data class Range(
+    public val start: Int,
+    public val end: Int,
+) : IteratorIndex {
     override fun <T> index(from: Iterator<T>): Iterator<T> = from.itTake(end).itSkip(start)
 }
 
@@ -58,7 +62,10 @@ public data class Range(public val start: Int, public val end: Int) : IteratorIn
  * The Kotlin port mirrors `core::ops::RangeInclusive<usize>` with `Int.MAX_VALUE`
  * standing in for the upstream `usize::MAX` overflow guard.
  */
-public data class RangeInclusive(public val start: Int, public val end: Int) : IteratorIndex {
+public data class RangeInclusive(
+    public val start: Int,
+    public val end: Int,
+) : IteratorIndex {
     override fun <T> index(from: Iterator<T>): Iterator<T> {
         // end - start + 1 without overflowing if possible
         val length =
@@ -76,12 +83,16 @@ public data class RangeInclusive(public val start: Int, public val end: Int) : I
 }
 
 /** Index by a `..end` range of `usize`, where `end` is exclusive. */
-public data class RangeTo(public val end: Int) : IteratorIndex {
+public data class RangeTo(
+    public val end: Int,
+) : IteratorIndex {
     override fun <T> index(from: Iterator<T>): Iterator<T> = from.itTake(end)
 }
 
 /** Index by a `..=end` range of `usize`, where `end` is inclusive. */
-public data class RangeToInclusive(public val end: Int) : IteratorIndex {
+public data class RangeToInclusive(
+    public val end: Int,
+) : IteratorIndex {
     override fun <T> index(from: Iterator<T>): Iterator<T> {
         check(end != Int.MAX_VALUE) { "RangeToInclusive.index: end must not be Int.MAX_VALUE" }
         return from.itTake(end + 1)
@@ -89,7 +100,9 @@ public data class RangeToInclusive(public val end: Int) : IteratorIndex {
 }
 
 /** Index by a `start..` range of `usize`. */
-public data class RangeFrom(public val start: Int) : IteratorIndex {
+public data class RangeFrom(
+    public val start: Int,
+) : IteratorIndex {
     override fun <T> index(from: Iterator<T>): Iterator<T> = from.itSkip(start)
 }
 

@@ -58,10 +58,11 @@ class IntersperseTest {
     @Test
     fun intersperseWithCallsGeneratorBetweenElements() {
         var calls = 0
-        val gen = IntersperseElement {
-            calls += 1
-            "[$calls]"
-        }
+        val gen =
+            IntersperseElement {
+                calls += 1
+                "[$calls]"
+            }
         val out = intersperseWith(listOf("a", "b", "c").iterator(), gen).asSequence().toList()
         assertEquals(listOf("a", "[1]", "b", "[2]", "c"), out)
         assertEquals(2, calls)
@@ -88,10 +89,11 @@ class IntersperseTest {
     @Test
     fun foldVisitsEveryEmittedElement() {
         val it = IntersperseWith(IntersperseElementSimple(0), listOf(1, 2, 3).iterator())
-        val collected = it.fold(mutableListOf<Int>()) { acc, x ->
-            acc.add(x)
-            acc
-        }
+        val collected =
+            it.fold(mutableListOf<Int>()) { acc, x ->
+                acc.add(x)
+                acc
+            }
         assertEquals(listOf(1, 0, 2, 0, 3), collected)
     }
 

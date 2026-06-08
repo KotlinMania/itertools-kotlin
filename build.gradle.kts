@@ -230,9 +230,7 @@ tasks.matching { it.name == "compileAndroidMain" }.configureEach {
 
 // Gap #9b: KGP-generated bridge boilerplate and KotlinCoroutineSupport runtime
 // produce warnings (unchecked casts, unused expressions, opt-in requirements)
-// that cannot be fixed in source — they are regenerated every build. The
-// gap-#8 audit confirms our own bridge code (Itertools.kt) has zero
-// unchecked Any? casts; only KGP-generated files remain.
+// that cannot be fixed in source — they are regenerated every build.
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
     if (name.startsWith("compileSwiftExport")) {
         compilerOptions.allWarningsAsErrors.set(false)
@@ -262,8 +260,7 @@ kotlin {
         apiVersion.set(KotlinVersion.KOTLIN_2_4)
         allWarningsAsErrors.set(!isCodeqlBuild)
         optIn.addAll(commonOptIns)
-        freeCompilerArgs.add("-Xexpect-actual-classes")
-        freeCompilerArgs.add("-Xsuppress-version-warnings")
+        freeCompilerArgs.addAll("-Xexpect-actual-classes", "-Xsuppress-version-warnings")
     }
 
     val xcf = XCFramework(frameworkName)
@@ -359,6 +356,7 @@ kotlin {
         }
     }
 }
+
 // ============================================================================
 // Test logging
 // ============================================================================
@@ -425,8 +423,8 @@ tasks.named("check") {
     // wasmWasi). Test EXECUTION belongs to check; target BUILD coverage belongs
     // to the explicit all-target build set below.
     dependsOn("testAndroidHostTest")
-    // Swift Export smoke test is required; it must not self-skip.
     dependsOn("hostTests")
+    // Swift Export smoke test is required; it must not self-skip.
     dependsOn("swiftExportSmokeTest")
 }
 
