@@ -8,22 +8,28 @@ import kotlin.test.assertFalse
 class TakeWhileInclusiveTest {
     @Test
     fun includesStoppingElement() {
-        val out = takeWhileInclusive(listOf(1, 2, 3, 4, 5)) { it < 3 }
-            .asSequence().toList()
+        val out =
+            takeWhileInclusive(listOf(1, 2, 3, 4, 5)) { it < 3 }
+                .asSequence()
+                .toList()
         assertEquals(listOf(1, 2, 3), out)
     }
 
     @Test
     fun stopsAfterFirstFalse() {
-        val out = takeWhileInclusive(listOf(10, 20, 30, 40)) { it < 1 }
-            .asSequence().toList()
+        val out =
+            takeWhileInclusive(listOf(10, 20, 30, 40)) { it < 1 }
+                .asSequence()
+                .toList()
         assertEquals(listOf(10), out)
     }
 
     @Test
     fun fullySatisfiedRunsToEnd() {
-        val out = takeWhileInclusive(listOf(1, 2, 3)) { true }
-            .asSequence().toList()
+        val out =
+            takeWhileInclusive(listOf(1, 2, 3)) { true }
+                .asSequence()
+                .toList()
         assertEquals(listOf(1, 2, 3), out)
     }
 
@@ -58,8 +64,10 @@ class TakeWhileInclusiveTest {
 
     @Test
     fun nullableElementsRoundTrip() {
-        val out = takeWhileInclusive(listOf<Int?>(1, null, 3, 4)) { it != null }
-            .asSequence().toList()
+        val out =
+            takeWhileInclusive(listOf<Int?>(1, null, 3, 4)) { it != null }
+                .asSequence()
+                .toList()
         assertEquals(listOf<Int?>(1, null), out)
     }
 }

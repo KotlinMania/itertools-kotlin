@@ -10,12 +10,12 @@ internal class RepeatN<A>(
     internal var elt: A?,
     private var n: Int,
 ) : Iterator<A> {
-
     override fun hasNext(): Boolean = n > 0
 
     override fun next(): A {
-        val current = elt
-            ?: throw NoSuchElementException("RepeatN exhausted")
+        val current =
+            elt
+                ?: throw NoSuchElementException("RepeatN exhausted")
         if (n > 1) {
             n -= 1
             return current

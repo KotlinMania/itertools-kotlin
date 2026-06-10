@@ -17,7 +17,9 @@ package io.github.kotlinmania.itertools
  * the caller, which matches the upstream behavior of resetting `len = 0`
  * and replacing the backing array.
  */
-internal class ArrayBuilder<T>(private val n: Int) {
+internal class ArrayBuilder<T>(
+    private val n: Int,
+) {
     private val arr: MutableList<T> = ArrayList(n)
 
     /**

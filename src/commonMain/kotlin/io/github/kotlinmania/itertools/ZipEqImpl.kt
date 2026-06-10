@@ -4,7 +4,10 @@ package io.github.kotlinmania.itertools
 /**
  * A pair of elements produced by [zipEq].
  */
-internal data class Zipped<A, B>(val first: A, val second: B)
+internal data class Zipped<A, B>(
+    val first: A,
+    val second: B,
+)
 
 /**
  * An iterator which iterates two other iterators simultaneously
@@ -18,7 +21,6 @@ internal class ZipEq<A, B>(
     private val aHint: SizeHint,
     private val bHint: SizeHint,
 ) : Iterator<Zipped<A, B>> {
-
     private var peeked: Zipped<A, B>? = null
     private var exhausted: Boolean = false
     private var consumed: Int = 0
@@ -49,8 +51,9 @@ internal class ZipEq<A, B>(
 
     override fun next(): Zipped<A, B> {
         advance()
-        val current = peeked
-            ?: throw NoSuchElementException("ZipEq exhausted")
+        val current =
+            peeked
+                ?: throw NoSuchElementException("ZipEq exhausted")
         peeked = null
         consumed += 1
         return current
@@ -78,7 +81,8 @@ internal fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>
 internal fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
     ZipEq(i, j, aHint, bHint)
 
-private fun sizeHintOf(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun sizeHintOf(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

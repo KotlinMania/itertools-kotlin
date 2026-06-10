@@ -34,6 +34,7 @@ internal fun <T, K> maxSetImpl(
     it: Iterator<T>,
     keyFor: (T) -> K,
     compare: (T, T, K, K) -> Int,
-): MutableList<T> = minSetImpl(it, keyFor) { it1, it2, key1, key2 ->
-    compare(it2, it1, key2, key1)
-}
+): MutableList<T> =
+    minSetImpl(it, keyFor) { it1, it2, key1, key2 ->
+        compare(it2, it1, key2, key1)
+    }

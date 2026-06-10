@@ -6,7 +6,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SourcesTest {
-
     @Test
     fun iterateProducesExpectedPrefix() {
         val iter = iterate(1) { x -> x % 3 + 1 }

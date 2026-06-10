@@ -11,13 +11,18 @@ internal sealed class MinMaxResult<out T> {
     internal object NoElements : MinMaxResult<Nothing>()
 
     /** Iterator with one element, so the minimum and maximum are the same. */
-    internal data class OneElement<T>(val value: T) : MinMaxResult<T>()
+    internal data class OneElement<T>(
+        val value: T,
+    ) : MinMaxResult<T>()
 
     /**
      * More than one element in the iterator, the first element is not larger
      * than the second.
      */
-    internal data class MinMax<T>(val min: T, val max: T) : MinMaxResult<T>()
+    internal data class MinMax<T>(
+        val min: T,
+        val max: T,
+    ) : MinMaxResult<T>()
 
     /**
      * `toOption` creates a nullable `Pair<T, T>`. The returned value is `null`
@@ -38,11 +43,12 @@ internal sealed class MinMaxResult<out T> {
      * check(r2.toOption() == 1 to 2)
      * ```
      */
-    fun toOption(): Pair<T, T>? = when (this) {
-        is NoElements -> null
-        is OneElement -> value to value
-        is MinMax -> min to max
-    }
+    fun toOption(): Pair<T, T>? =
+        when (this) {
+            is NoElements -> null
+            is OneElement -> value to value
+            is MinMax -> min to max
+        }
 }
 
 /** Implementation guts for `minmax` and `minmaxBy`. */
@@ -62,9 +68,15 @@ internal fun <I, K> minmaxImpl(
     var minKey: K
     var maxKey: K
     if (!lt(second0, first0, yk0, xk0)) {
-        min = first0; max = second0; minKey = xk0; maxKey = yk0
+        min = first0
+        max = second0
+        minKey = xk0
+        maxKey = yk0
     } else {
-        min = second0; max = first0; minKey = yk0; maxKey = xk0
+        min = second0
+        max = first0
+        minKey = yk0
+        maxKey = xk0
     }
 
     while (true) {

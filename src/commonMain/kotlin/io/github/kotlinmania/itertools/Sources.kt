@@ -14,7 +14,9 @@ package io.github.kotlinmania.itertools
  * surfaced as a [StateRef] whose [value] the closure assigns when it advances
  * the iteration.
  */
-internal class StateRef<St>(var value: St)
+internal class StateRef<St>(
+    var value: St,
+)
 
 /**
  * Creates a new unfold source with the specified closure as the "iterator
@@ -53,7 +55,6 @@ internal class Unfold<St, A>(
     private val f: (StateRef<St>) -> A?,
     initialState: St,
 ) : Iterator<A> {
-
     /** Internal state that will be passed to the closure on the next iteration. */
     val stateRef: StateRef<St> = StateRef(initialState)
 
@@ -86,7 +87,9 @@ internal class Unfold<St, A>(
         return cell.value
     }
 
-    private class Box<A>(val value: A)
+    private class Box<A>(
+        val value: A,
+    )
 }
 
 /**
@@ -99,7 +102,6 @@ internal class Iterate<St>(
     initialState: St,
     private val f: (St) -> St,
 ) : Iterator<St> {
-
     var state: St = initialState
         private set
 

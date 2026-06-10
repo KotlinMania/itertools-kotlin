@@ -13,12 +13,13 @@ internal class TakeWhileInclusive<T>(
     private val predicate: (T) -> Boolean,
     private val sourceHint: SizeHint,
 ) : Iterator<T> {
-
     private var done: Boolean = false
     private var slot: Slot<T>? = null
     private var consumed: Int = 0
 
-    private class Slot<T>(val value: T)
+    private class Slot<T>(
+        val value: T,
+    )
 
     private fun advance() {
         if (slot != null || done) return
@@ -87,7 +88,8 @@ internal class TakeWhileInclusive<T>(
 internal fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
     TakeWhileInclusive(iterable.iterator(), predicate, sourceSizeHint(iterable))
 
-private fun sourceSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun sourceSizeHint(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

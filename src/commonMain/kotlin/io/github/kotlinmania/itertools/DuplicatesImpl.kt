@@ -10,14 +10,21 @@ package io.github.kotlinmania.itertools
  */
 internal interface KeyXorValue<K, V> {
     fun keyRef(): K
+
     fun key(): K
+
     fun value(): V
 }
 
 /** `KeyXorValue` impl for the `(K, V)` shape — `KeyValue<K, V>` upstream. */
-internal class KeyValue<K, V>(private val k: K, private val v: V) : KeyXorValue<K, V> {
+internal class KeyValue<K, V>(
+    private val k: K,
+    private val v: V,
+) : KeyXorValue<K, V> {
     override fun keyRef(): K = k
+
     override fun key(): K = k
+
     override fun value(): V = v
 }
 
@@ -28,9 +35,13 @@ internal class KeyValue<K, V>(private val k: K, private val v: V) : KeyXorValue<
  * twice, which is equivalent for the immutable element types this adaptor is
  * meant for.
  */
-internal class JustValue<V>(private val v: V) : KeyXorValue<V, V> {
+internal class JustValue<V>(
+    private val v: V,
+) : KeyXorValue<V, V> {
     override fun keyRef(): V = v
+
     override fun key(): V = v
+
     override fun value(): V = v
 }
 
@@ -45,7 +56,9 @@ internal class ById<V> : KeyMethod<V, V> {
 }
 
 /** Apply a user-supplied function to elements before checking them for equality. */
-internal class ByFn<K, V>(private val f: (V) -> K) : KeyMethod<K, V> {
+internal class ByFn<K, V>(
+    private val f: (V) -> K,
+) : KeyMethod<K, V> {
     override fun make(value: V): KeyXorValue<K, V> = KeyValue(f(value), value)
 }
 
@@ -134,17 +147,19 @@ internal class DuplicatesBy<T, K> internal constructor(
      * collapses based on how many first-sightings are still pending.
      */
     fun sizeHint(): SizeHint {
-        val iterRemainingHi = sourceHint.upper?.let { hi ->
-            val remaining = hi - iterConsumed
-            if (remaining < 0) 0 else remaining
-        }
-        val hi = iterRemainingHi?.let { remaining ->
-            if (remaining <= meta.pending) {
-                remaining
-            } else {
-                meta.pending + (remaining - meta.pending) / 2
+        val iterRemainingHi =
+            sourceHint.upper?.let { hi ->
+                val remaining = hi - iterConsumed
+                if (remaining < 0) 0 else remaining
             }
-        }
+        val hi =
+            iterRemainingHi?.let { remaining ->
+                if (remaining <= meta.pending) {
+                    remaining
+                } else {
+                    meta.pending + (remaining - meta.pending) / 2
+                }
+            }
         return SizeHint(0, hi)
     }
 }
@@ -172,7 +187,8 @@ internal fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0
 fun <T> duplicates(iterable: Iterable<T>): Iterator<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
 
-private fun hintOfIterable(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun hintOfIterable(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

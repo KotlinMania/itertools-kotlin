@@ -4,7 +4,10 @@ package io.github.kotlinmania.itertools
 /**
  * A positioned element yielded by [withPosition].
  */
-internal data class Positioned<T>(val position: Position, val value: T)
+internal data class Positioned<T>(
+    val position: Position,
+    val value: T,
+)
 
 /**
  * An iterator adaptor that wraps each element in a [Position].
@@ -17,7 +20,6 @@ internal class WithPosition<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
 ) : Iterator<Positioned<T>> {
-
     private var handledFirst: Boolean = false
     private var consumed: Int = 0
 
@@ -25,7 +27,9 @@ internal class WithPosition<T>(
     private var tailSlot: Slot<T>? = null
     private var sourceExhausted: Boolean = false
 
-    private class Slot<T>(val value: T)
+    private class Slot<T>(
+        val value: T,
+    )
 
     private fun primeHead() {
         if (headSlot != null || sourceExhausted) return
@@ -57,12 +61,13 @@ internal class WithPosition<T>(
         val head = headSlot ?: throw NoSuchElementException("WithPosition exhausted")
         primeTail()
         val hasMore = tailSlot != null
-        val position = if (!handledFirst) {
-            handledFirst = true
-            if (hasMore) Position.First else Position.Only
-        } else {
-            if (hasMore) Position.Middle else Position.Last
-        }
+        val position =
+            if (!handledFirst) {
+                handledFirst = true
+                if (hasMore) Position.First else Position.Only
+            } else {
+                if (hasMore) Position.Middle else Position.Last
+            }
         // Advance: tail becomes new head.
         headSlot = tailSlot
         tailSlot = null
@@ -119,7 +124,8 @@ enum class Position {
 internal fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
     WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
 
-private fun withPositionSizeHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun withPositionSizeHint(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

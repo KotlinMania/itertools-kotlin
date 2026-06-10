@@ -15,7 +15,6 @@ internal class PadUsing<T>(
     private val sourceHint: SizeHint,
     private val filler: (Int) -> T,
 ) : Iterator<T> {
-
     private var pos: Int = 0
     private var sourceExhausted: Boolean = false
 
@@ -74,7 +73,8 @@ internal class PadUsing<T>(
 internal fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
     PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
 
-private fun padTailIterableHint(it: Iterable<*>): SizeHint = when (it) {
-    is Collection<*> -> SizeHint(it.size, it.size)
-    else -> SizeHint(0, null)
-}
+private fun padTailIterableHint(it: Iterable<*>): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }

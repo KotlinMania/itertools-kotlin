@@ -8,7 +8,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class UniqueImplTest {
-
     /**
      * Mirror of `tests/test_std.rs::unique_by` forward pass.
      *

@@ -14,21 +14,23 @@ class ExactlyOneErrTest {
 
     @Test
     fun bothPrefixYieldsFirstThenSecondThenInner() {
-        val it = ExactlyOneError(
-            ExactlyOneError.FirstTwo.Both(10, 20),
-            listOf(30, 40).iterator(),
-            SizeHint(2, 2),
-        )
+        val it =
+            ExactlyOneError(
+                ExactlyOneError.FirstTwo.Both(10, 20),
+                listOf(30, 40).iterator(),
+                SizeHint(2, 2),
+            )
         assertEquals(listOf(10, 20, 30, 40), it.asSequence().toList())
     }
 
     @Test
     fun justSecondPrefixYieldsSecondThenInner() {
-        val it = ExactlyOneError(
-            ExactlyOneError.FirstTwo.JustSecond("only-second"),
-            listOf("a", "b").iterator(),
-            SizeHint(2, 2),
-        )
+        val it =
+            ExactlyOneError(
+                ExactlyOneError.FirstTwo.JustSecond("only-second"),
+                listOf("a", "b").iterator(),
+                SizeHint(2, 2),
+            )
         assertEquals(listOf("only-second", "a", "b"), it.asSequence().toList())
     }
 
@@ -41,21 +43,23 @@ class ExactlyOneErrTest {
 
     @Test
     fun bothPrefixSignalsAtLeastTwoExpected() {
-        val it = ExactlyOneError(
-            ExactlyOneError.FirstTwo.Both(1, 2),
-            emptyList<Int>().iterator(),
-            SizeHint(0, 0),
-        )
+        val it =
+            ExactlyOneError(
+                ExactlyOneError.FirstTwo.Both(1, 2),
+                emptyList<Int>().iterator(),
+                SizeHint(0, 0),
+            )
         assertEquals("got at least 2 elements when exactly one was expected", it.toString())
     }
 
     @Test
     fun sizeHintReflectsPrefixAndInnerRemaining() {
-        val it = ExactlyOneError(
-            ExactlyOneError.FirstTwo.Both(1, 2),
-            listOf(3, 4, 5).iterator(),
-            SizeHint(3, 3),
-        )
+        val it =
+            ExactlyOneError(
+                ExactlyOneError.FirstTwo.Both(1, 2),
+                listOf(3, 4, 5).iterator(),
+                SizeHint(3, 3),
+            )
         assertEquals(SizeHint(5, 5), it.sizeHint())
         it.next()
         assertEquals(SizeHint(4, 4), it.sizeHint())
@@ -67,11 +71,12 @@ class ExactlyOneErrTest {
 
     @Test
     fun foldVisitsPrefixThenInner() {
-        val it = ExactlyOneError(
-            ExactlyOneError.FirstTwo.Both(1, 2),
-            listOf(3, 4).iterator(),
-            SizeHint(2, 2),
-        )
+        val it =
+            ExactlyOneError(
+                ExactlyOneError.FirstTwo.Both(1, 2),
+                listOf(3, 4).iterator(),
+                SizeHint(2, 2),
+            )
         val total = it.fold(0) { acc, x -> acc + x }
         assertEquals(10, total)
     }

@@ -10,7 +10,9 @@ package io.github.kotlinmania.itertools
  * façade. Callers stringify it with `toString()` exactly once; the
  * once-only contract is preserved on the underlying implementation.
  */
-public class Formatted internal constructor(private val producer: () -> String) {
+public class Formatted internal constructor(
+    private val producer: () -> String,
+) {
     override fun toString(): String = producer()
 }
 
