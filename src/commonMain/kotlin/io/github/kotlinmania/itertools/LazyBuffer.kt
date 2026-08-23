@@ -27,6 +27,9 @@ internal class LazyBuffer<T>(
     )
 
     /** Number of buffered (already-pulled) elements. */
+    fun len(): Int = buffer.size
+
+    /** Number of buffered (already-pulled) elements. */
     val length: Int
         get() = buffer.size
 
@@ -70,6 +73,9 @@ internal class LazyBuffer<T>(
     /** Indexed access into the buffered prefix. */
     operator fun get(index: Int): T = buffer[index]
 
+    /** Index into the buffered prefix. */
+    fun index(index: Int): T = buffer[index]
+
     /**
      * Returns a fresh list of the buffered elements at the given indices.
      *
@@ -78,4 +84,18 @@ internal class LazyBuffer<T>(
      * itself needs deep copying, which is the caller's responsibility.
      */
     fun getAt(indices: IntArray): List<T> = indices.map { buffer[it] }
+
+    /**
+     * Returns a list of the buffered elements at the given indices array.
+     */
+    fun getArray(indices: IntArray): List<T> = indices.map { buffer[it] }
+
+    companion object {
+        /** Create a new [LazyBuffer] from an iterator. */
+        fun <T> new(it: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): LazyBuffer<T> =
+            LazyBuffer(it, sourceHint)
+
+        /** Create a new [LazyBuffer] from an iterable. */
+        fun <T> new(iterable: Iterable<T>): LazyBuffer<T> = LazyBuffer(iterable)
+    }
 }

@@ -10,12 +10,16 @@ class PeekNthTest {
     fun testPeekNth() {
         val it = peekNth(listOf(1, 2, 3, 4, 5))
         assertEquals(1, it.peek())
+        assertEquals(1, it.peekMut())
         assertEquals(1, it.peekNth(0))
+        assertEquals(1, it.peekNthMut(0))
         assertEquals(2, it.peekNth(1))
+        assertEquals(2, it.peekNthMut(1))
         assertEquals(3, it.peekNth(2))
         assertEquals(4, it.peekNth(3))
         assertEquals(5, it.peekNth(4))
         assertNull(it.peekNth(5))
+        assertNull(it.peekNthMut(5))
 
         assertEquals(1, it.next())
         assertEquals(2, it.peekNth(0))

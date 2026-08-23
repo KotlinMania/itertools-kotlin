@@ -129,4 +129,43 @@ class EitherOrBothTest {
         assertEquals(EitherOrBoth.Right("42!"), right.rightAndThen { EitherOrBoth.Right(it + "!") })
         assertEquals(EitherOrBoth.Right("42!"), both.rightAndThen { EitherOrBoth.Right(it + "!") })
     }
+
+    @Test
+    fun testReferencesAndDefaults() {
+        val left: EitherOrBoth<Int, String> = EitherOrBoth.Left(1)
+        val right: EitherOrBoth<Int, String> = EitherOrBoth.Right("a")
+        val both: EitherOrBoth<Int, String> = EitherOrBoth.Both(1, "a")
+
+        assertEquals(left, left.asRef())
+        assertEquals(left, left.asMut())
+        assertEquals(left, left.asDeref())
+        assertEquals(left, left.asDerefMut())
+
+        assertEquals(Pair(1, "defaultB"), left.orDefault({ 0 }, { "defaultB" }))
+        assertEquals(Pair(0, "a"), right.orDefault({ 0 }, { "defaultB" }))
+        assertEquals(Pair(1, "a"), both.orDefault({ 0 }, { "defaultB" }))
+    }
+
+    @Test
+    fun testInsertions() {
+        val left: EitherOrBoth<Int, String> = EitherOrBoth.Left(1)
+        val right: EitherOrBoth<Int, String> = EitherOrBoth.Right("a")
+
+        assertEquals(EitherOrBoth.Left(1), left.leftOrInsert(99))
+        assertEquals(EitherOrBoth.Both(99, "a"), right.leftOrInsert(99))
+        assertEquals(EitherOrBoth.Both(1, "b"), left.rightOrInsert("b"))
+        assertEquals(EitherOrBoth.Right("a"), right.rightOrInsert("b"))
+
+        assertEquals(EitherOrBoth.Left(1), left.leftOrInsertWith { 99 })
+        assertEquals(EitherOrBoth.Both(99, "a"), right.leftOrInsertWith { 99 })
+        assertEquals(EitherOrBoth.Both(1, "b"), left.rightOrInsertWith { "b" })
+        assertEquals(EitherOrBoth.Right("a"), right.rightOrInsertWith { "b" })
+
+        assertEquals(EitherOrBoth.Left(42), left.insertLeft(42))
+        assertEquals(EitherOrBoth.Both(42, "a"), right.insertLeft(42))
+        assertEquals(EitherOrBoth.Both(1, "z"), left.insertRight("z"))
+        assertEquals(EitherOrBoth.Right("z"), right.insertRight("z"))
+
+        assertEquals(EitherOrBoth.Both(10, "hello"), left.insertBoth(10, "hello"))
+    }
 }

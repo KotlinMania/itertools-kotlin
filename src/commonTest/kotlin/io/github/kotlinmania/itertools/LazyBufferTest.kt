@@ -70,7 +70,22 @@ class LazyBufferTest {
     fun emptySourceIsImmediatelyDone() {
         val lb = LazyBuffer(emptyList<Int>())
         assertEquals(0, lb.length)
+        assertEquals(0, lb.len())
         assertFalse(lb.getNext())
         assertEquals(0, lb.count())
+    }
+
+    @Test
+    fun testGetArrayAndIndexAndNew() {
+        val lb = LazyBuffer.new(listOf("a", "b", "c", "d"))
+        lb.prefill(4)
+        assertEquals(4, lb.len())
+        assertEquals("b", lb.index(1))
+        assertEquals(listOf("c", "a", "b"), lb.getArray(intArrayOf(2, 0, 1)))
+
+        val iterLb = LazyBuffer.new(listOf(1, 2, 3).iterator())
+        iterLb.prefill(3)
+        assertEquals(3, iterLb.len())
+        assertEquals(2, iterLb.index(1))
     }
 }
