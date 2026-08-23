@@ -127,3 +127,39 @@ internal fun <I, K> minmaxImpl(
 
     return MinMaxResult.MinMax(min, max)
 }
+
+/**
+ * Return the minimum and maximum element of an iterator.
+ */
+fun <T : Comparable<T>> Iterator<T>.minmax(): MinMaxResult<T> =
+    minmaxImpl(this, { }) { x, y, _, _ -> x < y }
+
+/**
+ * Return the minimum and maximum element of an iterable.
+ */
+fun <T : Comparable<T>> Iterable<T>.minmax(): MinMaxResult<T> =
+    iterator().minmax()
+
+/**
+ * Return the minimum and maximum element of an iterator, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterator<T>.minmaxByKey(key: (T) -> K): MinMaxResult<T> =
+    minmaxImpl(this, key) { _, _, xk, yk -> xk < yk }
+
+/**
+ * Return the minimum and maximum element of an iterable, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterable<T>.minmaxByKey(key: (T) -> K): MinMaxResult<T> =
+    iterator().minmaxByKey(key)
+
+/**
+ * Return the minimum and maximum element of an iterator, as determined by the comparison function.
+ */
+fun <T> Iterator<T>.minmaxBy(compare: (T, T) -> Int): MinMaxResult<T> =
+    minmaxImpl(this, { }) { x, y, _, _ -> compare(x, y) < 0 }
+
+/**
+ * Return the minimum and maximum element of an iterable, as determined by the comparison function.
+ */
+fun <T> Iterable<T>.minmaxBy(compare: (T, T) -> Int): MinMaxResult<T> =
+    iterator().minmaxBy(compare)

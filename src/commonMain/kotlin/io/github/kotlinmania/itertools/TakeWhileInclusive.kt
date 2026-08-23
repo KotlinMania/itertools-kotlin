@@ -8,10 +8,10 @@ package io.github.kotlinmania.itertools
  *
  * See [takeWhileInclusive] for more information.
  */
-internal class TakeWhileInclusive<T>(
+class TakeWhileInclusive<T>(
     private val iter: Iterator<T>,
     private val predicate: (T) -> Boolean,
-    private val sourceHint: SizeHint,
+    private val sourceHint: SizeHint = SizeHint(0, null),
 ) : Iterator<T> {
     private var done: Boolean = false
     private var slot: Slot<T>? = null
@@ -85,8 +85,14 @@ internal class TakeWhileInclusive<T>(
  * // out == [1, 2, 3]
  * ```
  */
-internal fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
+fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
     TakeWhileInclusive(iterable.iterator(), predicate, sourceSizeHint(iterable))
+
+/**
+ * `Iterator`-enabled extension for [TakeWhileInclusive].
+ */
+fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
+    TakeWhileInclusive(this, predicate)
 
 private fun sourceSizeHint(it: Iterable<*>): SizeHint =
     when (it) {

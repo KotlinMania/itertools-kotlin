@@ -17,7 +17,7 @@ package io.github.kotlinmania.itertools
  * check(c == listOf(3, 6, 9))
  * ```
  */
-internal fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
+fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
     val resA = mutableListOf<A>()
     val resB = mutableListOf<B>()
     for ((a, b) in i) {
@@ -28,7 +28,7 @@ internal fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> 
 }
 
 /** [Triple] overload of [multiUnzip]. */
-internal fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
+fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
     val resA = mutableListOf<A>()
     val resB = mutableListOf<B>()
     val resC = mutableListOf<C>()

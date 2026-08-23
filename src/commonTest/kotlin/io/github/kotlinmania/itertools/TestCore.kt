@@ -72,7 +72,7 @@ class TestCore {
         val ys = listOf(Pair(0, 1), Pair(2, 1))
 
         val pit =
-            batching(xs.iterator()) { it ->
+            batching(xs.iterator()) {
                 if (it.hasNext()) {
                     val x = it.next()
                     if (it.hasNext()) {

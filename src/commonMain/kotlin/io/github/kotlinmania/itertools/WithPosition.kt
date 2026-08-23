@@ -4,7 +4,7 @@ package io.github.kotlinmania.itertools
 /**
  * A positioned element yielded by [withPosition].
  */
-internal data class Positioned<T>(
+data class Positioned<T>(
     val position: Position,
     val value: T,
 )
@@ -16,9 +16,9 @@ internal data class Positioned<T>(
  *
  * See [withPosition] for more information.
  */
-internal class WithPosition<T>(
+class WithPosition<T>(
     private val iter: Iterator<T>,
-    private val sourceHint: SizeHint,
+    private val sourceHint: SizeHint = SizeHint(0, null),
 ) : Iterator<Positioned<T>> {
     private var handledFirst: Boolean = false
     private var consumed: Int = 0
@@ -121,8 +121,14 @@ enum class Position {
  * // tagged == [Positioned(Position.First, "a"), Positioned(Position.Middle, "b"), Positioned(Position.Last, "c")]
  * ```
  */
-internal fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
+fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
     WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
+
+/**
+ * Create a new [WithPosition] iterator from an [Iterator].
+ */
+fun <T> Iterator<T>.withPosition(): Iterator<Positioned<T>> =
+    WithPosition(this)
 
 private fun withPositionSizeHint(it: Iterable<*>): SizeHint =
     when (it) {

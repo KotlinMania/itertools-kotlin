@@ -6,9 +6,9 @@ package io.github.kotlinmania.itertools
  *
  * Iterator element type is the source iterator's element type.
  */
-internal class PutBackN<T>(
+class PutBackN<T>(
     private val iter: Iterator<T>,
-    private val sourceHint: SizeHint,
+    private val sourceHint: SizeHint = SizeHint(0, null),
 ) : PeekingNext<T> {
     private val top: ArrayDeque<T> = ArrayDeque()
     private var consumed: Int = 0
@@ -77,8 +77,14 @@ internal class PutBackN<T>(
  *
  * Iterator element type is the source's element type.
  */
-fun <T> putBackN(iterable: Iterable<T>): Iterator<T> =
+fun <T> putBackN(iterable: Iterable<T>): PutBackN<T> =
     PutBackN(iterable.iterator(), sizeHintOfIterable(iterable))
+
+/**
+ * Create an iterator where you can put back multiple values to the front of the iteration.
+ */
+fun <T> Iterator<T>.putBackN(): PutBackN<T> =
+    PutBackN(this)
 
 private fun sizeHintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {

@@ -26,3 +26,24 @@ fun <A, B, C> iproduct(a: Iterable<A>, b: Iterable<B>, c: Iterable<C>): Iterator
             }
         }
     }.iterator()
+
+/**
+ * Cartesian product of four iterables.
+ */
+fun <A, B, C, D> iproduct(
+    a: Iterable<A>,
+    b: Iterable<B>,
+    c: Iterable<C>,
+    d: Iterable<D>,
+): Iterator<List<Any?>> =
+    sequence {
+        for (w in a) {
+            for (x in b) {
+                for (y in c) {
+                    for (z in d) {
+                        yield(listOf(w, x, y, z))
+                    }
+                }
+            }
+        }
+    }.iterator()
