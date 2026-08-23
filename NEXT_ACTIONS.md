@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 49/73 (67.1%)
-- **Function parity:** 251/658 matched (target 752) — 38.1%
-- **Class/type parity:** 69/199 matched (target 164) — 34.7%
-- **Combined symbol parity:** 320/857 matched (target 916) — 37.3%
-- **Average inline-code cosine:** 0.23 (function body across 48 matched files)
-- **Average documentation cosine:** 0.62 (doc text across 48 matched files)
+- **Files Present:** 50/73 (68.5%)
+- **Function parity:** 258/795 matched (target 793) — 32.5%
+- **Class/type parity:** 70/204 matched (target 171) — 34.3%
+- **Combined symbol parity:** 328/999 matched (target 964) — 32.8%
+- **Average inline-code cosine:** 0.23 (function body across 49 matched files)
+- **Average documentation cosine:** 0.60 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 19
-- **Critical Issues:** 43 files with <0.60 function similarity
+- **Critical Issues:** 44 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -68,21 +68,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests either_or_both.rs` (current: `// port-lint: tests either_or_both.rs`)
 - **Lint issues:** 2
 
-### 3. repeatn
-
-- **Target:** `itertools.RepeatN [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
-- **Dependents:** 3
-- **Priority Score:** 3020810.0
-- **Functions:** 5/6 matched
-- **Missing functions:** `rfold`
-- **Types:** 1/2 matched (target 1)
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `repeatn.rs` vs expected `repeatn.rs`
-- **Proposed provenance header:** `// port-lint: source repeatn.rs` (current: `// port-lint: source repeatn.rs`)
-- **Lint issues:** 1
-
-### 4. peek_nth
+### 3. peek_nth
 
 - **Target:** `itertools.PeekNth [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -98,7 +84,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests peek_nth.rs` (current: `// port-lint: tests peek_nth.rs`)
 - **Lint issues:** 2
 
-### 5. lazy_buffer
+### 4. lazy_buffer
 
 - **Target:** `itertools.LazyBuffer [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -114,7 +100,37 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests lazy_buffer.rs` (current: `// port-lint: tests lazy_buffer.rs`)
 - **Lint issues:** 2
 
-### 6. adaptors.multi_product
+### 5. repeatn
+
+- **Target:** `itertools.RepeatN [ZERO] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
+- **Dependents:** 3
+- **Priority Score:** 3010810.0
+- **Functions:** 6/6 matched (target 8)
+- **Missing functions:** _none_
+- **Types:** 1/2 matched (target 1)
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `repeatn.rs` vs expected `repeatn.rs`
+- **Proposed provenance header:** `// port-lint: source repeatn.rs` (current: `// port-lint: source repeatn.rs`)
+- **Lint issues:** 1
+
+### 6. lib
+
+- **Target:** `itertools.AllEqual [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.02
+- **Dependents:** 0
+- **Priority Score:** 1364209.8
+- **Functions:** 6/137 matched (target 10)
+- **Missing functions:** `interleave`, `interleave_shortest`, `intersperse`, `intersperse_with`, `get`, `zip_longest`, `zip_eq`, `batching`, `chunk_by`, `group_by`, `chunks`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `map_into`, `map_ok`, `filter_ok`, `filter_map_ok`, `flatten_ok`, `process_results`, `merge`, `merge_by`, `merge_join_by`, `kmerge`, `kmerge_by`, `cartesian_product`, `multi_cartesian_product`, `coalesce`, `dedup`, `dedup_by`, `dedup_with_count`, `dedup_by_with_count`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `peeking_take_while`, `take_while_ref`, `take_while_inclusive`, `while_some`, `tuple_combinations`, `array_combinations`, `combinations`, `combinations_with_replacement`, `permutations`, `powerset`, `pad_using`, `with_position`, `positions`, `update`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple`, `find_position`, `find_or_last`, `find_or_first`, `contains`, `dropping`, `dropping_back`, `concat`, `collect_vec`, `try_collect`, `set_from`, `join`, `format`, `format_with`, `fold_ok`, `fold_options`, `fold1`, `tree_reduce`, `inner0`, `inner`, `tree_fold1`, `sum1`, `product1`, `sorted_unstable`, `sorted_unstable_by`, `sorted_unstable_by_key`, `sorted`, `sorted_by`, `sorted_by_key`, `sorted_by_cached_key`, `k_smallest`, `k_smallest_by`, `k_smallest_by_key`, `k_smallest_relaxed`, `k_smallest_relaxed_by`, `k_smallest_relaxed_by_key`, `k_largest`, `k_largest_by`, `k_largest_by_key`, `k_largest_relaxed`, `k_largest_relaxed_by`, `k_largest_relaxed_by_key`, `tail`, `partition_map`, `partition_result`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`, `position_max`, `position_max_by_key`, `position_max_by`, `position_min`, `position_min_by_key`, `position_min_by`, `position_minmax`, `position_minmax_by_key`, `position_minmax_by`, `exactly_one`, `at_most_one`, `multipeek`, `counts`, `counts_by`, `multiunzip`, `try_len`, `equal`, `assert_equal`, `partition`
+- **Types:** 1/5 matched (target 7)
+- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`, `State`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `lib.rs` vs expected `lib.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `lib.rs` vs expected `lib.rs`
+- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source lib.rs`)
+- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source lib.rs`)
+- **Lint issues:** 2
+
+### 7. adaptors.multi_product
 
 - **Target:** `adaptors.MultiProduct [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.13
@@ -130,7 +146,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests adaptors/multi_product.rs` (current: `// port-lint: tests adaptors/multi_product.rs`)
 - **Lint issues:** 2
 
-### 7. flatten_ok
+### 8. flatten_ok
 
 - **Target:** `itertools.FlattenOk [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.13
@@ -146,7 +162,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests tests/flatten_ok.rs`)
 - **Lint issues:** 2
 
-### 8. permutations
+### 9. permutations
 
 - **Target:** `itertools.Permutations [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.27
@@ -162,7 +178,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests permutations.rs` (current: `// port-lint: tests permutations.rs`)
 - **Lint issues:** 2
 
-### 9. zip_longest
+### 10. zip_longest
 
 - **Target:** `itertools.ZipLongest [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.13
@@ -178,7 +194,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests zip_longest.rs` (current: `// port-lint: tests zip_longest.rs`)
 - **Lint issues:** 2
 
-### 10. intersperse
+### 11. intersperse
 
 - **Target:** `itertools.Intersperse [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.50
@@ -194,7 +210,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests intersperse.rs` (current: `// port-lint: tests intersperse.rs`)
 - **Lint issues:** 2
 
-### 11. combinations_with_replacement
+### 12. combinations_with_replacement
 
 - **Target:** `itertools.CombinationsWithReplacement [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.30
@@ -210,7 +226,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests combinations_with_replacement.rs` (current: `// port-lint: tests combinations_with_replacement.rs`)
 - **Lint issues:** 2
 
-### 12. powerset
+### 13. powerset
 
 - **Target:** `itertools.Powerset [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.60
@@ -226,7 +242,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests powerset.rs` (current: `// port-lint: tests powerset.rs`)
 - **Lint issues:** 2
 
-### 13. peeking_take_while
+### 14. peeking_take_while
 
 - **Target:** `itertools.PeekingTakeWhile [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.28
@@ -240,22 +256,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/peeking_take_while.rs` vs expected `peeking_take_while.rs`
 - **Proposed provenance header:** `// port-lint: source peeking_take_while.rs` (current: `// port-lint: source peeking_take_while.rs`)
 - **Proposed provenance header:** `// port-lint: tests peeking_take_while.rs` (current: `// port-lint: tests tests/peeking_take_while.rs`)
-- **Lint issues:** 2
-
-### 14. take_while_inclusive
-
-- **Target:** `itertools.TakeWhileInclusive [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
-- **Dependents:** 1
-- **Priority Score:** 1020610.0
-- **Functions:** 3/4 matched (target 14)
-- **Missing functions:** `new`
-- **Types:** 1/2 matched (target 3)
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
-- **Proposed provenance header:** `// port-lint: source take_while_inclusive.rs` (current: `// port-lint: source take_while_inclusive.rs`)
-- **Proposed provenance header:** `// port-lint: tests take_while_inclusive.rs` (current: `// port-lint: tests take_while_inclusive.rs`)
 - **Lint issues:** 2
 
 ### 15. tee
@@ -274,7 +274,23 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests tee.rs` (current: `// port-lint: tests tee.rs`)
 - **Lint issues:** 2
 
-### 16. diff
+### 16. take_while_inclusive
+
+- **Target:** `itertools.TakeWhileInclusive [ZERO] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
+- **Dependents:** 1
+- **Priority Score:** 1020610.0
+- **Functions:** 3/4 matched (target 15)
+- **Missing functions:** `new`
+- **Types:** 1/2 matched (target 3)
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
+- **Proposed provenance header:** `// port-lint: source take_while_inclusive.rs` (current: `// port-lint: source take_while_inclusive.rs`)
+- **Proposed provenance header:** `// port-lint: tests take_while_inclusive.rs` (current: `// port-lint: tests take_while_inclusive.rs`)
+- **Lint issues:** 2
+
+### 17. diff
 
 - **Target:** `itertools.Diff [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.29
@@ -290,13 +306,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests diff.rs` (current: `// port-lint: tests diff.rs`)
 - **Lint issues:** 2
 
-### 17. with_position
+### 18. with_position
 
 - **Target:** `itertools.WithPosition [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
 - **Dependents:** 1
 - **Priority Score:** 1010710.0
-- **Functions:** 4/4 matched (target 15)
+- **Functions:** 4/4 matched (target 16)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
 - **Missing types:** `Item`
@@ -306,7 +322,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests with_position.rs` (current: `// port-lint: tests with_position.rs`)
 - **Lint issues:** 2
 
-### 18. adaptors.mod
+### 19. adaptors.mod
 
 - **Target:** `adaptors.Update [STUB] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -333,7 +349,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source adaptors/mod.rs` (current: `// port-lint: source adaptors/mod.rs`)
 - **Lint issues:** 7
 
-### 19. groupbylazy
+### 20. groupbylazy
 
 - **Target:** `itertools.Groupbylazy [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.03
@@ -349,7 +365,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests groupbylazy.rs` (current: `// port-lint: tests groupbylazy.rs`)
 - **Lint issues:** 2
 
-### 20. adaptors.coalesce
+### 21. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.24
@@ -365,7 +381,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests adaptors/coalesce.rs` (current: `// port-lint: tests adaptors/coalesce.rs`)
 - **Lint issues:** 2
 
-### 21. tuple_impl
+### 22. tuple_impl
 
 - **Target:** `itertools.TupleImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.11
@@ -381,7 +397,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests tuple_impl.rs` (current: `// port-lint: tests tuple_impl.rs`)
 - **Lint issues:** 2
 
-### 22. merge_join
+### 23. merge_join
 
 - **Target:** `itertools.MergeJoin [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.09
@@ -397,7 +413,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests merge_join.rs` (current: `// port-lint: tests tests/merge_join.rs`)
 - **Lint issues:** 2
 
-### 23. adaptors.map
+### 24. adaptors.map
 
 - **Target:** `adaptors.Map [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.17
@@ -413,7 +429,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests adaptors/map.rs` (current: `// port-lint: tests adaptors/map.rs`)
 - **Lint issues:** 2
 
-### 24. combinations
+### 25. combinations
 
 - **Target:** `itertools.Combinations [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.46
@@ -429,7 +445,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests combinations.rs` (current: `// port-lint: tests combinations.rs`)
 - **Lint issues:** 2
 
-### 25. grouping_map
+### 26. grouping_map
 
 - **Target:** `itertools.GroupingMap [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.55
@@ -445,7 +461,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests grouping_map.rs` (current: `// port-lint: tests grouping_map.rs`)
 - **Lint issues:** 2
 
-### 26. kmerge_impl
+### 27. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.40
@@ -461,7 +477,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests kmerge_impl.rs` (current: `// port-lint: tests kmerge_impl.rs`)
 - **Lint issues:** 2
 
-### 27. process_results_impl
+### 28. process_results_impl
 
 - **Target:** `itertools.ProcessResultsImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.10
@@ -477,7 +493,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests process_results_impl.rs` (current: `// port-lint: tests process_results_impl.rs`)
 - **Lint issues:** 2
 
-### 28. next_array
+### 29. next_array
 
 - **Target:** `itertools.NextArray [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -494,7 +510,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests next_array.rs` (current: `// port-lint: tests next_array.rs`)
 - **Lint issues:** 2
 
-### 29. format
+### 30. format
 
 - **Target:** `itertools.Format [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -510,13 +526,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests format.rs` (current: `// port-lint: tests format.rs`)
 - **Lint issues:** 2
 
-### 30. rciter_impl
+### 31. rciter_impl
 
 - **Target:** `itertools.RcIterImpl [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.19
+- **Similarity:** 0.18
 - **Dependents:** 0
-- **Priority Score:** 50808.1
-- **Functions:** 2/5 matched (target 8)
+- **Priority Score:** 50808.2
+- **Functions:** 2/5 matched (target 9)
 - **Missing functions:** `size_hint`, `next_back`, `into_iter`
 - **Types:** 1/3 matched (target 2)
 - **Missing types:** `Item`, `IntoIter`
@@ -526,7 +542,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests rciter_impl.rs` (current: `// port-lint: tests rciter_impl.rs`)
 - **Lint issues:** 2
 
-### 31. duplicates_impl
+### 32. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -542,7 +558,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests duplicates_impl.rs` (current: `// port-lint: tests duplicates_impl.rs`)
 - **Lint issues:** 2
 
-### 32. unique_impl
+### 33. unique_impl
 
 - **Target:** `itertools.UniqueImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -558,7 +574,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests unique_impl.rs` (current: `// port-lint: tests unique_impl.rs`)
 - **Lint issues:** 2
 
-### 33. pad_tail
+### 34. pad_tail
 
 - **Target:** `itertools.PadTail [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -574,7 +590,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests pad_tail.rs` (current: `// port-lint: tests pad_tail.rs`)
 - **Lint issues:** 2
 
-### 34. exactly_one_err
+### 35. exactly_one_err
 
 - **Target:** `itertools.ExactlyOneErr [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -590,7 +606,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests exactly_one_err.rs` (current: `// port-lint: tests exactly_one_err.rs`)
 - **Lint issues:** 2
 
-### 35. free
+### 36. free
 
 - **Target:** `itertools.Free [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.69
@@ -606,7 +622,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests free.rs` (current: `// port-lint: tests free.rs`)
 - **Lint issues:** 2
 
-### 36. multipeek_impl
+### 37. multipeek_impl
 
 - **Target:** `itertools.MultiPeekImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.59
@@ -622,7 +638,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests multipeek_impl.rs` (current: `// port-lint: tests multipeek_impl.rs`)
 - **Lint issues:** 2
 
-### 37. iter_index
+### 38. iter_index
 
 - **Target:** `itertools.IterIndex [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -638,7 +654,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests iter_index.rs` (current: `// port-lint: tests iter_index.rs`)
 - **Lint issues:** 2
 
-### 38. sources
+### 39. sources
 
 - **Target:** `itertools.Sources [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -654,13 +670,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests sources.rs` (current: `// port-lint: tests sources.rs`)
 - **Lint issues:** 2
 
-### 39. put_back_n_impl
+### 40. put_back_n_impl
 
 - **Target:** `itertools.PutBackNImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 10710.0
-- **Functions:** 5/5 matched (target 14)
+- **Functions:** 5/5 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
@@ -670,7 +686,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests put_back_n_impl.rs` (current: `// port-lint: tests put_back_n_impl.rs`)
 - **Lint issues:** 2
 
-### 40. zip_eq_impl
+### 41. zip_eq_impl
 
 - **Target:** `itertools.ZipEqImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -686,7 +702,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests zip_eq_impl.rs` (current: `// port-lint: tests zip_eq_impl.rs`)
 - **Lint issues:** 2
 
-### 41. cons_tuples_impl
+### 42. cons_tuples_impl
 
 - **Target:** `itertools.ConsTuplesImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.71
@@ -702,7 +718,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests cons_tuples_impl.rs` (current: `// port-lint: tests cons_tuples_impl.rs`)
 - **Lint issues:** 2
 
-### 42. unziptuple
+### 43. unziptuple
 
 - **Target:** `itertools.UnzipTuple [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.18
@@ -716,13 +732,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source unziptuple.rs` (current: `// port-lint: source unziptuple.rs`)
 - **Lint issues:** 1
 
-### 43. ziptuple
+### 44. ziptuple
 
 - **Target:** `itertools.Ziptuple [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.20
 - **Dependents:** 0
 - **Priority Score:** 10208.0
-- **Functions:** 1/1 matched (target 12)
+- **Functions:** 1/1 matched (target 18)
 - **Missing functions:** _none_
 - **Types:** 0/1 matched (target 4)
 - **Missing types:** `Zip`
@@ -732,7 +748,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests ziptuple.rs` (current: `// port-lint: tests ziptuple.rs`)
 - **Lint issues:** 2
 
-### 44. k_smallest
+### 45. k_smallest
 
 - **Target:** `itertools.KSmallest [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -748,13 +764,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests k_smallest.rs` (current: `// port-lint: tests k_smallest.rs`)
 - **Lint issues:** 2
 
-### 45. minmax
+### 46. minmax
 
 - **Target:** `itertools.MinMax [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.54
 - **Dependents:** 0
 - **Priority Score:** 304.6
-- **Functions:** 2/2 matched (target 14)
+- **Functions:** 2/2 matched (target 20)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
@@ -764,7 +780,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests minmax.rs` (current: `// port-lint: tests minmax.rs`)
 - **Lint issues:** 2
 
-### 46. group_map
+### 47. group_map
 
 - **Target:** `itertools.GroupMap [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.71
@@ -778,13 +794,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source group_map.rs` (current: `// port-lint: source group_map.rs`)
 - **Lint issues:** 1
 
-### 47. extrema_set
+### 48. extrema_set
 
 - **Target:** `itertools.ExtremaSet [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.88
 - **Dependents:** 0
 - **Priority Score:** 201.2
-- **Functions:** 2/2 matched
+- **Functions:** 2/2 matched (target 14)
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
@@ -792,7 +808,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source extrema_set.rs` (current: `// port-lint: source extrema_set.rs`)
 - **Lint issues:** 1
 
-### 48. concat_impl
+### 49. concat_impl
 
 - **Target:** `itertools.ConcatImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.64
@@ -808,13 +824,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests concat_impl.rs` (current: `// port-lint: tests concat_impl.rs`)
 - **Lint issues:** 2
 
-### 49. impl_macros
+### 50. impl_macros
 
 - **Target:** `itertools.ImplMacros [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 10.0
-- **Functions:** 0/0 matched (target 2)
+- **Functions:** 0/0 matched (target 3)
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
@@ -830,17 +846,4 @@ For each file to be considered "complete":
 - All tests ported
 - Documentation ported
 - port-lint header present
-
-## Reexport / Wiring Modules
-
-These files match `reexport_modules` patterns in `.ast_distance_config.json`. They are filtered out of
-normal priority and missing-file ladders because they are wiring
-modules, not direct logic ports. Consult them for call-site routing;
-do not treat them as the next implementation target by default.
-
-### Missing
-
-| Source | Expected target | Deps | Source path | Expected path |
-|--------|-----------------|------|-------------|---------------|
-| `lib` | `Lib` | 0 | `src/lib.rs` | `Lib.kt` |
 

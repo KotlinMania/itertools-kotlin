@@ -12,12 +12,20 @@ class RcIter<T>(
 ) : Iterator<T> {
     override fun hasNext(): Boolean = shared.hasNext()
 
-    override fun next(): T = shared.next()
+    override fun next(): T {
+        if (!hasNext()) throw NoSuchElementException("RcIter exhausted")
+        return shared.next()
+    }
 
     /**
      * Create a new handle that shares the same underlying iterator.
      */
     fun share(): RcIter<T> = RcIter(shared)
+
+    /**
+     * Create a new handle that shares the same underlying iterator.
+     */
+    fun clone(): RcIter<T> = share()
 }
 
 /**

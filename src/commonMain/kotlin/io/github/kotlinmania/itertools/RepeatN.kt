@@ -6,10 +6,10 @@ package io.github.kotlinmania.itertools
  *
  * See [repeatN] for more information.
  */
-internal class RepeatN<A>(
+class RepeatN<A>(
     internal var elt: A?,
     private var n: Int,
-) : Iterator<A> {
+) : PeekingNext<A> {
     override fun hasNext(): Boolean = n > 0
 
     override fun next(): A {
@@ -23,6 +23,14 @@ internal class RepeatN<A>(
         n = 0
         elt = null
         return current
+    }
+
+    override fun peekingNext(accept: (A) -> Boolean): A? {
+        val current = elt ?: return null
+        if (n > 0 && accept(current)) {
+            return next()
+        }
+        return null
     }
 
     /** Exact remaining length. */
@@ -50,10 +58,13 @@ internal class RepeatN<A>(
         return operation(acc, current)
     }
 
+    /** Fold over the remaining elements in reverse order, consuming the iterator. */
+    fun <B> rfold(initial: B, operation: (B, A) -> B): B = fold(initial, operation)
+
     /** Equivalent to upstream `DoubleEndedIterator::next_back`; identical to [next]. */
     fun nextBack(): A? = if (hasNext()) next() else null
 }
 
 /** Create an iterator that produces `n` repetitions of `element`. */
-fun <A> repeatN(element: A, n: Int): Iterator<A> =
+fun <A> repeatN(element: A, n: Int): RepeatN<A> =
     if (n == 0) RepeatN(elt = null, n = 0) else RepeatN(elt = element, n = n)
