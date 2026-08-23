@@ -1,4 +1,4 @@
-import XCTest
+import Testing
 import Itertools
 
 // Smoke test for the Kotlin → Swift Export → SPM → swift test pipeline.
@@ -28,8 +28,10 @@ import Itertools
 // Add more meaningful per-API tests below as the Swift Export surface
 // grows. For now the import + a single passing assertion is the
 // canary that the pipeline is green for this repo.
-final class ItertoolsExportTests: XCTestCase {
+@Suite("Itertools Swift Export Tests")
+struct ItertoolsExportTests {
+    @Test("Swift module loads and exports cleanly")
     func testSwiftModuleLoads() throws {
-        XCTAssertTrue(true, "Itertools swift module imported cleanly")
+        #expect(Bool(true), "Itertools swift module imported cleanly")
     }
 }

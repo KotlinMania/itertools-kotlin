@@ -59,7 +59,7 @@ class ZipEq<A, B>(
         return current
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Returns the size hint. */
     fun sizeHint(): SizeHint = min(subScalar(aHint, consumed), subScalar(bHint, consumed))
 }
 

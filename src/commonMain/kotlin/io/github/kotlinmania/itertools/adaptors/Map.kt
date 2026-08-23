@@ -8,7 +8,7 @@ import io.github.kotlinmania.itertools.ItemResult
  *
  * See [mapOk] for more information.
  */
-class MapOk<T, U, E>(
+class MapOk<T, U, E> internal constructor(
     private val iter: Iterator<ItemResult<T, E>>,
     private val f: (T) -> U,
 ) : Iterator<ItemResult<U, E>> {

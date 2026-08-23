@@ -7,7 +7,7 @@ package io.github.kotlinmania.itertools
  *
  * See [consTuples] for more information.
  */
-class ConsTuples<A, B, C>(
+class ConsTuples<A, B, C> internal constructor(
     private val iter: Iterator<Pair<Pair<A, B>, C>>,
 ) : Iterator<Triple<A, B, C>> {
     override fun hasNext(): Boolean = iter.hasNext()

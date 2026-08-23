@@ -21,7 +21,7 @@ sealed class ItemResult<out T, out E> {
  *
  * See [flattenOk] for more information.
  */
-class FlattenOk<T, E>(
+class FlattenOk<T, E> internal constructor(
     private val iter: Iterator<ItemResult<Iterable<T>, E>>,
 ) : Iterator<ItemResult<T, E>> {
     private var currentInner: Iterator<T>? = null

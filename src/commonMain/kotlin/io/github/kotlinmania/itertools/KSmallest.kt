@@ -76,7 +76,6 @@ internal fun <T> kSmallestGeneral(
         check(storage.size == k)
         if (isLessThan(value, storage[0])) {
             // Treating this as a push-and-pop saves having to write a sift-up implementation.
-            // https://en.wikipedia.org/wiki/Binary_heap#Insert_then_extract
             storage[0] = value
             // We retain the smallest items we've seen so far, but ordered largest first so
             // we can drop the largest efficiently.
@@ -125,8 +124,7 @@ internal fun <T> kSmallestRelaxedGeneral(
         return buf
     }
 
-    // Kotlin stdlib has no `selectNthUnstableBy` equivalent; fall back to a full sort
-    // followed by truncation, which preserves the upstream invariant that the first `k`
+    // Sort followed by truncation, which preserves the invariant that the first `k`
     // elements are the `k` smallest in sorted order.
     buf.sortWith(comparator)
     while (buf.size > k) buf.removeAt(buf.size - 1)

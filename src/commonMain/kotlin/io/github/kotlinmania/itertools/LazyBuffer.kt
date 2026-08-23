@@ -33,12 +33,11 @@ internal class LazyBuffer<T>(
     val length: Int
         get() = buffer.size
 
-    /** Equivalent to upstream `LazyBuffer::size_hint`. */
+    /** Returns the size hint for the buffer. */
     fun sizeHint(): SizeHint = addScalar(subScalar(sourceHint, consumed), length)
 
     /**
-     * Drain the remaining source and return total length. Equivalent to
-     * upstream `LazyBuffer::count` (which consumes self).
+     * Drain the remaining source and return total length.
      */
     fun count(): Int {
         while (pullOne()) { /* drain */ }
@@ -78,10 +77,6 @@ internal class LazyBuffer<T>(
 
     /**
      * Returns a fresh list of the buffered elements at the given indices.
-     *
-     * Upstream Rust takes `&[usize]` and clones each element; in Kotlin
-     * reference semantics make the clone implicit unless the element type
-     * itself needs deep copying, which is the caller's responsibility.
      */
     fun getAt(indices: IntArray): List<T> = indices.map { buffer[it] }
 

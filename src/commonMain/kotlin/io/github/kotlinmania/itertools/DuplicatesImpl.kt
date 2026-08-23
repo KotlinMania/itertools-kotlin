@@ -142,7 +142,7 @@ internal class DuplicatesBy<T, K> internal constructor(
     }
 
     /**
-     * Equivalent to upstream `Iterator::size_hint`. The lower bound is always 0
+     * Returns the size hint for the iterator. The lower bound is always 0
      * because we may only encounter unique items from now on; the upper bound
      * collapses based on how many first-sightings are still pending.
      */
