@@ -1,4 +1,4 @@
-// port-lint: source src/permutations.rs
+// port-lint: tests permutations.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source src/duplicates_impl.rs
+// port-lint: source duplicates_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: source src/zip_longest.rs
+// port-lint: source zip_longest.rs
 package io.github.kotlinmania.itertools
 
 /**

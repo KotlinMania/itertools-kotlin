@@ -1,4 +1,4 @@
-// port-lint: source src/minmax.rs
+// port-lint: tests minmax.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

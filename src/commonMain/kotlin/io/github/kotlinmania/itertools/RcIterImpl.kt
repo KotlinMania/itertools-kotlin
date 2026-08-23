@@ -1,4 +1,4 @@
-// port-lint: source src/rciter_impl.rs
+// port-lint: source rciter_impl.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -10,7 +10,6 @@ package io.github.kotlinmania.itertools
 class RcIter<T>(
     private val shared: Iterator<T>,
 ) : Iterator<T> {
-
     override fun hasNext(): Boolean = shared.hasNext()
 
     override fun next(): T = shared.next()

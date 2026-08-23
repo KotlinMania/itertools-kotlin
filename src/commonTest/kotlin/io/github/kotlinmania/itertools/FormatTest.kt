@@ -1,4 +1,4 @@
-// port-lint: source src/format.rs
+// port-lint: tests format.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

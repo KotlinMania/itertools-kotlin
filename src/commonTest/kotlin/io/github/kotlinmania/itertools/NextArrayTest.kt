@@ -1,4 +1,4 @@
-// port-lint: source src/next_array.rs (#[cfg(test)] mod test)
+// port-lint: tests next_array.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

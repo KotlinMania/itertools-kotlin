@@ -1,4 +1,4 @@
-// port-lint: source src/intersperse.rs
+// port-lint: tests intersperse.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

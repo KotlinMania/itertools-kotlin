@@ -1,4 +1,4 @@
-// port-lint: source src/k_smallest.rs
+// port-lint: tests k_smallest.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

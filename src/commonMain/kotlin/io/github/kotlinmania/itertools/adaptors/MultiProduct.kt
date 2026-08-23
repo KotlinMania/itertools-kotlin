@@ -1,4 +1,4 @@
-// port-lint: source src/adaptors/multi_product.rs
+// port-lint: source adaptors/multi_product.rs
 package io.github.kotlinmania.itertools.adaptors
 
 /**

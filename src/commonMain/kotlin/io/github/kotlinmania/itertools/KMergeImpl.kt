@@ -1,4 +1,4 @@
-// port-lint: source src/kmerge_impl.rs
+// port-lint: source kmerge_impl.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -66,7 +66,6 @@ class KMergeBy<T> internal constructor(
     private val heap: MutableList<HeadTail<T>>,
     private val lessThan: (T, T) -> Boolean,
 ) : Iterator<T> {
-
     override fun hasNext(): Boolean = heap.isNotEmpty()
 
     override fun next(): T {

@@ -1,4 +1,4 @@
-// port-lint: source src/ziptuple.rs
+// port-lint: tests ziptuple.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -24,11 +24,12 @@ class ZiptupleTest {
 
     @Test
     fun testMultizipList() {
-        val lists = listOf(
-            listOf(1, 2, 3),
-            listOf(4, 5, 6),
-            listOf(7, 8, 9),
-        )
+        val lists =
+            listOf(
+                listOf(1, 2, 3),
+                listOf(4, 5, 6),
+                listOf(7, 8, 9),
+            )
         val res = multizip(lists).asSequence().toList()
         assertEquals(
             listOf(

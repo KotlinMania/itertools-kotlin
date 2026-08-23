@@ -1,4 +1,4 @@
-// port-lint: source src/merge_join.rs
+// port-lint: source merge_join.rs
 package io.github.kotlinmania.itertools
 
 /**

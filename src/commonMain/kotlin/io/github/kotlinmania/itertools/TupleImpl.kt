@@ -1,4 +1,4 @@
-// port-lint: source src/tuple_impl.rs
+// port-lint: source tuple_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

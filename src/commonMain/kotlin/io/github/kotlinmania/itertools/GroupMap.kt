@@ -1,4 +1,4 @@
-// port-lint: source src/group_map.rs
+// port-lint: source group_map.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: source src/free.rs
+// port-lint: source free.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -179,7 +179,11 @@ fun <T : Comparable<T>> sorted(iterable: Iterable<T>): Iterator<T> =
  * Sort all iterator elements into a new iterator in ascending order.
  */
 fun <T : Comparable<T>> sorted(iterator: Iterator<T>): Iterator<T> =
-    iterator.asSequence().toList().sorted().iterator()
+    iterator
+        .asSequence()
+        .toList()
+        .sorted()
+        .iterator()
 
 /**
  * Sort all iterator elements into a new iterator in ascending order.
@@ -193,4 +197,8 @@ fun <T : Comparable<T>> sortedUnstable(iterable: Iterable<T>): Iterator<T> =
  * This sort is unstable (i.e., may reorder equal elements).
  */
 fun <T : Comparable<T>> sortedUnstable(iterator: Iterator<T>): Iterator<T> =
-    iterator.asSequence().toList().sorted().iterator()
+    iterator
+        .asSequence()
+        .toList()
+        .sorted()
+        .iterator()

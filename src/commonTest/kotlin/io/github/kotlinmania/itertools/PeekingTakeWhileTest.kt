@@ -1,4 +1,4 @@
-// port-lint: source src/peeking_take_while.rs
+// port-lint: tests peeking_take_while.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -50,5 +50,29 @@ class PeekingTakeWhileTest {
                 .toList()
         assertEquals(listOf(0, 1, 2), ys)
         assertEquals(3, xs.next())
+    }
+
+    @Test
+    fun testPeekingTakeWhileList() {
+        val v = listOf(1, 2, 3, 4, 5, 6)
+        val r = v.iterator().peekable()
+        val taken = peekingTakeWhile(r) { it <= 3 }.asSequence().toList()
+        assertEquals(listOf(1, 2, 3), taken)
+        assertEquals(4, r.next())
+        val remaining = peekingTakeWhile(r) { true }.asSequence().toList()
+        assertEquals(listOf(5, 6), remaining)
+        assertFalse(r.hasNext())
+    }
+
+    @Test
+    fun testPeekingTakeWhileListRev() {
+        val v = listOf(6, 5, 4, 3, 2, 1)
+        val r = v.iterator().peekable()
+        val taken = peekingTakeWhile(r) { it >= 3 }.asSequence().toList()
+        assertEquals(listOf(6, 5, 4, 3), taken)
+        assertEquals(2, r.next())
+        val remaining = peekingTakeWhile(r) { true }.asSequence().toList()
+        assertEquals(listOf(1), remaining)
+        assertFalse(r.hasNext())
     }
 }

@@ -1,4 +1,4 @@
-// port-lint: source src/pad_tail.rs
+// port-lint: source pad_tail.rs
 package io.github.kotlinmania.itertools
 
 /**

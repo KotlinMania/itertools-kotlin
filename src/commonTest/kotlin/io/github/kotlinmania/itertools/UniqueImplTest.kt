@@ -1,4 +1,4 @@
-// port-lint: tests src/unique_impl.rs (tests/test_std.rs::{unique, unique_by})
+// port-lint: tests unique_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

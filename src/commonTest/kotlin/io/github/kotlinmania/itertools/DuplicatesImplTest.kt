@@ -1,4 +1,4 @@
-// port-lint: source src/duplicates_impl.rs (tests/test_std.rs::{duplicates, duplicates_by})
+// port-lint: tests duplicates_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

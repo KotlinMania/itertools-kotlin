@@ -1,4 +1,4 @@
-// port-lint: source src/either_or_both.rs
+// port-lint: source either_or_both.rs
 package io.github.kotlinmania.itertools
 
 /**

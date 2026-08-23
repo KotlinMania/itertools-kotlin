@@ -1,4 +1,4 @@
-// port-lint: source src/permutations.rs
+// port-lint: source permutations.rs
 package io.github.kotlinmania.itertools
 
 /**

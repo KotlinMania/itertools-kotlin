@@ -1,4 +1,4 @@
-// port-lint: source src/with_position.rs
+// port-lint: tests with_position.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
