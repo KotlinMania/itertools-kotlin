@@ -4,7 +4,7 @@ package io.github.kotlinmania.itertools
 /**
  * A pair of elements produced by [zipEq].
  */
-internal data class Zipped<A, B>(
+data class Zipped<A, B>(
     val first: A,
     val second: B,
 )
@@ -15,11 +15,11 @@ internal data class Zipped<A, B>(
  *
  * See [zipEq] for more information.
  */
-internal class ZipEq<A, B>(
+class ZipEq<A, B>(
     private val a: Iterator<A>,
     private val b: Iterator<B>,
-    private val aHint: SizeHint,
-    private val bHint: SizeHint,
+    private val aHint: SizeHint = SizeHint(0, null),
+    private val bHint: SizeHint = SizeHint(0, null),
 ) : Iterator<Zipped<A, B>> {
     private var peeked: Zipped<A, B>? = null
     private var exhausted: Boolean = false
@@ -75,10 +75,23 @@ internal class ZipEq<A, B>(
  * }
  * ```
  */
-internal fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
+
+/**
+ * Zips two iterables but **throws** if they are not of the same length.
+ */
+fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
     ZipEq(i.iterator(), j.iterator(), sizeHintOf(i), sizeHintOf(j))
 
-internal fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
+/**
+ * Zips two iterators but **throws** if they are not of the same length.
+ */
+fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>): ZipEq<A, B> =
+    ZipEq(i, j, SizeHint(0, null), SizeHint(0, null))
+
+/**
+ * Zips two iterators with size hints but **throws** if they are not of the same length.
+ */
+fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
     ZipEq(i, j, aHint, bHint)
 
 private fun sizeHintOf(it: Iterable<*>): SizeHint =

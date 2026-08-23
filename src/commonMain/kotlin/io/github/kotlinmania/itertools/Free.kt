@@ -9,10 +9,52 @@ package io.github.kotlinmania.itertools
  */
 
 /**
+ * Iterate [iterable] with a particular value created by a function inserted
+ * between each element.
+ */
+fun <T> intersperseWith(iterable: Iterable<T>, element: () -> T): Iterator<T> =
+    intersperseWith(iterable, IntersperseElement { element() })
+
+/**
+ * Iterate [iterator] with a particular value created by a function inserted
+ * between each element.
+ */
+fun <T> intersperseWith(iterator: Iterator<T>, element: () -> T): Iterator<T> =
+    intersperseWith(iterator, IntersperseElement { element() })
+
+/**
  * Iterate [iterable] with a running index.
  */
 fun <T> enumerate(iterable: Iterable<T>): Iterator<IndexedValue<T>> =
     iterable.withIndex().iterator()
+
+/**
+ * Create an iterator that interleaves elements in [i] and [j].
+ */
+fun <T> interleave(i: Iterator<T>, j: Iterator<T>): Iterator<T> =
+    io.github.kotlinmania.itertools.adaptors
+        .interleave(i, j)
+
+/**
+ * Create an iterator that interleaves elements in [i] and [j].
+ */
+fun <T> interleave(i: Iterable<T>, j: Iterable<T>): Iterator<T> =
+    io.github.kotlinmania.itertools.adaptors
+        .interleave(i, j)
+
+/**
+ * Create a new interleaveShortest iterator.
+ */
+fun <T> interleaveShortest(i: Iterator<T>, j: Iterator<T>): Iterator<T> =
+    io.github.kotlinmania.itertools.adaptors
+        .interleaveShortest(i, j)
+
+/**
+ * Create a new interleaveShortest iterator from iterables.
+ */
+fun <T> interleaveShortest(i: Iterable<T>, j: Iterable<T>): Iterator<T> =
+    io.github.kotlinmania.itertools.adaptors
+        .interleaveShortest(i, j)
 
 /**
  * Iterate [iterable] with a running index.
@@ -202,3 +244,103 @@ fun <T : Comparable<T>> sortedUnstable(iterator: Iterator<T>): Iterator<T> =
         .toList()
         .sorted()
         .iterator()
+
+/**
+ * Partition a mutable list in-place so that it contains all elements for which [predicate]
+ * returns `true`, followed by all elements for which [predicate] returns `false`.
+ *
+ * Returns the index of the first element of the second group.
+ */
+fun <T> partitionInPlace(list: MutableList<T>, predicate: (T) -> Boolean): Int {
+    var left = 0
+    var right = list.size - 1
+    while (left <= right) {
+        if (predicate(list[left])) {
+            left++
+        } else if (!predicate(list[right])) {
+            right--
+        } else {
+            val tmp = list[left]
+            list[left] = list[right]
+            list[right] = tmp
+            left++
+            right--
+        }
+    }
+    return left
+}
+
+/**
+ * Partition an IntArray in-place so that it contains all elements for which [predicate]
+ * returns `true`, followed by all elements for which [predicate] returns `false`.
+ *
+ * Returns the index of the first element of the second group.
+ */
+fun partitionInPlace(array: IntArray, predicate: (Int) -> Boolean): Int {
+    var left = 0
+    var right = array.size - 1
+    while (left <= right) {
+        if (predicate(array[left])) {
+            left++
+        } else if (!predicate(array[right])) {
+            right--
+        } else {
+            val tmp = array[left]
+            array[left] = array[right]
+            array[right] = tmp
+            left++
+            right--
+        }
+    }
+    return left
+}
+
+/**
+ * Sum all integer elements in the iterable, or return null if empty.
+ */
+fun sum1Int(iterable: Iterable<Int>): Int? {
+    val it = iterable.iterator()
+    if (!it.hasNext()) return null
+    var sum = it.next()
+    while (it.hasNext()) {
+        sum += it.next()
+    }
+    return sum
+}
+
+/**
+ * Multiply all integer elements in the iterable, or return null if empty.
+ */
+fun product1Int(iterable: Iterable<Int>): Int? {
+    val it = iterable.iterator()
+    if (!it.hasNext()) return null
+    var prod = it.next()
+    while (it.hasNext()) {
+        prod *= it.next()
+    }
+    return prod
+}
+
+/**
+ * Tree-reduce operation: reduces elements pairwise in a binary tree order.
+ */
+fun <T> treeReduce(iterable: Iterable<T>, operation: (T, T) -> T): T? {
+    val list = iterable.toList()
+    if (list.isEmpty()) return null
+    var current = list
+    while (current.size > 1) {
+        val next = mutableListOf<T>()
+        var i = 0
+        while (i < current.size) {
+            if (i + 1 < current.size) {
+                next.add(operation(current[i], current[i + 1]))
+                i += 2
+            } else {
+                next.add(current[i])
+                i += 1
+            }
+        }
+        current = next
+    }
+    return current.first()
+}

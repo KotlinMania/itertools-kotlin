@@ -64,7 +64,7 @@ class UniqueImplTest {
     @Test
     fun uniqueSizeHintLowerBoundCollapsesAfterFirstYield() {
         val xs = listOf(0, 0, 0)
-        val it = uniqueBy(xs.iterator(), SizeHint(xs.size, xs.size)) { it: Int -> it }
+        val it = uniqueBy(xs.iterator(), SizeHint(xs.size, xs.size)) { x: Int -> x }
         val before = it.sizeHint()
         assertEquals(1, before.lower)
         assertEquals(3, before.upper)
@@ -81,7 +81,7 @@ class UniqueImplTest {
     @Test
     fun uniqueSizeHintUpperBoundMatchesSourceForFiniteCollections() {
         val xs = listOf(1, 2, 3, 4)
-        val it = uniqueBy(xs.iterator(), SizeHint(xs.size, xs.size)) { it: Int -> it }
+        val it = uniqueBy(xs.iterator(), SizeHint(xs.size, xs.size)) { x: Int -> x }
         val (low, hi) = it.sizeHint()
         assertEquals(1, low)
         assertEquals(4, hi)
