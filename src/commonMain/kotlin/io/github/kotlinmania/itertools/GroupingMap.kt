@@ -6,7 +6,7 @@ package io.github.kotlinmania.itertools
  * It groups elements by their key and at the same time folds each group
  * using some aggregating operation.
  */
-class GroupingMap<K, V>(
+class GroupingMap<K, V> internal constructor(
     private val iter: Iterator<Pair<K, V>>,
 ) {
     /**
@@ -102,8 +102,8 @@ class GroupingMap<K, V>(
      * Groups elements from the `GroupingMap` source by key and finds the element of each group
      * that gives the maximum from the specified function.
      */
-    fun <CK : Comparable<CK>> maxByKey(f: (key: K, value: V) -> CK): Map<K, V> =
-        maxBy { key, a, b -> f(key, a).compareTo(f(key, b)) }
+    fun <R : Comparable<*>> maxByKey(f: (key: K, value: V) -> R): Map<K, V> =
+        maxBy { key, a, b -> compareValues(f(key, a), f(key, b)) }
 
     /**
      * Groups elements from the `GroupingMap` source by key and finds the minimum of each group.
@@ -128,8 +128,8 @@ class GroupingMap<K, V>(
      * Groups elements from the `GroupingMap` source by key and finds the element of each group
      * that gives the minimum from the specified function.
      */
-    fun <CK : Comparable<CK>> minByKey(f: (key: K, value: V) -> CK): Map<K, V> =
-        minBy { key, a, b -> f(key, a).compareTo(f(key, b)) }
+    fun <R : Comparable<*>> minByKey(f: (key: K, value: V) -> R): Map<K, V> =
+        minBy { key, a, b -> compareValues(f(key, a), f(key, b)) }
 
     /**
      * Groups elements from the `GroupingMap` source by key and find the maximum and minimum of
@@ -166,8 +166,8 @@ class GroupingMap<K, V>(
      * Groups elements from the `GroupingMap` source by key and find the elements of each group
      * that gives the minimum and maximum from the specified function.
      */
-    fun <CK : Comparable<CK>> minmaxByKey(f: (key: K, value: V) -> CK): Map<K, MinMaxResult<V>> =
-        minmaxBy { key, a, b -> f(key, a).compareTo(f(key, b)) }
+    fun <R : Comparable<*>> minmaxByKey(f: (key: K, value: V) -> R): Map<K, MinMaxResult<V>> =
+        minmaxBy { key, a, b -> compareValues(f(key, a), f(key, b)) }
 
     /**
      * Groups elements from the `GroupingMap` source by key and sums them using [plus].

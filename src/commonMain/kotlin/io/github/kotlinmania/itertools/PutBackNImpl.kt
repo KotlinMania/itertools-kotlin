@@ -53,7 +53,7 @@ class PutBackN<T>(
         return nextValue
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Returns the size hint. */
     fun sizeHint(): SizeHint = addScalar(subScalar(sourceHint, consumed), top.size)
 
     /**

@@ -6,7 +6,7 @@ import io.github.kotlinmania.itertools.ItemResult
 /**
  * An iterator adapter to filter and apply a transformation on values within a nested [ItemResult.Ok].
  */
-class FilterMapOk<T, U, E>(
+class FilterMapOk<T, U, E> internal constructor(
     private val iter: Iterator<ItemResult<T, E>>,
     private val transform: (T) -> U?,
 ) : Iterator<ItemResult<U, E>> {

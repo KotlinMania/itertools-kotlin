@@ -40,7 +40,7 @@ internal class PadUsing<T>(
         throw NoSuchElementException("PadUsing exhausted")
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Returns the size hint. */
     fun sizeHint(): SizeHint {
         val tail = if (pos < min) min - pos else 0
         val remaining = subScalar(sourceHint, pos)

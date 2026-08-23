@@ -2,12 +2,9 @@
 package io.github.kotlinmania.itertools
 
 /**
- * Public, non-generic carrier returned by [newFormat] and [newFormatDefault].
+ * Non-generic carrier returned by [newFormat] and [newFormatDefault].
  *
- * Swift Export's Kotlin->Swift bridge cannot safely round-trip a generic
- * iterator/wrapper through `Any?`, so the generic [Format] and [FormatWith]
- * implementations stay `internal` and are exposed through this non-generic
- * façade. Callers stringify it with `toString()` exactly once; the
+ * Callers format it with `toString()` exactly once; the
  * once-only contract is preserved on the underlying implementation.
  */
 public class Formatted internal constructor(
@@ -29,9 +26,6 @@ internal class FormatWith<T> internal constructor(
     iter: Iterator<T>,
     f: (T, (Any?) -> Unit) -> Unit,
 ) {
-    // `FormatWith` uses interior mutability because `toString` takes the
-    // receiver immutably. The Kotlin port keeps the same one-shot semantics
-    // by holding `inner` in a private nullable field and clearing it on use.
     private var inner: Pair<Iterator<T>, (T, (Any?) -> Unit) -> Unit>? = iter to f
 
     override fun toString(): String {
@@ -65,9 +59,6 @@ internal class Format<T> internal constructor(
     private val sep: String,
     iter: Iterator<T>,
 ) {
-    // `Format` uses interior mutability because `toString` takes the receiver
-    // immutably; the Kotlin port keeps the same one-shot semantics by holding
-    // `inner` in a private nullable field and clearing it on use.
     private var inner: Iterator<T>? = iter
 
     override fun toString(): String = formatInner { element, sb -> sb.append(element) }
@@ -92,10 +83,6 @@ internal class Format<T> internal constructor(
 /**
  * Construct a lazy renderer that walks the iterator using the supplied
  * formatter callback when its `toString` is invoked.
- *
- * The callback receives each item plus an emit function that writes its
- * stringified form into the underlying buffer; this mirrors the upstream
- * `&mut dyn FnMut(&dyn Display) -> Result` callback shape.
  */
 internal fun <T> newFormat(
     iter: Iterator<T>,

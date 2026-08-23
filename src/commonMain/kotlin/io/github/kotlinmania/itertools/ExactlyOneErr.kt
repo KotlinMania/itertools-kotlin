@@ -59,7 +59,7 @@ class ExactlyOneError<T>(
         }
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Returns the size hint. */
     fun sizeHint(): SizeHint = addScalar(subScalar(innerHint, consumed), additionalLen())
 
     /**

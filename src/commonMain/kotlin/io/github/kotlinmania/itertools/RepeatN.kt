@@ -61,7 +61,7 @@ class RepeatN<A>(
     /** Fold over the remaining elements in reverse order, consuming the iterator. */
     fun <B> rfold(initial: B, operation: (B, A) -> B): B = fold(initial, operation)
 
-    /** Equivalent to upstream `DoubleEndedIterator::next_back`; identical to [next]. */
+    /** Returns the next element from the back; identical to [next]. */
     fun nextBack(): A? = if (hasNext()) next() else null
 }
 

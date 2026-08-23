@@ -39,7 +39,7 @@ internal class UniqueBy<T, V> internal constructor(
     }
 
     /**
-     * Equivalent to upstream `Iterator::size_hint`. The lower bound is `1` only
+     * Returns the size hint for the iterator. The lower bound is `1` only
      * when the source has at least one element to yield AND the dedup set is
      * empty — that first element is guaranteed unique. The upper bound is
      * inherited from the source: every source element could in principle be
@@ -63,11 +63,6 @@ fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): Iterator<T> =
  * An iterator adapter to filter out duplicate elements.
  *
  * See `Itertools.unique` for more information.
- *
- * In the upstream Rust crate this is `Unique<I>` wrapping
- * `UniqueBy<I, I::Item, ()>` so the same hash bookkeeping is reused with the
- * key function fixed to the identity. The Kotlin port collapses the two by
- * exposing [unique] as a [UniqueBy] specialization with `f = { it }`.
  */
 internal typealias Unique<T> = UniqueBy<T, T>
 

@@ -9,10 +9,6 @@ package io.github.kotlinmania.itertools
 /**
  * A mutable reference holder used by [unfold] so the closure can rebind the
  * iterator's internal state between calls.
- *
- * Kotlin has no pass-by-reference, so the upstream `&mut St` argument is
- * surfaced as a [StateRef] whose [value] the closure assigns when it advances
- * the iteration.
  */
 internal class StateRef<St>(
     var value: St,
@@ -47,9 +43,6 @@ internal fun <A, St> unfold(initialState: St, f: (StateRef<St>) -> A?): Unfold<S
 
 /**
  * See [unfold] for more information.
- *
- * The `unfold` builder is deprecated upstream; instances are normally obtained
- * only by calling [unfold], so the deprecation lives on that builder.
  */
 internal class Unfold<St, A>(
     private val f: (StateRef<St>) -> A?,
@@ -114,7 +107,7 @@ internal class Iterate<St>(
         return ret
     }
 
-    /** `(Int.MAX_VALUE, null)` — the upstream `(usize::MAX, None)` size hint. */
+    /** Size hint representing an infinite sequence. */
     fun sizeHint(): SizeHint = SizeHint(Int.MAX_VALUE, null)
 }
 

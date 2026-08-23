@@ -98,8 +98,8 @@ class KMergeBy<T> internal constructor(
 /**
  * Create an iterator that merges elements of the contained iterators.
  */
-fun <T : Comparable<T>> kmerge(iterable: Iterable<Iterable<T>>): KMergeBy<T> =
-    kmergeBy(iterable) { a, b -> a < b }
+fun <T : Comparable<*>> kmerge(iterable: Iterable<Iterable<T>>): KMergeBy<T> =
+    kmergeBy(iterable) { a, b -> compareValues(a, b) < 0 }
 
 /**
  * Create an iterator that merges elements of the contained iterators using [lessThan].
@@ -108,27 +108,6 @@ fun <T> kmergeBy(iterable: Iterable<Iterable<T>>, lessThan: (T, T) -> Boolean): 
     val heap = mutableListOf<HeadTail<T>>()
     for (it in iterable) {
         val ht = HeadTail.create(it.iterator())
-        if (ht != null) {
-            heap.add(ht)
-        }
-    }
-    heapify(heap, lessThan)
-    return KMergeBy(heap, lessThan)
-}
-
-/**
- * Create an iterator that merges elements of the contained iterators.
- */
-fun <T : Comparable<T>> kmerge(iterators: List<Iterator<T>>): KMergeBy<T> =
-    kmergeBy(iterators) { a, b -> a < b }
-
-/**
- * Create an iterator that merges elements of the contained iterators using [lessThan].
- */
-fun <T> kmergeBy(iterators: List<Iterator<T>>, lessThan: (T, T) -> Boolean): KMergeBy<T> {
-    val heap = mutableListOf<HeadTail<T>>()
-    for (it in iterators) {
-        val ht = HeadTail.create(it)
         if (ht != null) {
             heap.add(ht)
         }

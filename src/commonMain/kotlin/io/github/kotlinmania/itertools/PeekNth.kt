@@ -17,7 +17,7 @@ class PeekNth<T>(
     /** Works like the `peek` method in peekable iterators. */
     fun peek(): T? = peekNth(0)
 
-    /** Works like the `peek_mut` method in peekable iterators. */
+    /** Works like the `peekMut` method in peekable iterators. */
     fun peekMut(): T? = peek()
 
     /** Returns the `nth` value without advancing the iterator. */

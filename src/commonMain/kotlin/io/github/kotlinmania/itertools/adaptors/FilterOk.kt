@@ -6,7 +6,7 @@ import io.github.kotlinmania.itertools.ItemResult
 /**
  * An iterator adapter to filter values within a nested [ItemResult.Ok].
  */
-class FilterOk<T, E>(
+class FilterOk<T, E> internal constructor(
     private val iter: Iterator<ItemResult<T, E>>,
     private val predicate: (T) -> Boolean,
 ) : Iterator<ItemResult<T, E>> {

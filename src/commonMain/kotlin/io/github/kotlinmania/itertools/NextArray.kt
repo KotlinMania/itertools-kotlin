@@ -8,14 +8,6 @@ package io.github.kotlinmania.itertools
  *
  * - `arr.size <= n` at all times.
  * - All elements currently present in `arr` are valid `T`s.
- *
- * Kotlin note: the upstream Rust uses `[MaybeUninit<T>; N]` so it can hold an
- * exactly-sized backing store while only the leading `len` elements are
- * initialized. Kotlin has no analog for `MaybeUninit` and no const generics,
- * so this port uses a growable [MutableList] whose `size` doubles as the
- * upstream `len`. Memory is reclaimed when [take] returns the contents to
- * the caller, which matches the upstream behavior of resetting `len = 0`
- * and replacing the backing array.
  */
 internal class ArrayBuilder<T>(
     private val n: Int,
@@ -49,11 +41,11 @@ internal class ArrayBuilder<T>(
         return out
     }
 
-    /** Equivalent to upstream `AsMut<[T]>::as_mut`. */
+    /** Returns a mutable view of the underlying list. */
     fun asMut(): MutableList<T> = arr
 }
 
-/** Equivalent to `it.next_array()`. */
+/** Returns the next [n] elements from the iterator as a list, or null if fewer remain. */
 internal fun <T> nextArray(source: Iterator<T>, n: Int): List<T>? {
     val builder = ArrayBuilder<T>(n)
     repeat(n) {
