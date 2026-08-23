@@ -9,7 +9,7 @@ package io.github.kotlinmania.itertools
 internal class PutBackN<T>(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
-) : Iterator<T> {
+) : PeekingNext<T> {
     private val top: ArrayDeque<T> = ArrayDeque()
     private var consumed: Int = 0
 
@@ -28,6 +28,18 @@ internal class PutBackN<T>(
      */
     fun putBack(x: T) {
         top.addLast(x)
+    }
+
+    override fun peekingNext(accept: (T) -> Boolean): T? {
+        if (hasNext()) {
+            val r = next()
+            if (!accept(r)) {
+                putBack(r)
+                return null
+            }
+            return r
+        }
+        return null
     }
 
     override fun hasNext(): Boolean = top.isNotEmpty() || iter.hasNext()
