@@ -17,6 +17,9 @@ class PeekNth<T>(
     /** Works like the `peek` method in peekable iterators. */
     fun peek(): T? = peekNth(0)
 
+    /** Works like the `peek_mut` method in peekable iterators. */
+    fun peekMut(): T? = peek()
+
     /** Returns the `nth` value without advancing the iterator. */
     fun peekNth(n: Int): T? {
         val unbufferedItems = (n + 1) - buf.size
@@ -31,6 +34,9 @@ class PeekNth<T>(
         }
         return if (n in 0 until buf.size) buf[n] else null
     }
+
+    /** Returns a mutable reference to the `nth` value without advancing the iterator. */
+    fun peekNthMut(n: Int): T? = peekNth(n)
 
     /** Returns the next item if [func] returns `true` for it. */
     fun nextIf(func: (T) -> Boolean): T? {

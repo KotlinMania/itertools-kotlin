@@ -194,6 +194,84 @@ sealed class EitherOrBoth<out A, out B> {
             is Right -> Pair(l(), this.value)
             is Both -> Pair(this.left, this.right)
         }
+
+    /** Return reference to self. */
+    fun asRef(): EitherOrBoth<A, B> = this
+
+    /** Return mutable reference to self. */
+    fun asMut(): EitherOrBoth<A, B> = this
+
+    /** Return dereferenced representation of self. */
+    fun asDeref(): EitherOrBoth<A, B> = this
+
+    /** Return mutable dereferenced representation of self. */
+    fun asDerefMut(): EitherOrBoth<A, B> = this
+
+    /**
+     * Returns a pair consisting of the `l` and `r` in `Both(l, r)`, if present.
+     * Otherwise, returns the wrapped value for the present element, and the supplied
+     * default producer for the other.
+     */
+    fun orDefault(
+        defaultA: () -> @UnsafeVariance A,
+        defaultB: () -> @UnsafeVariance B,
+    ): Pair<A, B> = orElse(defaultA, defaultB)
+
+    /**
+     * Returns the left value, or if not present, replaces with [value].
+     */
+    fun leftOrInsert(value: @UnsafeVariance A): EitherOrBoth<A, B> = leftOrInsertWith { value }
+
+    /**
+     * Returns the right value, or if not present, replaces with [value].
+     */
+    fun rightOrInsert(value: @UnsafeVariance B): EitherOrBoth<A, B> = rightOrInsertWith { value }
+
+    /**
+     * If the left value is not present, replace it with the value computed by [f].
+     */
+    fun leftOrInsertWith(f: () -> @UnsafeVariance A): EitherOrBoth<A, B> =
+        when (this) {
+            is Left, is Both -> this
+            is Right -> insertLeft(f())
+        }
+
+    /**
+     * If the right value is not present, replace it with the value computed by [f].
+     */
+    fun rightOrInsertWith(f: () -> @UnsafeVariance B): EitherOrBoth<A, B> =
+        when (this) {
+            is Right, is Both -> this
+            is Left -> insertRight(f())
+        }
+
+    /**
+     * Sets the `left` value of this instance. Does not affect the `right` value.
+     */
+    fun insertLeft(value: @UnsafeVariance A): EitherOrBoth<A, B> =
+        when (this) {
+            is Left -> Left(value)
+            is Both -> Both(value, this.right)
+            is Right -> Both(value, this.value)
+        }
+
+    /**
+     * Sets the `right` value of this instance. Does not affect the `left` value.
+     */
+    fun insertRight(value: @UnsafeVariance B): EitherOrBoth<A, B> =
+        when (this) {
+            is Right -> Right(value)
+            is Both -> Both(this.left, value)
+            is Left -> Both(this.value, value)
+        }
+
+    /**
+     * Set `self` to `Both`, containing the specified left and right values.
+     */
+    fun insertBoth(
+        left: @UnsafeVariance A,
+        right: @UnsafeVariance B,
+    ): Both<A, B> = Both(left, right)
 }
 
 /**
