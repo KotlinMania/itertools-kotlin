@@ -74,7 +74,7 @@ class DuplicatesImplTest {
     @Test
     fun duplicatesSizeHintLowerIsZero() {
         val xs = listOf(1, 2, 3, 2, 1, 3)
-        val it = duplicatesBy(xs.iterator(), SizeHint(xs.size, xs.size)) { it: Int -> it }
+        val it = duplicatesBy(xs.iterator(), SizeHint(xs.size, xs.size)) { x: Int -> x }
         val (lo, hi) = it.sizeHint()
         assertEquals(0, lo)
         // 6 remaining, 0 pending → 0 + (6 - 0) / 2 = 3
@@ -108,7 +108,7 @@ class DuplicatesImplTest {
     /** Non-Collection source: size hint stays `(0, null)` upper. */
     @Test
     fun duplicatesNonCollectionSourceHasNullUpper() {
-        val it = duplicatesBy(sequenceOf(1, 2, 1, 3).iterator(), SizeHint(0, null)) { it: Int -> it }
+        val it = duplicatesBy(sequenceOf(1, 2, 1, 3).iterator(), SizeHint(0, null)) { x: Int -> x }
         assertEquals(SizeHint(0, null), it.sizeHint())
     }
 }
