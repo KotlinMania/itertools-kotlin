@@ -49,6 +49,11 @@ sealed class MinMaxResult<out T> {
             is OneElement -> value to value
             is MinMax -> min to max
         }
+
+    /**
+     * Alias for [toOption].
+     */
+    fun intoOption(): Pair<T, T>? = toOption()
 }
 
 /** Implementation guts for `minmax` and `minmaxBy`. */
