@@ -1,4 +1,4 @@
-// port-lint: source src/combinations.rs
+// port-lint: source combinations.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -63,21 +63,33 @@ class Combinations<T>(
         return false
     }
 
-    internal fun tryNth(n: Int): List<T>? {
+    internal fun tryNthResult(n: Int): ItemResult<List<T>, Int> {
         val done =
             if (first) {
                 init()
             } else {
                 incrementIndices()
             }
-        if (done) return null
+        if (done) return ItemResult.Err(0)
         for (i in 0 until n) {
             if (incrementIndices()) {
-                return null
+                return ItemResult.Err(i + 1)
             }
         }
-        return pool.getAt(indices)
+        return ItemResult.Ok(pool.getAt(indices))
     }
+
+    internal fun tryNth(n: Int): List<T>? =
+        when (val res = tryNthResult(n)) {
+            is ItemResult.Ok -> res.value
+            is ItemResult.Err -> null
+        }
+
+    /** Returns the n-th combination without iterating through the preceding ones manually. */
+    fun nth(n: Int): List<T>? = tryNth(n)
+
+    /** Returns the total count of remaining combinations. */
+    fun count(): Int = nAndCount().second
 
     override fun hasNext(): Boolean {
         if (first) {

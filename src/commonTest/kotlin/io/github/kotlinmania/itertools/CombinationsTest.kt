@@ -1,4 +1,4 @@
-// port-lint: source src/combinations.rs
+// port-lint: tests combinations.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -31,5 +31,14 @@ class CombinationsTest {
     @Test
     fun testCombinationsTooShort() {
         assertFalse(combinations(listOf(1, 2), 5).hasNext())
+    }
+
+    @Test
+    fun testCombinationsNthAndCount() {
+        val comb = combinations(listOf(1, 2, 3, 4), 2)
+        assertEquals(6, comb.count())
+
+        val combNth = combinations(listOf(1, 2, 3, 4), 2)
+        assertEquals(listOf(1, 4), combNth.nth(2))
     }
 }

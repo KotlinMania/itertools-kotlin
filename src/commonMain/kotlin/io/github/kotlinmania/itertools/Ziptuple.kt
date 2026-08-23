@@ -1,4 +1,4 @@
-// port-lint: source src/ziptuple.rs
+// port-lint: source ziptuple.rs
 package io.github.kotlinmania.itertools
 
 /**

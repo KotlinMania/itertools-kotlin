@@ -1,4 +1,4 @@
-// port-lint: source src/adaptors/coalesce.rs
+// port-lint: tests adaptors/coalesce.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import kotlin.test.Test
@@ -8,13 +8,14 @@ class CoalesceTest {
     @Test
     fun testCoalesce() {
         val list = listOf(-1, 2, -3, 4, 5, -6)
-        val result = coalesce(list) { a, b ->
-            if (a >= 0 && b >= 0) {
-                CoalesceResult.Merged(a + b)
-            } else {
-                CoalesceResult.Separate(a, b)
-            }
-        }.asSequence().toList()
+        val result =
+            coalesce(list) { a, b ->
+                if (a >= 0 && b >= 0) {
+                    CoalesceResult.Merged(a + b)
+                } else {
+                    CoalesceResult.Separate(a, b)
+                }
+            }.asSequence().toList()
 
         assertEquals(listOf(-1, 2, -3, 9, -6), result)
     }

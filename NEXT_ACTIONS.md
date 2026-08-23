@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 48/50 (96.0%)
-- **Function parity:** 216/339 matched (target 620) — 63.7%
-- **Class/type parity:** 61/156 matched (target 152) — 39.1%
-- **Combined symbol parity:** 277/495 matched (target 772) — 56.0%
+- **Files Present:** 48/73 (65.8%)
+- **Function parity:** 222/630 matched (target 643) — 35.2%
+- **Class/type parity:** 61/183 matched (target 152) — 33.3%
+- **Combined symbol parity:** 283/813 matched (target 795) — 34.8%
 - **Average inline-code cosine:** 0.24 (function body across 47 matched files)
 - **Average documentation cosine:** 0.63 (doc text across 47 matched files)
 - **Cheat-zeroed Files:** 16
-- **Critical Issues:** 43 files with <0.60 function similarity
+- **Critical Issues:** 42 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -19,7 +19,7 @@ Based on AST analysis, here are the concrete next steps.
 - **Similarity:** 0.55 (needs 30% improvement)
 - **Dependencies:** 15
 - **Priority Score:** 15000905.0
-- **Functions:** 8/8 matched (target 13)
+- **Functions:** 8/8 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
@@ -41,31 +41,31 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.55
 - **Dependents:** 15
 - **Priority Score:** 15000905.0
-- **Functions:** 8/8 matched (target 13)
+- **Functions:** 8/8 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/size_hint.rs` vs expected `size_hint.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/size_hint.rs` vs expected `size_hint.rs`
-- **Proposed provenance header:** `// port-lint: source size_hint.rs` (current: `// port-lint: source src/size_hint.rs`)
-- **Proposed provenance header:** `// port-lint: source size_hint.rs` (current: `// port-lint: source src/size_hint.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `size_hint.rs` vs expected `size_hint.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:size_hint.rs` vs expected `size_hint.rs`
+- **Proposed provenance header:** `// port-lint: source size_hint.rs` (current: `// port-lint: source size_hint.rs`)
+- **Proposed provenance header:** `// port-lint: tests size_hint.rs` (current: `// port-lint: tests size_hint.rs`)
 - **Lint issues:** 2
 
 ### 2. either_or_both
 
 - **Target:** `itertools.EitherOrBoth [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.39
-- **Dependents:** 3
-- **Priority Score:** 3133606.2
-- **Functions:** 22/35 matched (target 26)
+- **Dependents:** 4
+- **Priority Score:** 4133606.2
+- **Functions:** 22/35 matched (target 27)
 - **Missing functions:** `as_ref`, `as_mut`, `as_deref`, `as_deref_mut`, `or_default`, `left_or_insert`, `right_or_insert`, `left_or_insert_with`, `right_or_insert_with`, `insert_left`, `insert_right`, `insert_both`, `from`
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/either_or_both.rs` vs expected `either_or_both.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/either_or_both.rs` vs expected `either_or_both.rs`
-- **Proposed provenance header:** `// port-lint: source either_or_both.rs` (current: `// port-lint: source src/either_or_both.rs`)
-- **Proposed provenance header:** `// port-lint: source either_or_both.rs` (current: `// port-lint: source src/either_or_both.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `either_or_both.rs` vs expected `either_or_both.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:either_or_both.rs` vs expected `either_or_both.rs`
+- **Proposed provenance header:** `// port-lint: source either_or_both.rs` (current: `// port-lint: source either_or_both.rs`)
+- **Proposed provenance header:** `// port-lint: tests either_or_both.rs` (current: `// port-lint: tests either_or_both.rs`)
 - **Lint issues:** 2
 
 ### 3. lazy_buffer
@@ -78,40 +78,40 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `len`, `get_array`, `index`
 - **Types:** 1/2 matched
 - **Missing types:** `Output`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/lazy_buffer.rs` vs expected `lazy_buffer.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/lazy_buffer.rs` vs expected `lazy_buffer.rs`
-- **Proposed provenance header:** `// port-lint: source lazy_buffer.rs` (current: `// port-lint: source src/lazy_buffer.rs`)
-- **Proposed provenance header:** `// port-lint: source lazy_buffer.rs` (current: `// port-lint: source src/lazy_buffer.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `lazy_buffer.rs` vs expected `lazy_buffer.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:lazy_buffer.rs` vs expected `lazy_buffer.rs`
+- **Proposed provenance header:** `// port-lint: source lazy_buffer.rs` (current: `// port-lint: source lazy_buffer.rs`)
+- **Proposed provenance header:** `// port-lint: tests lazy_buffer.rs` (current: `// port-lint: tests lazy_buffer.rs`)
 - **Lint issues:** 2
 
 ### 4. peek_nth
 
 - **Target:** `itertools.PeekNth [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.52
-- **Dependents:** 2
-- **Priority Score:** 2041204.8
-- **Functions:** 7/10 matched (target 11)
-- **Missing functions:** `peek_mut`, `peek_nth_mut`, `fold`
+- **Similarity:** 0.57
+- **Dependents:** 3
+- **Priority Score:** 3031204.2
+- **Functions:** 8/10 matched (target 12)
+- **Missing functions:** `peek_mut`, `peek_nth_mut`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/peek_nth.rs` vs expected `peek_nth.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/peek_nth.rs` vs expected `peek_nth.rs`
-- **Proposed provenance header:** `// port-lint: source peek_nth.rs` (current: `// port-lint: source src/peek_nth.rs`)
-- **Proposed provenance header:** `// port-lint: source peek_nth.rs` (current: `// port-lint: source src/peek_nth.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `peek_nth.rs` vs expected `peek_nth.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:peek_nth.rs` vs expected `peek_nth.rs`
+- **Proposed provenance header:** `// port-lint: source peek_nth.rs` (current: `// port-lint: source peek_nth.rs`)
+- **Proposed provenance header:** `// port-lint: tests peek_nth.rs` (current: `// port-lint: tests peek_nth.rs`)
 - **Lint issues:** 2
 
 ### 5. repeatn
 
 - **Target:** `itertools.RepeatN [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
-- **Dependents:** 2
-- **Priority Score:** 2020810.0
+- **Dependents:** 3
+- **Priority Score:** 3020810.0
 - **Functions:** 5/6 matched
 - **Missing functions:** `rfold`
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/repeatn.rs` vs expected `repeatn.rs`
-- **Proposed provenance header:** `// port-lint: source repeatn.rs` (current: `// port-lint: source src/repeatn.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `repeatn.rs` vs expected `repeatn.rs`
+- **Proposed provenance header:** `// port-lint: source repeatn.rs` (current: `// port-lint: source repeatn.rs`)
 - **Lint issues:** 1
 
 ### 6. adaptors.multi_product
@@ -124,45 +124,29 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `count`, `size_hint`, `last`
 - **Types:** 1/4 matched (target 2)
 - **Missing types:** `MultiProductInner`, `MultiProductIter`, `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/multi_product.rs` vs expected `adaptors/multi_product.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/multi_product.rs` vs expected `adaptors/multi_product.rs`
-- **Proposed provenance header:** `// port-lint: source adaptors/multi_product.rs` (current: `// port-lint: source src/adaptors/multi_product.rs`)
-- **Proposed provenance header:** `// port-lint: source adaptors/multi_product.rs` (current: `// port-lint: source src/adaptors/multi_product.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `adaptors/multi_product.rs` vs expected `adaptors/multi_product.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:adaptors/multi_product.rs` vs expected `adaptors/multi_product.rs`
+- **Proposed provenance header:** `// port-lint: source adaptors/multi_product.rs` (current: `// port-lint: source adaptors/multi_product.rs`)
+- **Proposed provenance header:** `// port-lint: tests adaptors/multi_product.rs` (current: `// port-lint: tests adaptors/multi_product.rs`)
 - **Lint issues:** 2
 
-### 7. powerset
-
-- **Target:** `itertools.Powerset [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.39
-- **Dependents:** 1
-- **Priority Score:** 1051006.1
-- **Functions:** 4/8 matched (target 9)
-- **Missing functions:** `nth`, `count`, `fold`, `remaining_for`
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/powerset.rs` vs expected `powerset.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/powerset.rs` vs expected `powerset.rs`
-- **Proposed provenance header:** `// port-lint: source powerset.rs` (current: `// port-lint: source src/powerset.rs`)
-- **Proposed provenance header:** `// port-lint: source powerset.rs` (current: `// port-lint: source src/powerset.rs`)
-- **Lint issues:** 2
-
-### 8. flatten_ok
+### 7. flatten_ok
 
 - **Target:** `itertools.FlattenOk [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.13
 - **Dependents:** 1
 - **Priority Score:** 1050808.8
-- **Functions:** 2/6 matched (target 7)
+- **Functions:** 2/6 matched (target 9)
 - **Missing functions:** `fold`, `size_hint`, `next_back`, `rfold`
 - **Types:** 1/2 matched (target 5)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/flatten_ok.rs` vs expected `flatten_ok.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/flatten_ok.rs` vs expected `flatten_ok.rs`
-- **Proposed provenance header:** `// port-lint: source flatten_ok.rs` (current: `// port-lint: source src/flatten_ok.rs`)
-- **Proposed provenance header:** `// port-lint: source flatten_ok.rs` (current: `// port-lint: source src/flatten_ok.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `flatten_ok.rs` vs expected `flatten_ok.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:flatten_ok.rs` vs expected `flatten_ok.rs`
+- **Proposed provenance header:** `// port-lint: source flatten_ok.rs` (current: `// port-lint: source flatten_ok.rs`)
+- **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests flatten_ok.rs`)
 - **Lint issues:** 2
 
-### 9. permutations
+### 8. permutations
 
 - **Target:** `itertools.Permutations [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.27
@@ -172,13 +156,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `count`, `size_hint`, `size_hint_for`
 - **Types:** 2/3 matched (target 7)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/permutations.rs` vs expected `permutations.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/permutations.rs` vs expected `permutations.rs`
-- **Proposed provenance header:** `// port-lint: source permutations.rs` (current: `// port-lint: source src/permutations.rs`)
-- **Proposed provenance header:** `// port-lint: source permutations.rs` (current: `// port-lint: source src/permutations.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `permutations.rs` vs expected `permutations.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:permutations.rs` vs expected `permutations.rs`
+- **Proposed provenance header:** `// port-lint: source permutations.rs` (current: `// port-lint: source permutations.rs`)
+- **Proposed provenance header:** `// port-lint: tests permutations.rs` (current: `// port-lint: tests permutations.rs`)
 - **Lint issues:** 2
 
-### 10. zip_longest
+### 9. zip_longest
 
 - **Target:** `itertools.ZipLongest [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.13
@@ -188,10 +172,26 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fold`, `next_back`, `rfold`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/zip_longest.rs` vs expected `zip_longest.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/zip_longest.rs` vs expected `zip_longest.rs`
-- **Proposed provenance header:** `// port-lint: source zip_longest.rs` (current: `// port-lint: source src/zip_longest.rs`)
-- **Proposed provenance header:** `// port-lint: source zip_longest.rs` (current: `// port-lint: source src/zip_longest.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `zip_longest.rs` vs expected `zip_longest.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:zip_longest.rs` vs expected `zip_longest.rs`
+- **Proposed provenance header:** `// port-lint: source zip_longest.rs` (current: `// port-lint: source zip_longest.rs`)
+- **Proposed provenance header:** `// port-lint: tests zip_longest.rs` (current: `// port-lint: tests zip_longest.rs`)
+- **Lint issues:** 2
+
+### 10. intersperse
+
+- **Target:** `itertools.Intersperse [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.50
+- **Dependents:** 1
+- **Priority Score:** 1031105.0
+- **Functions:** 6/6 matched (target 25)
+- **Missing functions:** _none_
+- **Types:** 2/5 matched (target 6)
+- **Missing types:** `IntersperseElement`, `Intersperse`, `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `intersperse.rs` vs expected `intersperse.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:intersperse.rs` vs expected `intersperse.rs`
+- **Proposed provenance header:** `// port-lint: source intersperse.rs` (current: `// port-lint: source intersperse.rs`)
+- **Proposed provenance header:** `// port-lint: tests intersperse.rs` (current: `// port-lint: tests intersperse.rs`)
 - **Lint issues:** 2
 
 ### 11. combinations_with_replacement
@@ -204,42 +204,42 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `nth`, `remaining_for`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/combinations_with_replacement.rs` vs expected `combinations_with_replacement.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/combinations_with_replacement.rs` vs expected `combinations_with_replacement.rs`
-- **Proposed provenance header:** `// port-lint: source combinations_with_replacement.rs` (current: `// port-lint: source src/combinations_with_replacement.rs`)
-- **Proposed provenance header:** `// port-lint: source combinations_with_replacement.rs` (current: `// port-lint: source src/combinations_with_replacement.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `combinations_with_replacement.rs` vs expected `combinations_with_replacement.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:combinations_with_replacement.rs` vs expected `combinations_with_replacement.rs`
+- **Proposed provenance header:** `// port-lint: source combinations_with_replacement.rs` (current: `// port-lint: source combinations_with_replacement.rs`)
+- **Proposed provenance header:** `// port-lint: tests combinations_with_replacement.rs` (current: `// port-lint: tests combinations_with_replacement.rs`)
 - **Lint issues:** 2
 
-### 12. peeking_take_while
+### 12. powerset
+
+- **Target:** `itertools.Powerset [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.60
+- **Dependents:** 1
+- **Priority Score:** 1021004.0
+- **Functions:** 7/8 matched (target 13)
+- **Missing functions:** `remaining_for`
+- **Types:** 1/2 matched
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `powerset.rs` vs expected `powerset.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:powerset.rs` vs expected `powerset.rs`
+- **Proposed provenance header:** `// port-lint: source powerset.rs` (current: `// port-lint: source powerset.rs`)
+- **Proposed provenance header:** `// port-lint: tests powerset.rs` (current: `// port-lint: tests powerset.rs`)
+- **Lint issues:** 2
+
+### 13. peeking_take_while
 
 - **Target:** `itertools.PeekingTakeWhile [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.28
 - **Dependents:** 1
 - **Priority Score:** 1020707.2
-- **Functions:** 3/4 matched (target 14)
+- **Functions:** 3/4 matched (target 16)
 - **Missing functions:** `size_hint`
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/peeking_take_while.rs` vs expected `peeking_take_while.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/peeking_take_while.rs` vs expected `peeking_take_while.rs`
-- **Proposed provenance header:** `// port-lint: source peeking_take_while.rs` (current: `// port-lint: source src/peeking_take_while.rs`)
-- **Proposed provenance header:** `// port-lint: source peeking_take_while.rs` (current: `// port-lint: source src/peeking_take_while.rs`)
-- **Lint issues:** 2
-
-### 13. take_while_inclusive
-
-- **Target:** `itertools.TakeWhileInclusive [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
-- **Dependents:** 1
-- **Priority Score:** 1020610.0
-- **Functions:** 3/4 matched (target 14)
-- **Missing functions:** `new`
-- **Types:** 1/2 matched (target 3)
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
-- **Proposed provenance header:** `// port-lint: source take_while_inclusive.rs` (current: `// port-lint: source src/take_while_inclusive.rs`)
-- **Proposed provenance header:** `// port-lint: source take_while_inclusive.rs` (current: `// port-lint: source src/take_while_inclusive.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `peeking_take_while.rs` vs expected `peeking_take_while.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:peeking_take_while.rs` vs expected `peeking_take_while.rs`
+- **Proposed provenance header:** `// port-lint: source peeking_take_while.rs` (current: `// port-lint: source peeking_take_while.rs`)
+- **Proposed provenance header:** `// port-lint: tests peeking_take_while.rs` (current: `// port-lint: tests peeking_take_while.rs`)
 - **Lint issues:** 2
 
 ### 14. tee
@@ -252,13 +252,29 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/tee.rs` vs expected `tee.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/tee.rs` vs expected `tee.rs`
-- **Proposed provenance header:** `// port-lint: source tee.rs` (current: `// port-lint: source src/tee.rs`)
-- **Proposed provenance header:** `// port-lint: source tee.rs` (current: `// port-lint: source src/tee.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tee.rs` vs expected `tee.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:tee.rs` vs expected `tee.rs`
+- **Proposed provenance header:** `// port-lint: source tee.rs` (current: `// port-lint: source tee.rs`)
+- **Proposed provenance header:** `// port-lint: tests tee.rs` (current: `// port-lint: tests tee.rs`)
 - **Lint issues:** 2
 
-### 15. diff
+### 15. take_while_inclusive
+
+- **Target:** `itertools.TakeWhileInclusive [ZERO] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
+- **Dependents:** 1
+- **Priority Score:** 1020610.0
+- **Functions:** 3/4 matched (target 14)
+- **Missing functions:** `new`
+- **Types:** 1/2 matched (target 3)
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:take_while_inclusive.rs` vs expected `take_while_inclusive.rs`
+- **Proposed provenance header:** `// port-lint: source take_while_inclusive.rs` (current: `// port-lint: source take_while_inclusive.rs`)
+- **Proposed provenance header:** `// port-lint: tests take_while_inclusive.rs` (current: `// port-lint: tests take_while_inclusive.rs`)
+- **Lint issues:** 2
+
+### 16. diff
 
 - **Target:** `itertools.Diff [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.29
@@ -268,13 +284,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fmt`, `clone`
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/diff.rs` vs expected `diff.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/diff.rs` vs expected `diff.rs`
-- **Proposed provenance header:** `// port-lint: source diff.rs` (current: `// port-lint: source src/diff.rs`)
-- **Proposed provenance header:** `// port-lint: source diff.rs` (current: `// port-lint: source src/diff.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `diff.rs` vs expected `diff.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:diff.rs` vs expected `diff.rs`
+- **Proposed provenance header:** `// port-lint: source diff.rs` (current: `// port-lint: source diff.rs`)
+- **Proposed provenance header:** `// port-lint: tests diff.rs` (current: `// port-lint: tests diff.rs`)
 - **Lint issues:** 2
 
-### 16. with_position
+### 17. with_position
 
 - **Target:** `itertools.WithPosition [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -284,13 +300,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/with_position.rs` vs expected `with_position.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/with_position.rs` vs expected `with_position.rs`
-- **Proposed provenance header:** `// port-lint: source with_position.rs` (current: `// port-lint: source src/with_position.rs`)
-- **Proposed provenance header:** `// port-lint: source with_position.rs` (current: `// port-lint: source src/with_position.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `with_position.rs` vs expected `with_position.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:with_position.rs` vs expected `with_position.rs`
+- **Proposed provenance header:** `// port-lint: source with_position.rs` (current: `// port-lint: source with_position.rs`)
+- **Proposed provenance header:** `// port-lint: tests with_position.rs` (current: `// port-lint: tests with_position.rs`)
 - **Lint issues:** 2
 
-### 17. groupbylazy
+### 18. groupbylazy
 
 - **Target:** `itertools.Groupbylazy [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.03
@@ -300,13 +316,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `call_mut`, `new`, `step`, `lookup_buffer`, `next_element`, `step_buffering`, `push_next_group`, `step_current`, `group_key`, `drop_group`, `into_iter`, `drop`, `new_chunks`
 - **Types:** 2/13 matched (target 3)
 - **Missing types:** `KeyFunction`, `Key`, `ChunkIndex`, `GroupInner`, `GroupBy`, `Item`, `IntoIter`, `Groups`, `Group`, `Chunks`, `Chunk`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/groupbylazy.rs` vs expected `groupbylazy.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/groupbylazy.rs` vs expected `groupbylazy.rs`
-- **Proposed provenance header:** `// port-lint: source groupbylazy.rs` (current: `// port-lint: source src/groupbylazy.rs`)
-- **Proposed provenance header:** `// port-lint: source groupbylazy.rs` (current: `// port-lint: source src/groupbylazy.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `groupbylazy.rs` vs expected `groupbylazy.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:groupbylazy.rs` vs expected `groupbylazy.rs`
+- **Proposed provenance header:** `// port-lint: source groupbylazy.rs` (current: `// port-lint: source groupbylazy.rs`)
+- **Proposed provenance header:** `// port-lint: tests groupbylazy.rs` (current: `// port-lint: tests groupbylazy.rs`)
 - **Lint issues:** 2
 
-### 18. adaptors.coalesce
+### 19. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.24
@@ -316,13 +332,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `size_hint`, `fold`, `new`, `coalesce_pair`, `dedup_pair`
 - **Types:** 3/16 matched (target 7)
 - **Missing types:** `CoalescePredicate`, `Item`, `NoCount`, `WithCount`, `CountItem`, `CItem`, `Coalesce`, `DedupPred2CoalescePred`, `DedupPredicate`, `DedupEq`, `Dedup`, `DedupPredWithCount2CoalescePred`, `DedupWithCount`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/coalesce.rs` vs expected `adaptors/coalesce.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/coalesce.rs` vs expected `adaptors/coalesce.rs`
-- **Proposed provenance header:** `// port-lint: source adaptors/coalesce.rs` (current: `// port-lint: source src/adaptors/coalesce.rs`)
-- **Proposed provenance header:** `// port-lint: source adaptors/coalesce.rs` (current: `// port-lint: source src/adaptors/coalesce.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `adaptors/coalesce.rs` vs expected `adaptors/coalesce.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:adaptors/coalesce.rs` vs expected `adaptors/coalesce.rs`
+- **Proposed provenance header:** `// port-lint: source adaptors/coalesce.rs` (current: `// port-lint: source adaptors/coalesce.rs`)
+- **Proposed provenance header:** `// port-lint: tests adaptors/coalesce.rs` (current: `// port-lint: tests adaptors/coalesce.rs`)
 - **Lint issues:** 2
 
-### 19. tuple_impl
+### 20. tuple_impl
 
 - **Target:** `itertools.TupleImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.07
@@ -332,29 +348,29 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `size_hint`, `tuples`, `add_then_div`, `tuple_windows`, `circular_tuple_windows`, `buffer_len`
 - **Types:** 0/7 matched (target 4)
 - **Missing types:** `HomogeneousTuple`, `TupleBuffer`, `Item`, `Tuples`, `TupleWindows`, `CircularTupleWindows`, `TupleCollect`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/tuple_impl.rs` vs expected `tuple_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/tuple_impl.rs` vs expected `tuple_impl.rs`
-- **Proposed provenance header:** `// port-lint: source tuple_impl.rs` (current: `// port-lint: source src/tuple_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source tuple_impl.rs` (current: `// port-lint: source src/tuple_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tuple_impl.rs` vs expected `tuple_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:tuple_impl.rs` vs expected `tuple_impl.rs`
+- **Proposed provenance header:** `// port-lint: source tuple_impl.rs` (current: `// port-lint: source tuple_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests tuple_impl.rs` (current: `// port-lint: tests tuple_impl.rs`)
 - **Lint issues:** 2
 
-### 20. merge_join
+### 21. merge_join
 
 - **Target:** `itertools.MergeJoin [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.09
 - **Dependents:** 0
 - **Priority Score:** 131909.1
-- **Functions:** 4/9 matched (target 18)
+- **Functions:** 4/9 matched (target 25)
 - **Missing functions:** `merge_by_new`, `left`, `right`, `fold`, `nth`
 - **Types:** 2/10 matched (target 3)
 - **Missing types:** `MergeLte`, `Merge`, `MergeFuncLR`, `FuncLR`, `T`, `OrderingOrBool`, `MergeResult`, `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/merge_join.rs` vs expected `merge_join.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/merge_join.rs` vs expected `merge_join.rs`
-- **Proposed provenance header:** `// port-lint: source merge_join.rs` (current: `// port-lint: source src/merge_join.rs`)
-- **Proposed provenance header:** `// port-lint: source merge_join.rs` (current: `// port-lint: source src/merge_join.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `merge_join.rs` vs expected `merge_join.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:merge_join.rs` vs expected `merge_join.rs`
+- **Proposed provenance header:** `// port-lint: source merge_join.rs` (current: `// port-lint: source merge_join.rs`)
+- **Proposed provenance header:** `// port-lint: tests merge_join.rs` (current: `// port-lint: tests merge_join.rs`)
 - **Lint issues:** 2
 
-### 21. adaptors.map
+### 22. adaptors.map
 
 - **Target:** `adaptors.Map [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.17
@@ -364,29 +380,29 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `size_hint`, `fold`, `collect`, `next_back`, `call`, `clone`
 - **Types:** 2/8 matched (target 3)
 - **Missing types:** `MapSpecialCase`, `MapSpecialCaseFn`, `Item`, `Out`, `MapSpecialCaseFnOk`, `MapSpecialCaseFnInto`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/map.rs` vs expected `adaptors/map.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/adaptors/map.rs` vs expected `adaptors/map.rs`
-- **Proposed provenance header:** `// port-lint: source adaptors/map.rs` (current: `// port-lint: source src/adaptors/map.rs`)
-- **Proposed provenance header:** `// port-lint: source adaptors/map.rs` (current: `// port-lint: source src/adaptors/map.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `adaptors/map.rs` vs expected `adaptors/map.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:adaptors/map.rs` vs expected `adaptors/map.rs`
+- **Proposed provenance header:** `// port-lint: source adaptors/map.rs` (current: `// port-lint: source adaptors/map.rs`)
+- **Proposed provenance header:** `// port-lint: tests adaptors/map.rs` (current: `// port-lint: tests adaptors/map.rs`)
 - **Lint issues:** 2
 
-### 22. combinations
+### 23. combinations
 
 - **Target:** `itertools.Combinations [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.41
+- **Similarity:** 0.46
 - **Dependents:** 0
-- **Priority Score:** 102305.9
-- **Functions:** 12/18 matched
-- **Missing functions:** `array_combinations`, `len`, `extract_item`, `new`, `nth`, `count`
+- **Priority Score:** 82305.4
+- **Functions:** 14/18 matched (target 22)
+- **Missing functions:** `array_combinations`, `len`, `extract_item`, `new`
 - **Types:** 1/5 matched (target 2)
 - **Missing types:** `ArrayCombinations`, `CombinationsGeneric`, `PoolIndex`, `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/combinations.rs` vs expected `combinations.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/combinations.rs` vs expected `combinations.rs`
-- **Proposed provenance header:** `// port-lint: source combinations.rs` (current: `// port-lint: source src/combinations.rs`)
-- **Proposed provenance header:** `// port-lint: source combinations.rs` (current: `// port-lint: source src/combinations.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `combinations.rs` vs expected `combinations.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:combinations.rs` vs expected `combinations.rs`
+- **Proposed provenance header:** `// port-lint: source combinations.rs` (current: `// port-lint: source combinations.rs`)
+- **Proposed provenance header:** `// port-lint: tests combinations.rs` (current: `// port-lint: tests combinations.rs`)
 - **Lint issues:** 2
 
-### 23. grouping_map
+### 24. grouping_map
 
 - **Target:** `itertools.GroupingMap [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.55
@@ -396,13 +412,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `call`, `new_map_for_grouping`, `new`
 - **Types:** 1/5 matched (target 2)
 - **Missing types:** `MapForGrouping`, `GroupingMapFn`, `Out`, `GroupingMapBy`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/grouping_map.rs` vs expected `grouping_map.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/grouping_map.rs` vs expected `grouping_map.rs`
-- **Proposed provenance header:** `// port-lint: source grouping_map.rs` (current: `// port-lint: source src/grouping_map.rs`)
-- **Proposed provenance header:** `// port-lint: source grouping_map.rs` (current: `// port-lint: source src/grouping_map.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `grouping_map.rs` vs expected `grouping_map.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:grouping_map.rs` vs expected `grouping_map.rs`
+- **Proposed provenance header:** `// port-lint: source grouping_map.rs` (current: `// port-lint: source grouping_map.rs`)
+- **Proposed provenance header:** `// port-lint: tests grouping_map.rs` (current: `// port-lint: tests grouping_map.rs`)
 - **Lint issues:** 2
 
-### 24. kmerge_impl
+### 25. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.40
@@ -412,13 +428,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `size_hint`, `kmerge_pred`
 - **Types:** 2/6 matched (target 3)
 - **Missing types:** `KMerge`, `KMergePredicate`, `KMergeByLt`, `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/kmerge_impl.rs` vs expected `kmerge_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/kmerge_impl.rs` vs expected `kmerge_impl.rs`
-- **Proposed provenance header:** `// port-lint: source kmerge_impl.rs` (current: `// port-lint: source src/kmerge_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source kmerge_impl.rs` (current: `// port-lint: source src/kmerge_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `kmerge_impl.rs` vs expected `kmerge_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:kmerge_impl.rs` vs expected `kmerge_impl.rs`
+- **Proposed provenance header:** `// port-lint: source kmerge_impl.rs` (current: `// port-lint: source kmerge_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests kmerge_impl.rs` (current: `// port-lint: tests kmerge_impl.rs`)
 - **Lint issues:** 2
 
-### 25. process_results_impl
+### 26. process_results_impl
 
 - **Target:** `itertools.ProcessResultsImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.10
@@ -428,13 +444,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `next_body`, `size_hint`, `fold`, `next_back`, `rfold`
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/process_results_impl.rs` vs expected `process_results_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/process_results_impl.rs` vs expected `process_results_impl.rs`
-- **Proposed provenance header:** `// port-lint: source process_results_impl.rs` (current: `// port-lint: source src/process_results_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source process_results_impl.rs` (current: `// port-lint: source src/process_results_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `process_results_impl.rs` vs expected `process_results_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:process_results_impl.rs` vs expected `process_results_impl.rs`
+- **Proposed provenance header:** `// port-lint: source process_results_impl.rs` (current: `// port-lint: source process_results_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests process_results_impl.rs` (current: `// port-lint: tests process_results_impl.rs`)
 - **Lint issues:** 2
 
-### 26. next_array
+### 27. next_array
 
 - **Target:** `itertools.NextArray [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -445,13 +461,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/next_array.rs` vs expected `next_array.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/next_array.rs` vs expected `next_array.rs`
-- **Proposed provenance header:** `// port-lint: source next_array.rs` (current: `// port-lint: source src/next_array.rs`)
-- **Proposed provenance header:** `// port-lint: source next_array.rs` (current: `// port-lint: source src/next_array.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `next_array.rs` vs expected `next_array.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:next_array.rs` vs expected `next_array.rs`
+- **Proposed provenance header:** `// port-lint: source next_array.rs` (current: `// port-lint: source next_array.rs`)
+- **Proposed provenance header:** `// port-lint: tests next_array.rs` (current: `// port-lint: tests next_array.rs`)
 - **Lint issues:** 2
 
-### 27. format
+### 28. format
 
 - **Target:** `itertools.Format [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -461,13 +477,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fmt`, `format`, `clone`, `drop`
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `PutBackOnDrop`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/format.rs` vs expected `format.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/format.rs` vs expected `format.rs`
-- **Proposed provenance header:** `// port-lint: source format.rs` (current: `// port-lint: source src/format.rs`)
-- **Proposed provenance header:** `// port-lint: source format.rs` (current: `// port-lint: source src/format.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `format.rs` vs expected `format.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:format.rs` vs expected `format.rs`
+- **Proposed provenance header:** `// port-lint: source format.rs` (current: `// port-lint: source format.rs`)
+- **Proposed provenance header:** `// port-lint: tests format.rs` (current: `// port-lint: tests format.rs`)
 - **Lint issues:** 2
 
-### 28. rciter_impl
+### 29. rciter_impl
 
 - **Target:** `itertools.RcIterImpl [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.19
@@ -477,13 +493,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `size_hint`, `next_back`, `into_iter`
 - **Types:** 1/3 matched (target 2)
 - **Missing types:** `Item`, `IntoIter`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/rciter_impl.rs` vs expected `rciter_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/rciter_impl.rs` vs expected `rciter_impl.rs`
-- **Proposed provenance header:** `// port-lint: source rciter_impl.rs` (current: `// port-lint: source src/rciter_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source rciter_impl.rs` (current: `// port-lint: source src/rciter_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `rciter_impl.rs` vs expected `rciter_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:rciter_impl.rs` vs expected `rciter_impl.rs`
+- **Proposed provenance header:** `// port-lint: source rciter_impl.rs` (current: `// port-lint: source rciter_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests rciter_impl.rs` (current: `// port-lint: tests rciter_impl.rs`)
 - **Lint issues:** 2
 
-### 29. duplicates_impl
+### 30. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -493,13 +509,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `next_back`
 - **Types:** 9/11 matched (target 10)
 - **Missing types:** `Item`, `Container`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/duplicates_impl.rs` vs expected `duplicates_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/duplicates_impl.rs` vs expected `duplicates_impl.rs`
-- **Proposed provenance header:** `// port-lint: source duplicates_impl.rs` (current: `// port-lint: source src/duplicates_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source duplicates_impl.rs` (current: `// port-lint: source src/duplicates_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `duplicates_impl.rs` vs expected `duplicates_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:duplicates_impl.rs` vs expected `duplicates_impl.rs`
+- **Proposed provenance header:** `// port-lint: source duplicates_impl.rs` (current: `// port-lint: source duplicates_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests duplicates_impl.rs` (current: `// port-lint: tests duplicates_impl.rs`)
 - **Lint issues:** 2
 
-### 30. unique_impl
+### 31. unique_impl
 
 - **Target:** `itertools.UniqueImpl [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -509,13 +525,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `count_new_keys`, `count`, `next_back`
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/unique_impl.rs` vs expected `unique_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:src/unique_impl.rs` vs expected `unique_impl.rs`
-- **Proposed provenance header:** `// port-lint: source unique_impl.rs` (current: `// port-lint: source src/unique_impl.rs`)
-- **Proposed provenance header:** `// port-lint: tests unique_impl.rs` (current: `// port-lint: tests src/unique_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `unique_impl.rs` vs expected `unique_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:unique_impl.rs` vs expected `unique_impl.rs`
+- **Proposed provenance header:** `// port-lint: source unique_impl.rs` (current: `// port-lint: source unique_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests unique_impl.rs` (current: `// port-lint: tests unique_impl.rs`)
 - **Lint issues:** 2
 
-### 31. free
+### 32. free
 
 - **Target:** `itertools.Free [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.64
@@ -525,45 +541,13 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `intersperse`, `intersperse_with`
 - **Types:** 0/1 matched
 - **Missing types:** `VecIntoIter`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/free.rs` vs expected `free.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/free.rs` vs expected `free.rs`
-- **Proposed provenance header:** `// port-lint: source free.rs` (current: `// port-lint: source src/free.rs`)
-- **Proposed provenance header:** `// port-lint: source free.rs` (current: `// port-lint: source src/free.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `free.rs` vs expected `free.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:free.rs` vs expected `free.rs`
+- **Proposed provenance header:** `// port-lint: source free.rs` (current: `// port-lint: source free.rs`)
+- **Proposed provenance header:** `// port-lint: tests free.rs` (current: `// port-lint: tests free.rs`)
 - **Lint issues:** 2
 
-### 32. intersperse
-
-- **Target:** `itertools.Intersperse [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.50
-- **Dependents:** 0
-- **Priority Score:** 31105.0
-- **Functions:** 6/6 matched (target 25)
-- **Missing functions:** _none_
-- **Types:** 2/5 matched (target 6)
-- **Missing types:** `IntersperseElement`, `Intersperse`, `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/intersperse.rs` vs expected `intersperse.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/intersperse.rs` vs expected `intersperse.rs`
-- **Proposed provenance header:** `// port-lint: source intersperse.rs` (current: `// port-lint: source src/intersperse.rs`)
-- **Proposed provenance header:** `// port-lint: source intersperse.rs` (current: `// port-lint: source src/intersperse.rs`)
-- **Lint issues:** 2
-
-### 33. exactly_one_err
-
-- **Target:** `itertools.ExactlyOneErr [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 30810.0
-- **Functions:** 4/6 matched (target 13)
-- **Missing functions:** `new`, `fmt`
-- **Types:** 1/2 matched (target 5)
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/exactly_one_err.rs` vs expected `exactly_one_err.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/exactly_one_err.rs` vs expected `exactly_one_err.rs`
-- **Proposed provenance header:** `// port-lint: source exactly_one_err.rs` (current: `// port-lint: source src/exactly_one_err.rs`)
-- **Proposed provenance header:** `// port-lint: source exactly_one_err.rs` (current: `// port-lint: source src/exactly_one_err.rs`)
-- **Lint issues:** 2
-
-### 34. pad_tail
+### 33. pad_tail
 
 - **Target:** `itertools.PadTail [ZERO] [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -573,10 +557,26 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `next_back`, `rfold`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/pad_tail.rs` vs expected `pad_tail.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/pad_tail.rs` vs expected `pad_tail.rs`
-- **Proposed provenance header:** `// port-lint: source pad_tail.rs` (current: `// port-lint: source src/pad_tail.rs`)
-- **Proposed provenance header:** `// port-lint: source pad_tail.rs` (current: `// port-lint: source src/pad_tail.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `pad_tail.rs` vs expected `pad_tail.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:pad_tail.rs` vs expected `pad_tail.rs`
+- **Proposed provenance header:** `// port-lint: source pad_tail.rs` (current: `// port-lint: source pad_tail.rs`)
+- **Proposed provenance header:** `// port-lint: tests pad_tail.rs` (current: `// port-lint: tests pad_tail.rs`)
+- **Lint issues:** 2
+
+### 34. exactly_one_err
+
+- **Target:** `itertools.ExactlyOneErr [ZERO] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 30810.0
+- **Functions:** 4/6 matched (target 13)
+- **Missing functions:** `new`, `fmt`
+- **Types:** 1/2 matched (target 5)
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `exactly_one_err.rs` vs expected `exactly_one_err.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:exactly_one_err.rs` vs expected `exactly_one_err.rs`
+- **Proposed provenance header:** `// port-lint: source exactly_one_err.rs` (current: `// port-lint: source exactly_one_err.rs`)
+- **Proposed provenance header:** `// port-lint: tests exactly_one_err.rs` (current: `// port-lint: tests exactly_one_err.rs`)
 - **Lint issues:** 2
 
 ### 35. multipeek_impl
@@ -589,10 +589,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fold`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/multipeek_impl.rs` vs expected `multipeek_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/multipeek_impl.rs` vs expected `multipeek_impl.rs`
-- **Proposed provenance header:** `// port-lint: source multipeek_impl.rs` (current: `// port-lint: source src/multipeek_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source multipeek_impl.rs` (current: `// port-lint: source src/multipeek_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `multipeek_impl.rs` vs expected `multipeek_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:multipeek_impl.rs` vs expected `multipeek_impl.rs`
+- **Proposed provenance header:** `// port-lint: source multipeek_impl.rs` (current: `// port-lint: source multipeek_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests multipeek_impl.rs` (current: `// port-lint: tests multipeek_impl.rs`)
 - **Lint issues:** 2
 
 ### 36. iter_index
@@ -605,10 +605,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/3 matched (target 8)
 - **Missing types:** `Sealed`, `Output`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/iter_index.rs` vs expected `iter_index.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/iter_index.rs` vs expected `iter_index.rs`
-- **Proposed provenance header:** `// port-lint: source iter_index.rs` (current: `// port-lint: source src/iter_index.rs`)
-- **Proposed provenance header:** `// port-lint: source iter_index.rs` (current: `// port-lint: source src/iter_index.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `iter_index.rs` vs expected `iter_index.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:iter_index.rs` vs expected `iter_index.rs`
+- **Proposed provenance header:** `// port-lint: source iter_index.rs` (current: `// port-lint: source iter_index.rs`)
+- **Proposed provenance header:** `// port-lint: tests iter_index.rs` (current: `// port-lint: tests iter_index.rs`)
 - **Lint issues:** 2
 
 ### 37. put_back_n_impl
@@ -621,10 +621,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/put_back_n_impl.rs` vs expected `put_back_n_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/put_back_n_impl.rs` vs expected `put_back_n_impl.rs`
-- **Proposed provenance header:** `// port-lint: source put_back_n_impl.rs` (current: `// port-lint: source src/put_back_n_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source put_back_n_impl.rs` (current: `// port-lint: source src/put_back_n_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `put_back_n_impl.rs` vs expected `put_back_n_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:put_back_n_impl.rs` vs expected `put_back_n_impl.rs`
+- **Proposed provenance header:** `// port-lint: source put_back_n_impl.rs` (current: `// port-lint: source put_back_n_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests put_back_n_impl.rs` (current: `// port-lint: tests put_back_n_impl.rs`)
 - **Lint issues:** 2
 
 ### 38. sources
@@ -637,10 +637,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/sources.rs` vs expected `sources.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/sources.rs` vs expected `sources.rs`
-- **Proposed provenance header:** `// port-lint: source sources.rs` (current: `// port-lint: source src/sources.rs`)
-- **Proposed provenance header:** `// port-lint: source sources.rs` (current: `// port-lint: source src/sources.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `sources.rs` vs expected `sources.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:sources.rs` vs expected `sources.rs`
+- **Proposed provenance header:** `// port-lint: source sources.rs` (current: `// port-lint: source sources.rs`)
+- **Proposed provenance header:** `// port-lint: tests sources.rs` (current: `// port-lint: tests sources.rs`)
 - **Lint issues:** 2
 
 ### 39. zip_eq_impl
@@ -653,10 +653,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/zip_eq_impl.rs` vs expected `zip_eq_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/zip_eq_impl.rs` vs expected `zip_eq_impl.rs`
-- **Proposed provenance header:** `// port-lint: source zip_eq_impl.rs` (current: `// port-lint: source src/zip_eq_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source zip_eq_impl.rs` (current: `// port-lint: source src/zip_eq_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `zip_eq_impl.rs` vs expected `zip_eq_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:zip_eq_impl.rs` vs expected `zip_eq_impl.rs`
+- **Proposed provenance header:** `// port-lint: source zip_eq_impl.rs` (current: `// port-lint: source zip_eq_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests zip_eq_impl.rs` (current: `// port-lint: tests zip_eq_impl.rs`)
 - **Lint issues:** 2
 
 ### 40. minmax
@@ -669,10 +669,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `into_option`
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/minmax.rs` vs expected `minmax.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/minmax.rs` vs expected `minmax.rs`
-- **Proposed provenance header:** `// port-lint: source minmax.rs` (current: `// port-lint: source src/minmax.rs`)
-- **Proposed provenance header:** `// port-lint: source minmax.rs` (current: `// port-lint: source src/minmax.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `minmax.rs` vs expected `minmax.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:minmax.rs` vs expected `minmax.rs`
+- **Proposed provenance header:** `// port-lint: source minmax.rs` (current: `// port-lint: source minmax.rs`)
+- **Proposed provenance header:** `// port-lint: tests minmax.rs` (current: `// port-lint: tests minmax.rs`)
 - **Lint issues:** 2
 
 ### 41. cons_tuples_impl
@@ -685,10 +685,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
 - **Missing types:** `ConsTuplesFn`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/cons_tuples_impl.rs` vs expected `cons_tuples_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/cons_tuples_impl.rs` vs expected `cons_tuples_impl.rs`
-- **Proposed provenance header:** `// port-lint: source cons_tuples_impl.rs` (current: `// port-lint: source src/cons_tuples_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source cons_tuples_impl.rs` (current: `// port-lint: source src/cons_tuples_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `cons_tuples_impl.rs` vs expected `cons_tuples_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:cons_tuples_impl.rs` vs expected `cons_tuples_impl.rs`
+- **Proposed provenance header:** `// port-lint: source cons_tuples_impl.rs` (current: `// port-lint: source cons_tuples_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests cons_tuples_impl.rs` (current: `// port-lint: tests cons_tuples_impl.rs`)
 - **Lint issues:** 2
 
 ### 42. unziptuple
@@ -701,8 +701,8 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/1 matched (target 0)
 - **Missing types:** `MultiUnzip`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/unziptuple.rs` vs expected `unziptuple.rs`
-- **Proposed provenance header:** `// port-lint: source unziptuple.rs` (current: `// port-lint: source src/unziptuple.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `unziptuple.rs` vs expected `unziptuple.rs`
+- **Proposed provenance header:** `// port-lint: source unziptuple.rs` (current: `// port-lint: source unziptuple.rs`)
 - **Lint issues:** 1
 
 ### 43. ziptuple
@@ -715,10 +715,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/1 matched (target 4)
 - **Missing types:** `Zip`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/ziptuple.rs` vs expected `ziptuple.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/ziptuple.rs` vs expected `ziptuple.rs`
-- **Proposed provenance header:** `// port-lint: source ziptuple.rs` (current: `// port-lint: source src/ziptuple.rs`)
-- **Proposed provenance header:** `// port-lint: source ziptuple.rs` (current: `// port-lint: source src/ziptuple.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `ziptuple.rs` vs expected `ziptuple.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:ziptuple.rs` vs expected `ziptuple.rs`
+- **Proposed provenance header:** `// port-lint: source ziptuple.rs` (current: `// port-lint: source ziptuple.rs`)
+- **Proposed provenance header:** `// port-lint: tests ziptuple.rs` (current: `// port-lint: tests ziptuple.rs`)
 - **Lint issues:** 2
 
 ### 44. k_smallest
@@ -731,10 +731,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/k_smallest.rs` vs expected `k_smallest.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/k_smallest.rs` vs expected `k_smallest.rs`
-- **Proposed provenance header:** `// port-lint: source k_smallest.rs` (current: `// port-lint: source src/k_smallest.rs`)
-- **Proposed provenance header:** `// port-lint: source k_smallest.rs` (current: `// port-lint: source src/k_smallest.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `k_smallest.rs` vs expected `k_smallest.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:k_smallest.rs` vs expected `k_smallest.rs`
+- **Proposed provenance header:** `// port-lint: source k_smallest.rs` (current: `// port-lint: source k_smallest.rs`)
+- **Proposed provenance header:** `// port-lint: tests k_smallest.rs` (current: `// port-lint: tests k_smallest.rs`)
 - **Lint issues:** 2
 
 ### 45. group_map
@@ -747,8 +747,8 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/group_map.rs` vs expected `group_map.rs`
-- **Proposed provenance header:** `// port-lint: source group_map.rs` (current: `// port-lint: source src/group_map.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `group_map.rs` vs expected `group_map.rs`
+- **Proposed provenance header:** `// port-lint: source group_map.rs` (current: `// port-lint: source group_map.rs`)
 - **Lint issues:** 1
 
 ### 46. extrema_set
@@ -761,8 +761,8 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/extrema_set.rs` vs expected `extrema_set.rs`
-- **Proposed provenance header:** `// port-lint: source extrema_set.rs` (current: `// port-lint: source src/extrema_set.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `extrema_set.rs` vs expected `extrema_set.rs`
+- **Proposed provenance header:** `// port-lint: source extrema_set.rs` (current: `// port-lint: source extrema_set.rs`)
 - **Lint issues:** 1
 
 ### 47. concat_impl
@@ -775,10 +775,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/concat_impl.rs` vs expected `concat_impl.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/concat_impl.rs` vs expected `concat_impl.rs`
-- **Proposed provenance header:** `// port-lint: source concat_impl.rs` (current: `// port-lint: source src/concat_impl.rs`)
-- **Proposed provenance header:** `// port-lint: source concat_impl.rs` (current: `// port-lint: source src/concat_impl.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `concat_impl.rs` vs expected `concat_impl.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:concat_impl.rs` vs expected `concat_impl.rs`
+- **Proposed provenance header:** `// port-lint: source concat_impl.rs` (current: `// port-lint: source concat_impl.rs`)
+- **Proposed provenance header:** `// port-lint: tests concat_impl.rs` (current: `// port-lint: tests concat_impl.rs`)
 - **Lint issues:** 2
 
 ### 48. impl_macros
@@ -791,8 +791,8 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/impl_macros.rs` vs expected `impl_macros.rs`
-- **Proposed provenance header:** `// port-lint: source impl_macros.rs` (current: `// port-lint: source src/impl_macros.rs`)
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `impl_macros.rs` vs expected `impl_macros.rs`
+- **Proposed provenance header:** `// port-lint: source impl_macros.rs` (current: `// port-lint: source impl_macros.rs`)
 - **Lint issues:** 1
 
 ## Success Criteria
@@ -815,6 +815,6 @@ do not treat them as the next implementation target by default.
 
 | Source | Expected target | Deps | Source path | Expected path |
 |--------|-----------------|------|-------------|---------------|
-| `adaptors.mod` | `adaptors.Mod` | 0 | `adaptors/mod.rs` | `adaptors/Mod.kt` |
-| `lib` | `Lib` | 0 | `lib.rs` | `Lib.kt` |
+| `adaptors.mod` | `adaptors.Mod` | 0 | `src/adaptors/mod.rs` | `adaptors/Mod.kt` |
+| `lib` | `Lib` | 0 | `src/lib.rs` | `Lib.kt` |
 

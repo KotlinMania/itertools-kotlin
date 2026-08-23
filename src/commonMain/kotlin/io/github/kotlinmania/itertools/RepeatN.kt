@@ -1,4 +1,4 @@
-// port-lint: source src/repeatn.rs
+// port-lint: source repeatn.rs
 package io.github.kotlinmania.itertools
 
 /**

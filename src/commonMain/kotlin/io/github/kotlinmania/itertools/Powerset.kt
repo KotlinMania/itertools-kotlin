@@ -1,4 +1,4 @@
-// port-lint: source src/powerset.rs
+// port-lint: source powerset.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -42,6 +42,22 @@ class Powerset<T>(
         }
     }
 
+    /** Returns the n-th element of the powerset. */
+    fun nth(n: Int): List<T>? {
+        var nRemaining = n
+        while (true) {
+            when (val res = combs.tryNthResult(nRemaining)) {
+                is ItemResult.Ok -> return res.value
+                is ItemResult.Err -> {
+                    if (!incrementK()) {
+                        return null
+                    }
+                    nRemaining -= res.error
+                }
+            }
+        }
+    }
+
     /** Size hint for remaining powerset elements. */
     fun sizeHint(): SizeHint {
         val k = combs.k()
@@ -49,6 +65,35 @@ class Powerset<T>(
         val low = remainingForPowerset(nMin, k) ?: Int.MAX_VALUE
         val upp = nMax?.let { remainingForPowerset(it, k) }
         return add(combs.sizeHint(), SizeHint(low, upp))
+    }
+
+    /** Returns the count of remaining powerset elements. */
+    fun count(): Int {
+        val k = combs.k()
+        val (n, combsCount) = combs.nAndCount()
+        return combsCount + (remainingForPowerset(n, k) ?: 0)
+    }
+
+    /** Folds the elements of the powerset. */
+    fun <B> fold(init: B, f: (B, List<T>) -> B): B {
+        var acc = init
+        if (combs.k() == 0) {
+            while (combs.hasNext()) {
+                acc = f(acc, combs.next())
+            }
+            combs.reset(1)
+        }
+        while (combs.hasNext()) {
+            acc = f(acc, combs.next())
+        }
+        val n = combs.n()
+        for (k in (combs.k() + 1)..n) {
+            combs.reset(k)
+            while (combs.hasNext()) {
+                acc = f(acc, combs.next())
+            }
+        }
+        return acc
     }
 }
 

@@ -1,4 +1,4 @@
-// port-lint: source src/merge_join.rs
+// port-lint: tests merge_join.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -46,5 +46,100 @@ class MergeJoinTest {
             ),
             res,
         )
+    }
+
+    @Test
+    fun testEmpty() {
+        val left = emptyList<Int>()
+        val right = emptyList<Int>()
+        val expected = emptyList<EitherOrBoth<Int, Int>>()
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testLeftOnly() {
+        val left = listOf(1, 2, 3)
+        val right = emptyList<Int>()
+        val expected = listOf(EitherOrBoth.Left(1), EitherOrBoth.Left(2), EitherOrBoth.Left(3))
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testRightOnly() {
+        val left = emptyList<Int>()
+        val right = listOf(1, 2, 3)
+        val expected = listOf(EitherOrBoth.Right(1), EitherOrBoth.Right(2), EitherOrBoth.Right(3))
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testFirstLeftThenRight() {
+        val left = listOf(1, 2, 3)
+        val right = listOf(4, 5, 6)
+        val expected =
+            listOf(
+                EitherOrBoth.Left(1),
+                EitherOrBoth.Left(2),
+                EitherOrBoth.Left(3),
+                EitherOrBoth.Right(4),
+                EitherOrBoth.Right(5),
+                EitherOrBoth.Right(6),
+            )
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testFirstRightThenLeft() {
+        val left = listOf(4, 5, 6)
+        val right = listOf(1, 2, 3)
+        val expected =
+            listOf(
+                EitherOrBoth.Right(1),
+                EitherOrBoth.Right(2),
+                EitherOrBoth.Right(3),
+                EitherOrBoth.Left(4),
+                EitherOrBoth.Left(5),
+                EitherOrBoth.Left(6),
+            )
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testInterspersedLeftAndRight() {
+        val left = listOf(1, 3, 5)
+        val right = listOf(2, 4, 6)
+        val expected =
+            listOf(
+                EitherOrBoth.Left(1),
+                EitherOrBoth.Right(2),
+                EitherOrBoth.Left(3),
+                EitherOrBoth.Right(4),
+                EitherOrBoth.Left(5),
+                EitherOrBoth.Right(6),
+            )
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testOverlappingLeftAndRight() {
+        val left = listOf(1, 3, 4, 6)
+        val right = listOf(2, 3, 4, 5)
+        val expected =
+            listOf(
+                EitherOrBoth.Left(1),
+                EitherOrBoth.Right(2),
+                EitherOrBoth.Both(3, 3),
+                EitherOrBoth.Both(4, 4),
+                EitherOrBoth.Right(5),
+                EitherOrBoth.Left(6),
+            )
+        val actual = mergeJoinBy(left, right) { l, r -> l.compareTo(r) }.asSequence().toList()
+        assertEquals(expected, actual)
     }
 }

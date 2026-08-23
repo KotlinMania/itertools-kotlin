@@ -1,4 +1,4 @@
-// port-lint: source src/powerset.rs
+// port-lint: tests powerset.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -38,6 +38,18 @@ class PowersetTest {
 
     @Test
     fun testPowersetCounts() {
-        assertEquals(16, powerset(0 until 4).asSequence().count())
+        assertEquals(16, powerset(0 until 4).count())
+        assertEquals(256, powerset(0 until 8).count())
+        assertEquals(65536, powerset(0 until 16).count())
+    }
+
+    @Test
+    fun testPowersetNthAndFold() {
+        val ps = powerset(listOf(0, 1, 2))
+        assertEquals(listOf(1, 2), ps.nth(6))
+
+        val psFold = powerset(listOf(0, 1))
+        val count = psFold.fold(0) { acc, _ -> acc + 1 }
+        assertEquals(4, count)
     }
 }

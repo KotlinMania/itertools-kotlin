@@ -1,4 +1,4 @@
-// port-lint: source src/adaptors/map.rs
+// port-lint: source adaptors/map.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import io.github.kotlinmania.itertools.ItemResult
@@ -12,15 +12,13 @@ class MapOk<T, U, E>(
     private val iter: Iterator<ItemResult<T, E>>,
     private val f: (T) -> U,
 ) : Iterator<ItemResult<U, E>> {
-
     override fun hasNext(): Boolean = iter.hasNext()
 
-    override fun next(): ItemResult<U, E> {
-        return when (val item = iter.next()) {
+    override fun next(): ItemResult<U, E> =
+        when (val item = iter.next()) {
             is ItemResult.Ok -> ItemResult.Ok(f(item.value))
             is ItemResult.Err -> ItemResult.Err(item.error)
         }
-    }
 }
 
 /**
@@ -42,7 +40,6 @@ class MapInto<T, U>(
     private val iter: Iterator<T>,
     private val transform: (T) -> U,
 ) : Iterator<U> {
-
     override fun hasNext(): Boolean = iter.hasNext()
 
     override fun next(): U = transform(iter.next())

@@ -1,4 +1,4 @@
-// port-lint: source src/peek_nth.rs
+// port-lint: source peek_nth.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -63,6 +63,18 @@ class PeekNth<T>(
 
     /** Returns the size hint. */
     fun sizeHint(): SizeHint = addScalar(sourceHint, buf.size)
+
+    /** Folds the elements of the iterator. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        for (item in buf) {
+            acc = f(acc, item)
+        }
+        while (iter.hasNext()) {
+            acc = f(acc, iter.next())
+        }
+        return acc
+    }
 }
 
 /**

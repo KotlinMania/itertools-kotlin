@@ -1,4 +1,4 @@
-// port-lint: source src/tee.rs
+// port-lint: source tee.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: source src/adaptors/coalesce.rs
+// port-lint: source adaptors/coalesce.rs
 package io.github.kotlinmania.itertools.adaptors
 
 /**
@@ -6,10 +6,15 @@ package io.github.kotlinmania.itertools.adaptors
  */
 sealed class CoalesceResult<out T> {
     /** The two items were successfully merged into [merged]. */
-    data class Merged<out T>(val merged: T) : CoalesceResult<T>()
+    data class Merged<out T>(
+        val merged: T,
+    ) : CoalesceResult<T>()
 
     /** The two items could not be merged and remain separate. */
-    data class Separate<out T>(val first: T, val second: T) : CoalesceResult<T>()
+    data class Separate<out T>(
+        val first: T,
+        val second: T,
+    ) : CoalesceResult<T>()
 }
 
 /**
@@ -29,11 +34,12 @@ class CoalesceBy<T>(
         if (!hasNext()) {
             throw NoSuchElementException("CoalesceBy exhausted")
         }
-        var current: T = if (lastBuf.isNotEmpty()) {
-            lastBuf.removeFirst()
-        } else {
-            iter.next()
-        }
+        var current: T =
+            if (lastBuf.isNotEmpty()) {
+                lastBuf.removeFirst()
+            } else {
+                iter.next()
+            }
 
         while (iter.hasNext()) {
             val nextItem = iter.next()
@@ -72,13 +78,14 @@ class DedupBy<T>(
     private val iter: Iterator<T>,
     private val same: (T, T) -> Boolean,
 ) : Iterator<T> {
-    private val coalesceIter = CoalesceBy(iter) { a, b ->
-        if (same(a, b)) {
-            CoalesceResult.Merged(a)
-        } else {
-            CoalesceResult.Separate(a, b)
+    private val coalesceIter =
+        CoalesceBy(iter) { a, b ->
+            if (same(a, b)) {
+                CoalesceResult.Merged(a)
+            } else {
+                CoalesceResult.Separate(a, b)
+            }
         }
-    }
 
     override fun hasNext(): Boolean = coalesceIter.hasNext()
 
@@ -126,13 +133,14 @@ class DedupByWithCount<T>(
             throw NoSuchElementException("DedupByWithCount exhausted")
         }
         var count = 1
-        var item: T = if (lastBuf.isNotEmpty()) {
-            val l = lastBuf.removeFirst()
-            count = l.first
-            l.second
-        } else {
-            iter.next()
-        }
+        var item: T =
+            if (lastBuf.isNotEmpty()) {
+                val l = lastBuf.removeFirst()
+                count = l.first
+                l.second
+            } else {
+                iter.next()
+            }
 
         while (iter.hasNext()) {
             val nextItem = iter.next()

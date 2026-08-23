@@ -1,4 +1,4 @@
-// port-lint: source src/cons_tuples_impl.rs
+// port-lint: source cons_tuples_impl.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -10,7 +10,6 @@ package io.github.kotlinmania.itertools
 class ConsTuples<A, B, C>(
     private val iter: Iterator<Pair<Pair<A, B>, C>>,
 ) : Iterator<Triple<A, B, C>> {
-
     override fun hasNext(): Boolean = iter.hasNext()
 
     override fun next(): Triple<A, B, C> {

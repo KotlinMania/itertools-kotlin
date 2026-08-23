@@ -1,4 +1,4 @@
-// port-lint: source src/peeking_take_while.rs
+// port-lint: source peeking_take_while.rs
 package io.github.kotlinmania.itertools
 
 /**

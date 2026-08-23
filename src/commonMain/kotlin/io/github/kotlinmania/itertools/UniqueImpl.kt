@@ -1,4 +1,4 @@
-// port-lint: source src/unique_impl.rs
+// port-lint: source unique_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

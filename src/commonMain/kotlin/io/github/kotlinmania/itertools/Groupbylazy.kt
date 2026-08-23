@@ -1,4 +1,4 @@
-// port-lint: source src/groupbylazy.rs
+// port-lint: source groupbylazy.rs
 package io.github.kotlinmania.itertools
 
 /**
@@ -18,11 +18,12 @@ class ChunkBy<K, T>(
         if (!hasNext()) {
             throw NoSuchElementException("ChunkBy exhausted")
         }
-        val first = if (pending.isNotEmpty()) {
-            pending.removeFirst()
-        } else {
-            iter.next()
-        }
+        val first =
+            if (pending.isNotEmpty()) {
+                pending.removeFirst()
+            } else {
+                iter.next()
+            }
 
         val key = keySelector(first)
         val group = mutableListOf(first)

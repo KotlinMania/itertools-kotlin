@@ -1,4 +1,4 @@
-// port-lint: source src/either_or_both.rs
+// port-lint: tests either_or_both.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
@@ -105,5 +105,28 @@ class EitherOrBothTest {
         assertEquals(5, pairBoth.reduce { a, b -> a + b })
         assertEquals(2, pairLeft.reduce { a, b -> a + b })
         assertEquals(3, pairRight.reduce { a, b -> a + b })
+    }
+
+    @Test
+    fun testIntoAndAndThen() {
+        val left: EitherOrBoth<Int, String> = EitherOrBoth.Left(1)
+        val right: EitherOrBoth<Int, String> = EitherOrBoth.Right("42")
+        val both: EitherOrBoth<Int, String> = EitherOrBoth.Both(1, "42")
+
+        assertEquals(1, left.intoLeft { it.toInt() })
+        assertEquals(42, right.intoLeft { it.toInt() })
+        assertEquals(1, both.intoLeft { it.toInt() })
+
+        assertEquals("1", left.intoRight { it.toString() })
+        assertEquals("42", right.intoRight { it.toString() })
+        assertEquals("42", both.intoRight { it.toString() })
+
+        assertEquals(EitherOrBoth.Left(10), left.leftAndThen { EitherOrBoth.Left(it * 10) })
+        assertEquals(EitherOrBoth.Right("42"), right.leftAndThen { EitherOrBoth.Left(999) })
+        assertEquals(EitherOrBoth.Left(10), both.leftAndThen { EitherOrBoth.Left(it * 10) })
+
+        assertEquals(EitherOrBoth.Left(1), left.rightAndThen { EitherOrBoth.Right("new") })
+        assertEquals(EitherOrBoth.Right("42!"), right.rightAndThen { EitherOrBoth.Right(it + "!") })
+        assertEquals(EitherOrBoth.Right("42!"), both.rightAndThen { EitherOrBoth.Right(it + "!") })
     }
 }

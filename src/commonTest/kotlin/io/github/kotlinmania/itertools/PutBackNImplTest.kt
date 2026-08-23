@@ -1,4 +1,4 @@
-// port-lint: source src/put_back_n_impl.rs
+// port-lint: tests put_back_n_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

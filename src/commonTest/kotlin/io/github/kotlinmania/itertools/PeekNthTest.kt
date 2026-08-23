@@ -1,4 +1,4 @@
-// port-lint: source src/peek_nth.rs
+// port-lint: tests peek_nth.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

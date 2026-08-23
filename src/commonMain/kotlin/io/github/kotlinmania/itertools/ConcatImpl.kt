@@ -1,4 +1,4 @@
-// port-lint: source src/concat_impl.rs
+// port-lint: source concat_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

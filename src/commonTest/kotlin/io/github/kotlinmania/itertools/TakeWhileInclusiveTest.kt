@@ -1,4 +1,4 @@
-// port-lint: source src/take_while_inclusive.rs
+// port-lint: tests take_while_inclusive.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
