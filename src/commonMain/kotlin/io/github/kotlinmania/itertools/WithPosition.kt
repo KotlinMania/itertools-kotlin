@@ -3,7 +3,6 @@ package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName
 
-
 /**
  * A positioned element yielded by [withPosition].
  */

@@ -3,7 +3,6 @@ package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName
 
-
 /**
  * An iterator adaptor that pads a sequence to a minimum length by filling
  * missing elements using a function.
@@ -95,10 +94,8 @@ public fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): Iterator<T> =
 public fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): Iterator<T> =
     padUsing(this, min, filler)
 
-
 private fun padTailIterableHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-

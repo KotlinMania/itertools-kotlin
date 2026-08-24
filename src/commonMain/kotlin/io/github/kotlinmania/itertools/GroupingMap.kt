@@ -221,7 +221,9 @@ fun <K, V> groupingMap(iterable: Iterable<Pair<K, V>>): GroupingMap<K, V> =
 /**
  * A wrapper function for [GroupingMap].
  */
-class GroupingMapFn<K, V>(val keyMapper: (V) -> K) {
+class GroupingMapFn<K, V>(
+    val keyMapper: (V) -> K,
+) {
     fun call(v: V): Pair<K, V> = keyMapper(v) to v
 }
 
@@ -232,6 +234,7 @@ internal fun <K, V> newMapForGrouping(iter: Iterator<V>, keyMapper: (V) -> K): I
     val fn = GroupingMapFn(keyMapper)
     return object : Iterator<Pair<K, V>> {
         override fun hasNext(): Boolean = iter.hasNext()
+
         override fun next(): Pair<K, V> = fn.call(iter.next())
     }
 }
@@ -259,4 +262,3 @@ fun <K, V> Iterator<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
  */
 fun <K, V> Iterable<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
     GroupingMap(iterator())
-

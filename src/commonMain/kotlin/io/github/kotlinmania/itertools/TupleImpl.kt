@@ -2,6 +2,183 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * Interface implemented for homogeneous tuples.
+ */
+interface HomogeneousTuple
+
+/**
+ * Trait for collecting tuples from iterators.
+ */
+interface TupleCollect : HomogeneousTuple
+
+/**
+ * An iterator over an incomplete tuple.
+ */
+class TupleBuffer<T>(
+    private val buffer: List<T>,
+) : Iterator<T> {
+    private var cur: Int = 0
+
+    override fun hasNext(): Boolean = cur < buffer.size
+
+    override fun next(): T {
+        if (!hasNext()) {
+            throw NoSuchElementException("TupleBuffer exhausted")
+        }
+        val item = buffer[cur]
+        cur += 1
+        return item
+    }
+
+    /** Size hint for remaining elements. */
+    fun sizeHint(): SizeHint {
+        val rem = (buffer.size - cur).coerceAtLeast(0)
+        return SizeHint(rem, rem)
+    }
+
+    companion object {
+        fun <T> new(buf: List<T>): TupleBuffer<T> = TupleBuffer(buf)
+    }
+}
+
+/**
+ * Divide (n + a) by d avoiding overflow.
+ */
+fun addThenDiv(n: Int, a: Int, d: Int): Int? {
+    if (d == 0) return null
+    return (n / d) + (a / d) + ((n % d + a % d) / d)
+}
+
+/**
+ * Return the buffer length of non-null items.
+ */
+fun bufferLen(buf: List<Any?>): Int = buf.count { it != null }
+
+/**
+ * An iterator that groups items into tuples of a specific size.
+ */
+class Tuples<I, T>(
+    private val iter: Iterator<T>,
+    val size: Int,
+) : Iterator<List<T>> {
+    private val buffer: ArrayDeque<T> = ArrayDeque(size)
+
+    private fun fillBuffer() {
+        while (buffer.size < size && iter.hasNext()) {
+            buffer.addLast(iter.next())
+        }
+    }
+
+    override fun hasNext(): Boolean {
+        fillBuffer()
+        return buffer.size == size
+    }
+
+    override fun next(): List<T> {
+        if (!hasNext()) {
+            throw NoSuchElementException("Tuples exhausted")
+        }
+        val result = mutableListOf<T>()
+        for (i in 0 until size) {
+            result.add(buffer.removeFirst())
+        }
+        return result
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint {
+        val buffered = buffer.size
+        val low = addThenDiv(0, buffered, size) ?: 0
+        return SizeHint(low, null)
+    }
+
+    /** Return elements that were not enough to form a complete tuple. */
+    fun intoBuffer(): TupleBuffer<T> = TupleBuffer.new(buffer.toList())
+}
+
+/**
+ * An iterator over all contiguous windows of a specific size.
+ */
+class TupleWindows<I, T>(
+    private val iter: Iterator<T>,
+    val size: Int,
+) : Iterator<List<T>> {
+    private val buffer: ArrayDeque<T> = ArrayDeque(size)
+
+    private fun fillBuffer() {
+        while (buffer.size < size && iter.hasNext()) {
+            buffer.addLast(iter.next())
+        }
+    }
+
+    override fun hasNext(): Boolean {
+        fillBuffer()
+        return buffer.size == size
+    }
+
+    override fun next(): List<T> {
+        if (!hasNext()) {
+            throw NoSuchElementException("TupleWindows exhausted")
+        }
+        val result = buffer.toList()
+        buffer.removeFirst()
+        if (iter.hasNext()) {
+            buffer.addLast(iter.next())
+        }
+        return result
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+}
+
+/**
+ * An iterator over all circular windows of a specific size.
+ */
+class CircularTupleWindows<I, T>(
+    private val iter: Iterator<T>,
+    val size: Int,
+) : Iterator<List<T>> {
+    private val items: List<T> by lazy { iter.asSequence().toList() }
+    private var index: Int = 0
+
+    override fun hasNext(): Boolean = items.isNotEmpty() && index < items.size
+
+    override fun next(): List<T> {
+        if (!hasNext()) {
+            throw NoSuchElementException("CircularTupleWindows exhausted")
+        }
+        val result = List(size) { i -> items[(index + i) % items.size] }
+        index += 1
+        return result
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint {
+        val rem = (items.size - index).coerceAtLeast(0)
+        return SizeHint(rem, rem)
+    }
+}
+
+/**
+ * Create a new [Tuples] iterator.
+ */
+fun <T> tuples(iter: Iterator<T>, size: Int = 2): Tuples<Iterator<T>, T> =
+    Tuples(iter, size)
+
+/**
+ * Create a new [TupleWindows] iterator.
+ */
+fun <T> tupleWindows(iter: Iterator<T>, size: Int = 2): TupleWindows<Iterator<T>, T> =
+    TupleWindows(iter, size)
+
+/**
+ * Create a new [CircularTupleWindows] iterator.
+ */
+fun <T> circularTupleWindows(iter: Iterator<T>, size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+    CircularTupleWindows(iter, size)
+
+/**
  * An iterator that groups the items in tuples of size 1.
  */
 class Tuples1<T>(

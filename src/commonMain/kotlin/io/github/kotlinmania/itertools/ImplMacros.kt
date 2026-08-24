@@ -2,6 +2,11 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * Implementation's internal macros ledger.
+ */
+public object ImplMacros
+
+/**
  * Cartesian product of two iterables.
  */
 fun <A, B> iproduct(a: Iterable<A>, b: Iterable<B>): Iterator<Pair<A, B>> =

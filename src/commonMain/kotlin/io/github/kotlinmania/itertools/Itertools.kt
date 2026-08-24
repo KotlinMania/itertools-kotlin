@@ -67,10 +67,14 @@ sealed class AllEqualValueResult<out T> {
  */
 sealed class Either<out L, out R> {
     /** The left value. */
-    data class Left<out L>(val value: L) : Either<L, Nothing>()
+    data class Left<out L>(
+        val value: L,
+    ) : Either<L, Nothing>()
 
     /** The right value. */
-    data class Right<out R>(val value: R) : Either<Nothing, R>()
+    data class Right<out R>(
+        val value: R,
+    ) : Either<Nothing, R>()
 }
 
 // ---------------------------------------------------------------------------
@@ -105,25 +109,29 @@ fun <T> Iterable<T>.interleaveShortest(other: Iterable<T>): InterleaveShortest<T
  * An iterator adaptor to insert a particular element between each element of the adapted iterator.
  */
 fun <T> Iterator<T>.intersperse(element: T): Iterator<T> =
-    io.github.kotlinmania.itertools.intersperse(this, element)
+    io.github.kotlinmania.itertools
+        .intersperse(this, element)
 
 /**
  * An iterable adaptor to insert a particular element between each element of the adapted iterable.
  */
 fun <T> Iterable<T>.intersperse(element: T): Iterator<T> =
-    io.github.kotlinmania.itertools.intersperse(iterator(), element)
+    io.github.kotlinmania.itertools
+        .intersperse(iterator(), element)
 
 /**
  * An iterator adaptor to insert a particular value created by a function between each element of the adapted iterator.
  */
 fun <T> Iterator<T>.intersperseWith(element: () -> T): Iterator<T> =
-    io.github.kotlinmania.itertools.intersperseWith(this) { element() }
+    io.github.kotlinmania.itertools
+        .intersperseWith(this) { element() }
 
 /**
  * An iterable adaptor to insert a particular value created by a function between each element of the adapted iterable.
  */
 fun <T> Iterable<T>.intersperseWith(element: () -> T): Iterator<T> =
-    io.github.kotlinmania.itertools.intersperseWith(iterator()) { element() }
+    io.github.kotlinmania.itertools
+        .intersperseWith(iterator()) { element() }
 
 /**
  * Create an iterator adaptor that steps over elements of an iterator in chunks.
@@ -225,49 +233,57 @@ fun <T, E> Iterable<ItemResult<Iterable<T>, E>>.flattenOk(): FlattenOk<T, E> =
  * Merge two iterators in ascending order.
  */
 fun <T : Comparable<T>> Iterator<T>.merge(other: Iterator<T>): MergeBy<T> =
-    io.github.kotlinmania.itertools.merge(this, other)
+    io.github.kotlinmania.itertools
+        .merge(this, other)
 
 /**
  * Merge two iterables in ascending order.
  */
 fun <T : Comparable<T>> Iterable<T>.merge(other: Iterable<T>): MergeBy<T> =
-    io.github.kotlinmania.itertools.merge(this, other)
+    io.github.kotlinmania.itertools
+        .merge(this, other)
 
 /**
  * Merge two iterators using a custom comparator.
  */
 fun <T> Iterator<T>.mergeBy(other: Iterator<T>, isLte: (T, T) -> Boolean): MergeBy<T> =
-    io.github.kotlinmania.itertools.mergeBy(this, other, isLte)
+    io.github.kotlinmania.itertools
+        .mergeBy(this, other, isLte)
 
 /**
  * Merge two iterables using a custom comparator.
  */
 fun <T> Iterable<T>.mergeBy(other: Iterable<T>, isLte: (T, T) -> Boolean): MergeBy<T> =
-    io.github.kotlinmania.itertools.mergeBy(this, other, isLte)
+    io.github.kotlinmania.itertools
+        .mergeBy(this, other, isLte)
 
 /**
  * Merge-join items from two iterators in ascending order.
  */
 fun <L, R> Iterator<L>.mergeJoinBy(other: Iterator<R>, cmp: (L, R) -> Int): MergeJoinBy<L, R> =
-    io.github.kotlinmania.itertools.mergeJoinBy(this, other, cmp)
+    io.github.kotlinmania.itertools
+        .mergeJoinBy(this, other, cmp)
 
 /**
  * Merge-join items from two iterables in ascending order.
  */
 fun <L, R> Iterable<L>.mergeJoinBy(other: Iterable<R>, cmp: (L, R) -> Int): MergeJoinBy<L, R> =
-    io.github.kotlinmania.itertools.mergeJoinBy(this, other, cmp)
+    io.github.kotlinmania.itertools
+        .mergeJoinBy(this, other, cmp)
 
 /**
  * Merge multiple iterators into one sorted iterator.
  */
 fun <T : Comparable<*>> Iterable<Iterator<T>>.kmerge(): KMergeBy<T> =
-    io.github.kotlinmania.itertools.kmergeIterators(this)
+    io.github.kotlinmania.itertools
+        .kmergeIterators(this)
 
 /**
  * Merge multiple iterators using a custom comparison function.
  */
 fun <T> Iterable<Iterator<T>>.kmergeBy(first: (T, T) -> Boolean): KMergeBy<T> =
-    io.github.kotlinmania.itertools.kmergeIteratorsBy(this, first)
+    io.github.kotlinmania.itertools
+        .kmergeIteratorsBy(this, first)
 
 /**
  * Return an iterator adaptor that iterates over the cartesian product of two iterators.
@@ -294,7 +310,8 @@ fun <A, B> Iterable<A>.cartesianProduct(other: Iterable<B>): Iterator<Pair<A, B>
  * Return an iterator adaptor that iterates over the cartesian product of multiple iterables.
  */
 fun <T> Iterable<Iterable<T>>.multiCartesianProduct(): MultiProduct<T> =
-    io.github.kotlinmania.itertools.adaptors.multiCartesianProduct(this)
+    io.github.kotlinmania.itertools.adaptors
+        .multiCartesianProduct(this)
 
 /**
  * Return an iterator adaptor that joins together adjacent elements.
@@ -312,49 +329,57 @@ fun <T> Iterable<T>.coalesce(f: (T, T) -> CoalesceResult<T>): CoalesceBy<T> =
  * Return an iterator adaptor that removes repeated duplicate elements.
  */
 fun <T> Iterator<T>.dedup(): DedupBy<T> =
-    io.github.kotlinmania.itertools.adaptors.dedup(this)
+    io.github.kotlinmania.itertools.adaptors
+        .dedup(this)
 
 /**
  * Return an iterator adaptor that removes repeated duplicate elements.
  */
 fun <T> Iterable<T>.dedup(): DedupBy<T> =
-    io.github.kotlinmania.itertools.adaptors.dedup(this)
+    io.github.kotlinmania.itertools.adaptors
+        .dedup(this)
 
 /**
  * Return an iterator adaptor that removes repeated duplicate elements using a comparison function.
  */
 fun <T> Iterator<T>.dedupBy(same: (T, T) -> Boolean): DedupBy<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupBy(this, same)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupBy(this, same)
 
 /**
  * Return an iterator adaptor that removes repeated duplicate elements using a comparison function.
  */
 fun <T> Iterable<T>.dedupBy(same: (T, T) -> Boolean): DedupBy<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupBy(this, same)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupBy(this, same)
 
 /**
  * Return an iterator adaptor that removes repeated duplicates and counts them.
  */
 fun <T> Iterator<T>.dedupWithCount(): DedupByWithCount<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupWithCount(this)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupWithCount(this)
 
 /**
  * Return an iterator adaptor that removes repeated duplicates and counts them.
  */
 fun <T> Iterable<T>.dedupWithCount(): DedupByWithCount<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupWithCount(this)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupWithCount(this)
 
 /**
  * Return an iterator adaptor that removes repeated duplicates with a count using a comparison function.
  */
 fun <T> Iterator<T>.dedupByWithCount(same: (T, T) -> Boolean): DedupByWithCount<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupByWithCount(this, same)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupByWithCount(this, same)
 
 /**
  * Return an iterator adaptor that removes repeated duplicates with a count using a comparison function.
  */
 fun <T> Iterable<T>.dedupByWithCount(same: (T, T) -> Boolean): DedupByWithCount<T> =
-    io.github.kotlinmania.itertools.adaptors.dedupByWithCount(this, same)
+    io.github.kotlinmania.itertools.adaptors
+        .dedupByWithCount(this, same)
 
 /**
  * Return an iterator adaptor that takes items while a predicate holds.
@@ -396,61 +421,71 @@ fun <T> Iterable<T>.takeWhileRef(accept: (T) -> Boolean): PeekingTakeWhile<T> =
  * Return an iterator adaptor that yields elements until encountering null.
  */
 fun <T : Any> Iterator<T?>.whileSome(): WhileSome<T> =
-    io.github.kotlinmania.itertools.adaptors.whileSome(this)
+    io.github.kotlinmania.itertools.adaptors
+        .whileSome(this)
 
 /**
  * Return an iterator adaptor that yields elements until encountering null.
  */
 fun <T : Any> Iterable<T?>.whileSome(): WhileSome<T> =
-    io.github.kotlinmania.itertools.adaptors.whileSome(this)
+    io.github.kotlinmania.itertools.adaptors
+        .whileSome(this)
 
 /**
  * Return an iterator adaptor that yields all combinations of size [k].
  */
 fun <T> Iterator<T>.combinations(k: Int): Combinations<T> =
-    io.github.kotlinmania.itertools.combinations(this, k)
+    io.github.kotlinmania.itertools
+        .combinations(this, k)
 
 /**
  * Return an iterator adaptor that yields all combinations of size [k].
  */
 fun <T> Iterable<T>.combinations(k: Int): Combinations<T> =
-    io.github.kotlinmania.itertools.combinations(this, k)
+    io.github.kotlinmania.itertools
+        .combinations(this, k)
 
 /**
  * Return an iterator adaptor that yields all combinations with replacement of size [k].
  */
 fun <T> Iterator<T>.combinationsWithReplacement(k: Int): CombinationsWithReplacement<T> =
-    io.github.kotlinmania.itertools.combinationsWithReplacement(this, k)
+    io.github.kotlinmania.itertools
+        .combinationsWithReplacement(this, k)
 
 /**
  * Return an iterator adaptor that yields all combinations with replacement of size [k].
  */
 fun <T> Iterable<T>.combinationsWithReplacement(k: Int): CombinationsWithReplacement<T> =
-    io.github.kotlinmania.itertools.combinationsWithReplacement(this, k)
+    io.github.kotlinmania.itertools
+        .combinationsWithReplacement(this, k)
 
 /**
  * Return an iterator adaptor that yields all permutations of size [k].
  */
 fun <T> Iterator<T>.permutations(k: Int): Permutations<T> =
-    io.github.kotlinmania.itertools.permutations(this, k)
+    io.github.kotlinmania.itertools
+        .permutations(this, k)
 
 /**
  * Return an iterator adaptor that yields all permutations of size [k].
  */
 fun <T> Iterable<T>.permutations(k: Int): Permutations<T> =
-    io.github.kotlinmania.itertools.permutations(this, k)
+    io.github.kotlinmania.itertools
+        .permutations(this, k)
 
 /**
  * Return an iterator adaptor that yields all subsets of the iterator.
  */
 fun <T> Iterator<T>.powerset(): Powerset<T> =
-    io.github.kotlinmania.itertools.powerset(this)
+    io.github.kotlinmania.itertools
+        .powerset(this)
 
 /**
  * Return an iterator adaptor that yields all subsets of the iterable.
  */
 fun <T> Iterable<T>.powerset(): Powerset<T> =
-    io.github.kotlinmania.itertools.powerset(this)
+    io.github.kotlinmania.itertools
+        .powerset(this)
 
 /**
  * Return an iterator adaptor that yields indices of matching elements.
@@ -638,13 +673,15 @@ fun <T> List<T>.droppingBack(n: Int): List<T> {
  * Flatten an iterator of iterables into a single list.
  */
 fun <T> Iterator<Iterable<T>>.concat(): List<T> =
-    io.github.kotlinmania.itertools.concat(this)
+    io.github.kotlinmania.itertools
+        .concat(this)
 
 /**
  * Flatten an iterable of iterables into a single list.
  */
 fun <T> Iterable<Iterable<T>>.concat(): List<T> =
-    io.github.kotlinmania.itertools.concat(this)
+    io.github.kotlinmania.itertools
+        .concat(this)
 
 /**
  * Collect the iterator into a [List].
@@ -753,10 +790,11 @@ fun <T> Iterator<T>.treeReduce(f: (T, T) -> T): T? {
 
     fun inner(stop: Int, it: Iterator<T>): Result<T, T?> {
         val first = inner0(it)
-        var x = when (first) {
-            is Result.Ok -> first.value
-            is Result.Err -> return first
-        }
+        var x =
+            when (first) {
+                is Result.Ok -> first.value
+                is Result.Err -> return first
+            }
         for (height in 0 until stop) {
             val next = if (height == 0) inner0(it) else inner(height, it)
             when (next) {
@@ -777,8 +815,13 @@ fun <T> Iterator<T>.treeReduce(f: (T, T) -> T): T? {
 }
 
 private sealed class Result<out T, out E> {
-    data class Ok<out T>(val value: T) : Result<T, Nothing>()
-    data class Err<out E>(val value: E) : Result<Nothing, E>()
+    data class Ok<out T>(
+        val value: T,
+    ) : Result<T, Nothing>()
+
+    data class Err<out E>(
+        val value: E,
+    ) : Result<Nothing, E>()
 }
 
 /**
@@ -931,7 +974,6 @@ fun <T, K : Comparable<K>> Iterator<T>.sortedByCachedKey(key: (T) -> K): List<T>
  */
 fun <T, K : Comparable<K>> Iterable<T>.sortedByCachedKey(key: (T) -> K): List<T> =
     toMutableList().apply { sortBy(key) }
-
 
 /**
  * Sort the [k] smallest elements into a new list in ascending order.
@@ -1380,37 +1422,43 @@ fun <T> Iterable<T>.positionMinmaxBy(cmp: (T, T) -> Int): MinMaxResult<Int> =
  * Return the single element of the iterator or an error if length != 1.
  */
 fun <T> Iterator<T>.exactlyOne(): ItemResult<T, ExactlyOneError<T>> =
-    io.github.kotlinmania.itertools.exactlyOne(this)
+    io.github.kotlinmania.itertools
+        .exactlyOne(this)
 
 /**
  * Return the single element of the iterable or an error if length != 1.
  */
 fun <T> Iterable<T>.exactlyOne(): ItemResult<T, ExactlyOneError<T>> =
-    io.github.kotlinmania.itertools.exactlyOne(this)
+    io.github.kotlinmania.itertools
+        .exactlyOne(this)
 
 /**
  * Return the single element or null of the iterator or an error if length > 1.
  */
 fun <T> Iterator<T>.atMostOne(): ItemResult<T?, ExactlyOneError<T>> =
-    io.github.kotlinmania.itertools.atMostOne(this)
+    io.github.kotlinmania.itertools
+        .atMostOne(this)
 
 /**
  * Return the single element or null of the iterable or an error if length > 1.
  */
 fun <T> Iterable<T>.atMostOne(): ItemResult<T?, ExactlyOneError<T>> =
-    io.github.kotlinmania.itertools.atMostOne(this)
+    io.github.kotlinmania.itertools
+        .atMostOne(this)
 
 /**
  * Return an iterator adaptor that allows peeking multiple elements ahead.
  */
 fun <T> Iterator<T>.multipeek(): MultiPeek<T> =
-    io.github.kotlinmania.itertools.multipeek(this)
+    io.github.kotlinmania.itertools
+        .multipeek(this)
 
 /**
  * Return an iterator adaptor that allows peeking multiple elements ahead.
  */
 fun <T> Iterable<T>.multipeek(): MultiPeek<T> =
-    io.github.kotlinmania.itertools.multipeek(this)
+    io.github.kotlinmania.itertools
+        .multipeek(this)
 
 /**
  * Collect the items and count frequencies of each element.
@@ -1450,20 +1498,20 @@ fun <T, K> Iterable<T>.countsBy(f: (T) -> K): Map<K, Int> = iterator().countsBy(
  * Unzip an iterator of pairs into two lists.
  */
 fun <A, B> Iterator<Pair<A, B>>.multiunzip(): Pair<List<A>, List<B>> =
-    io.github.kotlinmania.itertools.multiUnzip(asSequence().asIterable())
+    io.github.kotlinmania.itertools
+        .multiUnzip(asSequence().asIterable())
 
 /**
  * Unzip an iterable of pairs into two lists.
  */
 fun <A, B> Iterable<Pair<A, B>>.multiunzip(): Pair<List<A>, List<B>> =
-    io.github.kotlinmania.itertools.multiUnzip(this)
+    io.github.kotlinmania.itertools
+        .multiUnzip(this)
 
 /**
  * Return the length of the iterator or a [SizeHint] if not known exactly.
  */
-fun <T> Iterator<T>.tryLen(): ItemResult<Int, SizeHint> {
-    return ItemResult.Err(SizeHint(0, null))
-}
+fun <T> Iterator<T>.tryLen(): ItemResult<Int, SizeHint> = ItemResult.Err(SizeHint(0, null))
 
 // ---------------------------------------------------------------------------
 // Free Functions

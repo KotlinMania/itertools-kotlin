@@ -3,7 +3,6 @@ package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName
 
-
 /**
  * An iterator adaptor that consumes elements while the given predicate is
  * `true`, including the element for which the predicate first returned
@@ -110,10 +109,8 @@ fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
 fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
     takeWhileInclusive(this, predicate)
 
-
 private fun sourceSizeHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-

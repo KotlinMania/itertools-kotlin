@@ -128,4 +128,3 @@ public fun <T> Iterator<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) 
  */
 public fun <T> Iterable<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) -> Unit): Formatted =
     iterator().formatWith(separator, f)
-

@@ -20,15 +20,21 @@ class ProcessResults<T, E> internal constructor(
     private fun advance() {
         if (nextQueue.isNotEmpty() || errorHolder.error != null) return
         if (!iter.hasNext()) return
-        when (val item = iter.next()) {
-            is ItemResult.Ok -> {
-                nextQueue.addLast(item.value)
-            }
-            is ItemResult.Err -> {
-                errorHolder.error = item.error
-            }
+        val item = nextBody(iter.next())
+        if (item != null) {
+            nextQueue.addLast(item)
         }
     }
+
+    private fun nextBody(item: ItemResult<T, E>?): T? =
+        when (item) {
+            is ItemResult.Ok -> item.value
+            is ItemResult.Err -> {
+                errorHolder.error = item.error
+                null
+            }
+            null -> null
+        }
 
     override fun hasNext(): Boolean {
         advance()
@@ -41,6 +47,34 @@ class ProcessResults<T, E> internal constructor(
             throw NoSuchElementException("ProcessResults exhausted")
         }
         return nextQueue.removeFirst()
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Consumes the iterator and folds elements with [init] and [f]. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Returns the next element from the back if available. */
+    fun nextBack(): T? {
+        if (!hasNext()) return null
+        return next()
+    }
+
+    /** Folds elements in reverse order. */
+    fun <B> rfold(init: B, f: (B, T) -> B): B {
+        val items = asSequence().toList()
+        var acc = init
+        for (i in items.indices.reversed()) {
+            acc = f(acc, items[i])
+        }
+        return acc
     }
 }
 
