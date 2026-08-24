@@ -139,3 +139,25 @@ fun <T> kmergeBy(iterable: Iterable<Iterable<T>>, lessThan: (T, T) -> Boolean): 
     heapify(heap, lessThan)
     return KMergeBy(heap, lessThan)
 }
+
+/**
+ * Create an iterator that merges elements of the contained iterators.
+ */
+fun <T : Comparable<*>> kmergeIterators(iterators: Iterable<Iterator<T>>): KMergeBy<T> =
+    kmergeIteratorsBy(iterators) { a, b -> compareValues(a, b) < 0 }
+
+/**
+ * Create an iterator that merges elements of the contained iterators using [lessThan].
+ */
+fun <T> kmergeIteratorsBy(iterators: Iterable<Iterator<T>>, lessThan: (T, T) -> Boolean): KMergeBy<T> {
+    val heap = mutableListOf<HeadTail<T>>()
+    for (it in iterators) {
+        val ht = HeadTail.create(it)
+        if (ht != null) {
+            heap.add(ht)
+        }
+    }
+    heapify(heap, lessThan)
+    return KMergeBy(heap, lessThan)
+}
+

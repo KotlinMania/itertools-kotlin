@@ -84,7 +84,7 @@ internal class Format<T> internal constructor(
  * Construct a lazy renderer that walks the iterator using the supplied
  * formatter callback when its `toString` is invoked.
  */
-internal fun <T> newFormat(
+public fun <T> newFormat(
     iter: Iterator<T>,
     separator: String,
     f: (T, (Any?) -> Unit) -> Unit,
@@ -104,3 +104,28 @@ public fun <T> newFormatDefault(
     val impl = Format(separator, iter)
     return Formatted { impl.toString() }
 }
+
+/**
+ * Format all iterator elements lazily, separated by [separator].
+ */
+public fun <T> Iterator<T>.format(separator: String): Formatted =
+    newFormatDefault(this, separator)
+
+/**
+ * Format all iterable elements lazily, separated by [separator].
+ */
+public fun <T> Iterable<T>.format(separator: String): Formatted =
+    iterator().format(separator)
+
+/**
+ * Format all iterator elements lazily, separated by [separator], using [f].
+ */
+public fun <T> Iterator<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) -> Unit): Formatted =
+    newFormat(this, separator, f)
+
+/**
+ * Format all iterable elements lazily, separated by [separator], using [f].
+ */
+public fun <T> Iterable<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) -> Unit): Formatted =
+    iterator().formatWith(separator, f)
+

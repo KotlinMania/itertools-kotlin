@@ -56,3 +56,12 @@ fun <T> multiCartesianProduct(iters: List<Iterator<T>>): MultiProduct<T> {
     val pool = iters.map { it.asSequence().toList() }
     return MultiProduct(pool)
 }
+
+/**
+ * Create a new cartesian product iterator over an arbitrary iterable of iterators.
+ */
+fun <T> multiProduct(iters: Iterable<Iterator<T>>): MultiProduct<T> {
+    val pool = iters.map { it.asSequence().toList() }
+    return MultiProduct(pool)
+}
+

@@ -1,6 +1,9 @@
 // port-lint: source take_while_inclusive.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
+
 /**
  * An iterator adaptor that consumes elements while the given predicate is
  * `true`, including the element for which the predicate first returned
@@ -81,6 +84,7 @@ class TakeWhileInclusive<T>(
 
 /**
  * `Iterable`-enabled constructor for [TakeWhileInclusive].
+
  *
  * Yields elements while [predicate] returns `true`, including the element
  * for which it first returns `false`.
@@ -90,6 +94,7 @@ class TakeWhileInclusive<T>(
  * // out == [1, 2, 3]
  * ```
  */
+@JvmName("takeWhileInclusiveIterable")
 fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
     TakeWhileInclusive(iterable.iterator(), predicate, sourceSizeHint(iterable))
 
@@ -99,8 +104,16 @@ fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): It
 fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
     TakeWhileInclusive(this, predicate)
 
+/**
+ * `Iterable`-enabled extension for [TakeWhileInclusive].
+ */
+fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
+    takeWhileInclusive(this, predicate)
+
+
 private fun sourceSizeHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+

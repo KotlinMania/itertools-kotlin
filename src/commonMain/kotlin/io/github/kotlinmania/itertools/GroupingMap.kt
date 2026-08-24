@@ -247,3 +247,16 @@ fun <T, K> Iterable<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T>
  */
 fun <T, K> Iterator<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T> =
     GroupingMap(newMapForGrouping(this, keyMapper))
+
+/**
+ * Creates a [GroupingMap] from an iterator of pairs.
+ */
+fun <K, V> Iterator<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
+    GroupingMap(this)
+
+/**
+ * Creates a [GroupingMap] from an iterable of pairs.
+ */
+fun <K, V> Iterable<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
+    GroupingMap(iterator())
+

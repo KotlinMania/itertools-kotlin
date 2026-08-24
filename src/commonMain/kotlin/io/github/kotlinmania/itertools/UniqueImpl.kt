@@ -6,7 +6,7 @@ package io.github.kotlinmania.itertools
  *
  * See `Itertools.uniqueBy` for more information.
  */
-internal class UniqueBy<T, V> internal constructor(
+public class UniqueBy<T, V> internal constructor(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
     internal val f: (T) -> V,
@@ -38,17 +38,13 @@ internal class UniqueBy<T, V> internal constructor(
         return buffered.removeFirst()
     }
 
-    /**
-     * Returns the size hint for the iterator. The lower bound is `1` only
-     * when the source has at least one element to yield AND the dedup set is
-     * empty — that first element is guaranteed unique. The upper bound is
-     * inherited from the source: every source element could in principle be
-     * unique.
-     */
+    /** Equivalent to upstream size hint. */
     fun sizeHint(): SizeHint {
-        val newLow = if (sourceHint.lower > 0 && used.isEmpty()) 1 else 0
-        return SizeHint(newLow, sourceHint.upper)
+        val (lower, upper) = sourceHint
+        val newLow = if (lower > 0 && used.isEmpty()) 1 else 0
+        return SizeHint(newLow, upper)
     }
+
 
     /**
      * Counts remaining unique elements.
@@ -72,11 +68,11 @@ internal fun <K> countNewKeys(used: HashMap<K, Unit>, iterable: Iterable<K>): In
 }
 
 /** Create a new `UniqueBy` iterator. */
-internal fun <T, V> uniqueBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
+public fun <T, V> uniqueBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
     UniqueBy(iter, sourceHint, f)
 
 /** Filter duplicate elements from [iterable], comparing by the key produced by [f]. */
-fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): Iterator<T> =
+public fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): UniqueBy<T, V> =
     uniqueBy(iterable.iterator(), hintOfIterable(iterable), f)
 
 /**
@@ -84,14 +80,14 @@ fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): Iterator<T> =
  *
  * See `Itertools.unique` for more information.
  */
-internal typealias Unique<T> = UniqueBy<T, T>
+public typealias Unique<T> = UniqueBy<T, T>
 
 /** Create a new `Unique` iterator. */
-internal fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Unique<T> =
+public fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Unique<T> =
     UniqueBy(iter, sourceHint) { it }
 
 /** Filter duplicate elements from [iterable], comparing by identity. */
-fun <T> unique(iterable: Iterable<T>): Iterator<T> =
+public fun <T> unique(iterable: Iterable<T>): Unique<T> =
     unique(iterable.iterator(), hintOfIterable(iterable))
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =

@@ -1,6 +1,9 @@
 // port-lint: source with_position.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
+
 /**
  * A positioned element yielded by [withPosition].
  */
@@ -116,11 +119,15 @@ enum class Position {
 /**
  * Create a new [WithPosition] iterator.
  *
+ * Wraps elements from [iterable] with their relative position in the stream
+ * ([Position.First], [Position.Middle], [Position.Last], or [Position.Only]).
+ *
  * ```
  * val tagged = withPosition(listOf("a", "b", "c")).asSequence().toList()
  * // tagged == [Positioned(Position.First, "a"), Positioned(Position.Middle, "b"), Positioned(Position.Last, "c")]
  * ```
  */
+@JvmName("withPositionIterable")
 fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
     WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
 
@@ -129,6 +136,12 @@ fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
  */
 fun <T> Iterator<T>.withPosition(): Iterator<Positioned<T>> =
     WithPosition(this)
+
+/**
+ * Create a new [WithPosition] iterator from an [Iterable].
+ */
+fun <T> Iterable<T>.withPosition(): Iterator<Positioned<T>> =
+    withPosition(this)
 
 private fun withPositionSizeHint(it: Iterable<*>): SizeHint =
     when (it) {

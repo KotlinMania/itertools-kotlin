@@ -16,8 +16,13 @@ package io.github.kotlinmania.itertools
  * check(concat(input) == listOf(1, 2, 3, 4, 5, 6))
  * ```
  */
-fun <T> concat(iterable: Iterable<Iterable<T>>): List<T> {
-    val iterator = iterable.iterator()
+fun <T> concat(iterable: Iterable<Iterable<T>>): List<T> =
+    concat(iterable.iterator())
+
+/**
+ * Combine all an iterator's elements into one element by using [MutableList.addAll].
+ */
+fun <T> concat(iterator: Iterator<Iterable<T>>): List<T> {
     if (!iterator.hasNext()) return emptyList()
     val acc = iterator.next().toMutableList()
     while (iterator.hasNext()) {
@@ -25,3 +30,4 @@ fun <T> concat(iterable: Iterable<Iterable<T>>): List<T> {
     }
     return acc
 }
+

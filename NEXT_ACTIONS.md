@@ -5,10 +5,10 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 269/504 matched (target 804) — 53.4%
-- **Class/type parity:** 75/177 matched (target 176) — 42.4%
-- **Combined symbol parity:** 344/681 matched (target 980) — 50.5%
-- **Average inline-code cosine:** 0.39 (function body across 49 matched files)
+- **Function parity:** 365/504 matched (target 994) — 72.4%
+- **Class/type parity:** 75/177 matched (target 182) — 42.4%
+- **Combined symbol parity:** 440/681 matched (target 1176) — 64.6%
+- **Average inline-code cosine:** 0.40 (function body across 49 matched files)
 - **Average documentation cosine:** 0.61 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 2
 - **Critical Issues:** 40 files with <0.60 function similarity
@@ -91,43 +91,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Item`
 
-### 6. lib
-
-- **Target:** `itertools.AllEqual`
-- **Similarity:** 0.02
-- **Dependents:** 0
-- **Priority Score:** 1364209.8
-- **Functions:** 6/137 matched (target 10)
-- **Missing functions:** `interleave`, `interleave_shortest`, `intersperse`, `intersperse_with`, `get`, `zip_longest`, `zip_eq`, `batching`, `chunk_by`, `group_by`, `chunks`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `map_into`, `map_ok`, `filter_ok`, `filter_map_ok`, `flatten_ok`, `process_results`, `merge`, `merge_by`, `merge_join_by`, `kmerge`, `kmerge_by`, `cartesian_product`, `multi_cartesian_product`, `coalesce`, `dedup`, `dedup_by`, `dedup_with_count`, `dedup_by_with_count`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `peeking_take_while`, `take_while_ref`, `take_while_inclusive`, `while_some`, `tuple_combinations`, `array_combinations`, `combinations`, `combinations_with_replacement`, `permutations`, `powerset`, `pad_using`, `with_position`, `positions`, `update`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple`, `find_position`, `find_or_last`, `find_or_first`, `contains`, `dropping`, `dropping_back`, `concat`, `collect_vec`, `try_collect`, `set_from`, `join`, `format`, `format_with`, `fold_ok`, `fold_options`, `fold1`, `tree_reduce`, `inner0`, `inner`, `tree_fold1`, `sum1`, `product1`, `sorted_unstable`, `sorted_unstable_by`, `sorted_unstable_by_key`, `sorted`, `sorted_by`, `sorted_by_key`, `sorted_by_cached_key`, `k_smallest`, `k_smallest_by`, `k_smallest_by_key`, `k_smallest_relaxed`, `k_smallest_relaxed_by`, `k_smallest_relaxed_by_key`, `k_largest`, `k_largest_by`, `k_largest_by_key`, `k_largest_relaxed`, `k_largest_relaxed_by`, `k_largest_relaxed_by_key`, `tail`, `partition_map`, `partition_result`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`, `position_max`, `position_max_by_key`, `position_max_by`, `position_min`, `position_min_by_key`, `position_min_by`, `position_minmax`, `position_minmax_by_key`, `position_minmax_by`, `exactly_one`, `at_most_one`, `multipeek`, `counts`, `counts_by`, `multiunzip`, `try_len`, `equal`, `assert_equal`, `partition`
-- **Types:** 1/5 matched (target 7)
-- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`, `State`
-
-### 7. adaptors.multi_product
+### 6. adaptors.multi_product
 
 - **Target:** `adaptors.MultiProduct`
 - **Similarity:** 0.13
 - **Dependents:** 1
 - **Priority Score:** 1071008.8
-- **Functions:** 2/6 matched
+- **Functions:** 2/6 matched (target 7)
 - **Missing functions:** `new`, `count`, `size_hint`, `last`
 - **Types:** 1/4 matched (target 2)
 - **Missing types:** `MultiProductInner`, `MultiProductIter`, `Item`
 
-### 8. flatten_ok
-
-- **Target:** `itertools.FlattenOk [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.13
-- **Dependents:** 1
-- **Priority Score:** 1050808.8
-- **Functions:** 2/6 matched (target 9)
-- **Missing functions:** `fold`, `size_hint`, `next_back`, `rfold`
-- **Types:** 1/2 matched (target 5)
-- **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/flatten_ok.rs` vs expected `flatten_ok.rs`
-- **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests tests/flatten_ok.rs`)
-- **Lint issues:** 1
-
-### 9. permutations
+### 7. permutations
 
 - **Target:** `itertools.Permutations`
 - **Similarity:** 0.27
@@ -138,7 +113,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 7)
 - **Missing types:** `Item`
 
-### 10. zip_longest
+### 8. zip_longest
 
 - **Target:** `itertools.ZipLongest`
 - **Similarity:** 0.13
@@ -149,7 +124,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 11. combinations_with_replacement
+### 9. combinations_with_replacement
 
 - **Target:** `itertools.CombinationsWithReplacement`
 - **Similarity:** 0.30
@@ -160,7 +135,21 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 12. powerset
+### 10. flatten_ok
+
+- **Target:** `itertools.FlattenOk [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.33
+- **Dependents:** 1
+- **Priority Score:** 1030806.7
+- **Functions:** 4/6 matched (target 11)
+- **Missing functions:** `next_back`, `rfold`
+- **Types:** 1/2 matched (target 5)
+- **Missing types:** `Item`
+- **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/flatten_ok.rs` vs expected `flatten_ok.rs`
+- **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests tests/flatten_ok.rs`)
+- **Lint issues:** 1
+
+### 11. powerset
 
 - **Target:** `itertools.Powerset`
 - **Similarity:** 0.60
@@ -171,7 +160,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 13. peeking_take_while
+### 12. peeking_take_while
 
 - **Target:** `itertools.PeekingTakeWhile [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.28
@@ -184,6 +173,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/peeking_take_while.rs` vs expected `peeking_take_while.rs`
 - **Proposed provenance header:** `// port-lint: tests peeking_take_while.rs` (current: `// port-lint: tests tests/peeking_take_while.rs`)
 - **Lint issues:** 1
+
+### 13. tee
+
+- **Target:** `itertools.Tee`
+- **Similarity:** 0.45
+- **Dependents:** 1
+- **Priority Score:** 1020605.4
+- **Functions:** 2/3 matched (target 13)
+- **Missing functions:** `new`
+- **Types:** 2/3 matched
+- **Missing types:** `Item`
 
 ### 14. diff
 
@@ -202,7 +202,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.34
 - **Dependents:** 1
 - **Priority Score:** 1010706.6
-- **Functions:** 4/4 matched (target 16)
+- **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
 - **Missing types:** `Item`
@@ -213,21 +213,21 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.53
 - **Dependents:** 1
 - **Priority Score:** 1010604.7
-- **Functions:** 4/4 matched (target 16)
+- **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
 
-### 17. tee
+### 17. lib
 
-- **Target:** `itertools.Tee`
-- **Similarity:** 0.57
-- **Dependents:** 1
-- **Priority Score:** 1010604.4
-- **Functions:** 3/3 matched (target 13)
-- **Missing functions:** _none_
-- **Types:** 2/3 matched
-- **Missing types:** `Item`
+- **Target:** `itertools.Itertools`
+- **Similarity:** 0.37
+- **Dependents:** 0
+- **Priority Score:** 424206.3
+- **Functions:** 100/137 matched (target 183)
+- **Missing functions:** `get`, `zip_longest`, `zip_eq`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `map_into`, `process_results`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `take_while_inclusive`, `tuple_combinations`, `array_combinations`, `pad_using`, `with_position`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple`, `format`, `format_with`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`
+- **Types:** 1/5 matched (target 13)
+- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`, `State`
 
 ### 18. adaptors.mod
 
@@ -333,18 +333,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
 
-### 27. format
-
-- **Target:** `itertools.Format`
-- **Similarity:** 0.15
-- **Dependents:** 0
-- **Priority Score:** 50908.5
-- **Functions:** 2/6 matched (target 14)
-- **Missing functions:** `fmt`, `format`, `clone`, `drop`
-- **Types:** 2/3 matched (target 4)
-- **Missing types:** `PutBackOnDrop`
-
-### 28. rciter_impl
+### 27. rciter_impl
 
 - **Target:** `itertools.RcIterImpl`
 - **Similarity:** 0.18
@@ -355,7 +344,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 2)
 - **Missing types:** `Item`, `IntoIter`
 
-### 29. duplicates_impl
+### 28. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl`
 - **Similarity:** 0.61
@@ -365,6 +354,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `new`, `next_back`
 - **Types:** 9/11 matched (target 10)
 - **Missing types:** `Item`, `Container`
+
+### 29. format
+
+- **Target:** `itertools.Format`
+- **Similarity:** 0.17
+- **Dependents:** 0
+- **Priority Score:** 40908.3
+- **Functions:** 3/6 matched (target 18)
+- **Missing functions:** `fmt`, `clone`, `drop`
+- **Types:** 2/3 matched (target 4)
+- **Missing types:** `PutBackOnDrop`
 
 ### 30. intersperse
 
@@ -391,10 +391,10 @@ Every matched file is listed below with function and type symbol parity.
 ### 32. pad_tail
 
 - **Target:** `itertools.PadTail`
-- **Similarity:** 0.39
+- **Similarity:** 0.45
 - **Dependents:** 0
-- **Priority Score:** 30806.1
-- **Functions:** 4/6 matched (target 13)
+- **Priority Score:** 30805.5
+- **Functions:** 4/6 matched (target 16)
 - **Missing functions:** `next_back`, `rfold`
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
@@ -405,7 +405,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.56
 - **Dependents:** 0
 - **Priority Score:** 21404.4
-- **Functions:** 8/8 matched (target 16)
+- **Functions:** 8/8 matched (target 18)
 - **Missing functions:** _none_
 - **Types:** 4/6 matched (target 5)
 - **Missing types:** `KMergePredicate`, `Item`
@@ -449,7 +449,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.64
 - **Dependents:** 0
 - **Priority Score:** 12503.6
-- **Functions:** 20/20 matched (target 32)
+- **Functions:** 20/20 matched (target 34)
 - **Missing functions:** _none_
 - **Types:** 4/5 matched
 - **Missing types:** `Out`
@@ -578,10 +578,10 @@ Every matched file is listed below with function and type symbol parity.
 ### 49. concat_impl
 
 - **Target:** `itertools.ConcatImpl`
-- **Similarity:** 0.64
+- **Similarity:** 0.67
 - **Dependents:** 0
-- **Priority Score:** 103.6
-- **Functions:** 1/1 matched (target 5)
+- **Priority Score:** 103.3
+- **Functions:** 1/1 matched (target 6)
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_

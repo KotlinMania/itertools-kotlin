@@ -29,7 +29,12 @@ internal class TeeBuffer<T>(
  *
  * See `Itertools.tee()` for more information.
  */
-internal class Tee<T> internal constructor(
+/**
+ * One half of an iterator pair where both return the same elements.
+ *
+ * See `Itertools.tee()` for more information.
+ */
+public class Tee<T> internal constructor(
     private val buffer: TeeBuffer<T>,
     private val id: Boolean,
     private val sourceHint: SizeHint,
@@ -64,7 +69,7 @@ internal class Tee<T> internal constructor(
 /**
  * Splits [iter] into two iterators that both yield the same elements.
  */
-internal fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> =
+public fun <T> tee(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> =
     teeNew(iter)
 
 /**
@@ -72,7 +77,7 @@ internal fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> =
  *
  * Mirrors `new` from upstream.
  */
-internal fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Pair<Tee<T>, Tee<T>> {
+public fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Pair<Tee<T>, Tee<T>> {
     val buffer = TeeBuffer(ArrayDeque<T>(), iter, owner = false, iterConsumed = 0)
     val t1 = Tee(buffer, id = true, sourceHint = sourceHint)
     val t2 = Tee(buffer, id = false, sourceHint = sourceHint)
@@ -82,7 +87,7 @@ internal fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, nu
 /**
  * Convenience overload that derives a size hint from [iterable] when possible.
  */
-internal fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
+public fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
     val hint: SizeHint =
         when (iterable) {
             is Collection<*> -> SizeHint(iterable.size, iterable.size)
@@ -90,3 +95,4 @@ internal fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
         }
     return teeNew(iterable.iterator(), hint)
 }
+
