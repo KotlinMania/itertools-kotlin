@@ -17,11 +17,17 @@ internal class HeadTail<T>(
         return null
     }
 
+    /** Hints at the size of the sequence, same as the Iterator method. */
+    fun sizeHint(tailHint: SizeHint = SizeHint(0, null)): SizeHint =
+        addScalar(tailHint, 1)
+
     companion object {
         fun <T> create(it: Iterator<T>): HeadTail<T>? {
             if (!it.hasNext()) return null
             return HeadTail(it.next(), it)
         }
+
+        fun <T> new(it: Iterator<T>): HeadTail<T>? = create(it)
     }
 }
 
@@ -54,6 +60,20 @@ private fun <T> heapify(data: MutableList<HeadTail<T>>, lessThan: (T, T) -> Bool
     for (i in (data.size / 2 - 1) downTo 0) {
         siftDown(data, i, lessThan)
     }
+}
+
+/**
+ * An iterator adaptor that merges an arbitrary number of base iterators in ascending order.
+ */
+typealias KMerge<T> = KMergeBy<T>
+
+fun interface KMergePredicate<T> {
+    fun kmergePred(a: T, b: T): Boolean
+}
+
+class KMergeByLt<T : Comparable<*>> : KMergePredicate<T> {
+    override fun kmergePred(a: T, b: T): Boolean =
+        compareValues(a, b) < 0
 }
 
 /**
@@ -93,6 +113,10 @@ class KMergeBy<T> internal constructor(
         }
         return result
     }
+
+    /** Returns the size hint for the merged iterators. */
+    fun sizeHint(): SizeHint =
+        SizeHint(heap.size, null)
 }
 
 /**

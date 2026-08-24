@@ -74,7 +74,7 @@ class WithPosition<T>(
         return Positioned(position, head.value)
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Equivalent to upstream size hint. */
     fun sizeHint(): SizeHint {
         val carried = (if (headSlot != null) 1 else 0) + (if (tailSlot != null) 1 else 0)
         return addScalar(subScalar(sourceHint, consumed), carried)

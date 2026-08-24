@@ -207,19 +207,43 @@ fun <K, V> groupingMap(iter: Iterator<Pair<K, V>>): GroupingMap<K, V> =
     GroupingMap(iter)
 
 /**
+ * Creates a new [GroupingMap] from [iter].
+ */
+fun <K, V> new(iter: Iterator<Pair<K, V>>): GroupingMap<K, V> =
+    GroupingMap(iter)
+
+/**
  * Creates a new [GroupingMap] from an iterable of pairs.
  */
 fun <K, V> groupingMap(iterable: Iterable<Pair<K, V>>): GroupingMap<K, V> =
     GroupingMap(iterable.iterator())
 
 /**
+ * A wrapper function for [GroupingMap].
+ */
+class GroupingMapFn<K, V>(val keyMapper: (V) -> K) {
+    fun call(v: V): Pair<K, V> = keyMapper(v) to v
+}
+
+typealias MapForGrouping<K, V> = Iterator<Pair<K, V>>
+typealias GroupingMapBy<K, V> = GroupingMap<K, V>
+
+internal fun <K, V> newMapForGrouping(iter: Iterator<V>, keyMapper: (V) -> K): Iterator<Pair<K, V>> {
+    val fn = GroupingMapFn(keyMapper)
+    return object : Iterator<Pair<K, V>> {
+        override fun hasNext(): Boolean = iter.hasNext()
+        override fun next(): Pair<K, V> = fn.call(iter.next())
+    }
+}
+
+/**
  * Groups elements of this iterable by [keyMapper] into a [GroupingMap].
  */
 fun <T, K> Iterable<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T> =
-    GroupingMap(this.asSequence().map { keyMapper(it) to it }.iterator())
+    GroupingMap(newMapForGrouping(this.iterator(), keyMapper))
 
 /**
  * Groups elements of this iterator by [keyMapper] into a [GroupingMap].
  */
 fun <T, K> Iterator<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T> =
-    GroupingMap(this.asSequence().map { keyMapper(it) to it }.iterator())
+    GroupingMap(newMapForGrouping(this, keyMapper))

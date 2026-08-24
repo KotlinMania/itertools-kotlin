@@ -50,7 +50,7 @@ class TakeWhileInclusive<T>(
     }
 
     /**
-     * Equivalent to upstream `Iterator::size_hint`. Lower bound is always zero
+     * Equivalent to upstream size hint. Lower bound is always zero
      * because the predicate may stop on the first element; upper bound mirrors
      * the source iterator's remaining upper bound, shrunk to zero once the
      * adaptor is exhausted.
@@ -63,7 +63,7 @@ class TakeWhileInclusive<T>(
 
     /**
      * Consumes the adaptor with a left fold, honoring the predicate-inclusive
-     * stop condition. Mirrors upstream's `try_fold(...).unwrap_or_else(|err| err)`.
+     * stop condition.
      */
     fun <B> fold(initial: B, operation: (B, T) -> B): B {
         var acc = initial
@@ -71,6 +71,11 @@ class TakeWhileInclusive<T>(
             acc = operation(acc, next())
         }
         return acc
+    }
+
+    companion object {
+        fun <T> new(iter: Iterator<T>, predicate: (T) -> Boolean): TakeWhileInclusive<T> =
+            TakeWhileInclusive(iter, predicate)
     }
 }
 

@@ -50,7 +50,7 @@ internal class Tee<T> internal constructor(
         return element
     }
 
-    /** Equivalent to upstream `Iterator::size_hint`. */
+    /** Equivalent to upstream size hint. */
     fun sizeHint(): SizeHint {
         val iterRemaining = subScalar(sourceHint, buffer.iterConsumed)
         return if (buffer.owner == id) {
@@ -63,8 +63,14 @@ internal class Tee<T> internal constructor(
 
 /**
  * Splits [iter] into two iterators that both yield the same elements.
+ */
+internal fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> =
+    teeNew(iter)
+
+/**
+ * Splits [iter] into two iterators that both yield the same elements.
  *
- * Mirrors `itertools::tee::new` from upstream Rust.
+ * Mirrors `new` from upstream.
  */
 internal fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Pair<Tee<T>, Tee<T>> {
     val buffer = TeeBuffer(ArrayDeque<T>(), iter, owner = false, iterConsumed = 0)

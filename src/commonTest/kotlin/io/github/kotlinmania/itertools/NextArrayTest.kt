@@ -40,11 +40,10 @@ class NextArrayTest {
         assertEquals(listOf(Unit, Unit, Unit, Unit), builder.take())
     }
 
-    // The upstream `tracked_drop` test exercises Rust's per-element `Drop`
-    // semantics in `MaybeUninit<T>`, including the safety promise that
-    // partially-written elements are still destroyed when the panic-on-push
-    // case unwinds. Kotlin has no analog: GC reclaims `MutableList<T>`
-    // contents wholesale, and there is no per-element drop hook. The
-    // upstream invariant being tested simply does not exist here, so no
-    // faithful port of `tracked_drop` is possible.
+    // The upstream tracked drop test exercises per-element destruction
+    // semantics in uninitialized buffers, including the safety promise that
+    // partially-written elements are still destroyed when the error case unwinds.
+    // Kotlin has no analog: memory management reclaims buffer contents wholesale,
+    // and there is no per-element drop hook. The upstream invariant being tested
+    // does not exist in Kotlin, so no faithful port is possible.
 }

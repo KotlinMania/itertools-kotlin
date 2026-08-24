@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 
 class TeeTest {
     /**
-     * Mirror of `tests/test_std.rs::tee` — the canonical upstream interleaving
+     * Mirror of standard tests tee — the canonical upstream interleaving
      * test for `tee`. The Kotlin port keeps the same call order; because
      * Kotlin's `Iterator` exposes `hasNext` / `next` rather than a fused
      * `Option<T>` `next`, we assert on `hasNext()` as well, then on `next()`.
@@ -52,7 +52,7 @@ class TeeTest {
     }
 
     /**
-     * Mirror of `tests/quick.rs::size_tee` — after pulling one half by `n`,
+     * Mirror of size tee quick check — after pulling one half by `n`,
      * the size hints relate to the remaining sequence as expected.
      */
     @Test
