@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 258/504 matched (target 793) — 51.2%
+- **Function parity:** 258/504 matched (target 791) — 51.2%
 - **Class/type parity:** 70/177 matched (target 171) — 39.5%
-- **Combined symbol parity:** 328/681 matched (target 964) — 48.2%
+- **Combined symbol parity:** 328/681 matched (target 962) — 48.2%
 - **Average inline-code cosine:** 0.33 (function body across 49 matched files)
 - **Average documentation cosine:** 0.61 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 8
@@ -327,7 +327,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.40
 - **Dependents:** 0
 - **Priority Score:** 71406.0
-- **Functions:** 5/8 matched (target 14)
+- **Functions:** 5/8 matched (target 12)
 - **Missing functions:** `new`, `size_hint`, `kmerge_pred`
 - **Types:** 2/6 matched (target 3)
 - **Missing types:** `KMerge`, `KMergePredicate`, `KMergeByLt`, `Item`
