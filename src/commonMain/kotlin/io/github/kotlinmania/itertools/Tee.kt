@@ -29,6 +29,7 @@ internal class TeeBuffer<T>(
  *
  * See `Itertools.tee()` for more information.
  */
+
 /**
  * One half of an iterator pair where both return the same elements.
  *
@@ -95,4 +96,3 @@ public fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
         }
     return teeNew(iterable.iterator(), hint)
 }
-

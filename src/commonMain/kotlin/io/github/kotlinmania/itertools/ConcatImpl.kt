@@ -30,4 +30,3 @@ fun <T> concat(iterator: Iterator<Iterable<T>>): List<T> {
     }
     return acc
 }
-

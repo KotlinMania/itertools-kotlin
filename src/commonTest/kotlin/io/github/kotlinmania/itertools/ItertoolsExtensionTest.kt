@@ -13,37 +13,74 @@ class ItertoolsExtensionTest {
         val a = listOf(1, 3, 5)
         val b = listOf(2, 4)
         assertEquals(listOf(1, 2, 3, 4, 5), a.interleave(b).asSequence().toList())
-        assertEquals(listOf(1, 2, 3, 4, 5), a.iterator().interleave(b.iterator()).asSequence().toList())
+        assertEquals(
+            listOf(1, 2, 3, 4, 5),
+            a
+                .iterator()
+                .interleave(b.iterator())
+                .asSequence()
+                .toList(),
+        )
         assertEquals(listOf(1, 2, 3, 4, 5), a.interleaveShortest(b).asSequence().toList())
-        assertEquals(listOf(1, 2, 3, 4, 5), a.iterator().interleaveShortest(b.iterator()).asSequence().toList())
+        assertEquals(
+            listOf(1, 2, 3, 4, 5),
+            a
+                .iterator()
+                .interleaveShortest(b.iterator())
+                .asSequence()
+                .toList(),
+        )
     }
 
     @Test
     fun testIntersperse() {
         val list = listOf("a", "b", "c")
         assertEquals(listOf("a", ",", "b", ",", "c"), list.intersperse(",").asSequence().toList())
-        assertEquals(listOf("a", ",", "b", ",", "c"), list.iterator().intersperse(",").asSequence().toList())
+        assertEquals(
+            listOf("a", ",", "b", ",", "c"),
+            list
+                .iterator()
+                .intersperse(",")
+                .asSequence()
+                .toList(),
+        )
         assertEquals(listOf("a", "-", "b", "-", "c"), list.intersperseWith { "-" }.asSequence().toList())
-        assertEquals(listOf("a", "-", "b", "-", "c"), list.iterator().intersperseWith { "-" }.asSequence().toList())
+        assertEquals(
+            listOf("a", "-", "b", "-", "c"),
+            list
+                .iterator()
+                .intersperseWith { "-" }
+                .asSequence()
+                .toList(),
+        )
     }
 
     @Test
     fun testBatching() {
         val list = listOf(1, 2, 3, 4, 5)
-        val batches = list.batching { it ->
-            if (!it.hasNext()) null
-            else {
-                val sum = it.next() + (if (it.hasNext()) it.next() else 0)
-                sum
-            }
-        }.asSequence().toList()
+        val batches =
+            list
+                .batching { iter ->
+                    if (!iter.hasNext()) {
+                        null
+                    } else {
+                        val sum = iter.next() + (if (iter.hasNext()) iter.next() else 0)
+                        sum
+                    }
+                }.asSequence()
+                .toList()
         assertEquals(listOf(3, 7, 5), batches)
     }
 
     @Test
     fun testChunkByAndGroupBy() {
         val data = listOf(1, 1, 2, 3, 3, 3, 2, 2)
-        val chunkKeys = data.chunkBy { it }.asSequence().map { (k, v) -> Pair(k, v.toList()) }.toList()
+        val chunkKeys =
+            data
+                .chunkBy { it }
+                .asSequence()
+                .map { (k, v) -> Pair(k, v.toList()) }
+                .toList()
         assertEquals(
             listOf(
                 Pair(1, listOf(1, 1)),
@@ -53,24 +90,35 @@ class ItertoolsExtensionTest {
             ),
             chunkKeys,
         )
-        val groupKeys = data.groupBy { it }.asSequence().map { (k, v) -> Pair(k, v.toList()) }.toList()
+        val groupKeys =
+            data
+                .groupBy { it }
+                .asSequence()
+                .map { (k, v) -> Pair(k, v.toList()) }
+                .toList()
         assertEquals(chunkKeys, groupKeys)
     }
 
     @Test
     fun testChunks() {
         val list = listOf(1, 2, 3, 4, 5)
-        val chunks = list.chunks(2).asSequence().map { it.toList() }.toList()
+        val chunks =
+            list
+                .chunks(2)
+                .asSequence()
+                .map { it.toList() }
+                .toList()
         assertEquals(listOf(listOf(1, 2), listOf(3, 4), listOf(5)), chunks)
     }
 
     @Test
     fun testItemResultAdaptors() {
-        val items: List<ItemResult<Int, String>> = listOf(
-            ItemResult.Ok(1),
-            ItemResult.Err("err"),
-            ItemResult.Ok(3),
-        )
+        val items: List<ItemResult<Int, String>> =
+            listOf(
+                ItemResult.Ok(1),
+                ItemResult.Err("err"),
+                ItemResult.Ok(3),
+            )
         val mapped = items.mapOk { it * 10 }.asSequence().toList()
         assertEquals(ItemResult.Ok(10), mapped[0])
         assertEquals(ItemResult.Err("err"), mapped[1])
@@ -82,11 +130,12 @@ class ItertoolsExtensionTest {
         val filterMapped = items.filterMapOk { if (it > 1) it * 2 else null }.asSequence().toList()
         assertEquals(listOf(ItemResult.Err("err"), ItemResult.Ok(6)), filterMapped)
 
-        val nested: List<ItemResult<List<Int>, String>> = listOf(
-            ItemResult.Ok(listOf(1, 2)),
-            ItemResult.Err("err"),
-            ItemResult.Ok(listOf(3)),
-        )
+        val nested: List<ItemResult<List<Int>, String>> =
+            listOf(
+                ItemResult.Ok(listOf(1, 2)),
+                ItemResult.Err("err"),
+                ItemResult.Ok(listOf(3)),
+            )
         val flattened = nested.flattenOk().asSequence().toList()
         assertEquals(
             listOf(
@@ -104,7 +153,14 @@ class ItertoolsExtensionTest {
         val a = listOf(1, 3, 5)
         val b = listOf(2, 4, 6)
         assertEquals(listOf(1, 2, 3, 4, 5, 6), a.merge(b).asSequence().toList())
-        assertEquals(listOf(1, 2, 3, 4, 5, 6), a.iterator().merge(b.iterator()).asSequence().toList())
+        assertEquals(
+            listOf(1, 2, 3, 4, 5, 6),
+            a
+                .iterator()
+                .merge(b.iterator())
+                .asSequence()
+                .toList(),
+        )
         assertEquals(listOf(1, 2, 3, 4, 5, 6), a.mergeBy(b) { x, y -> x <= y }.asSequence().toList())
     }
 
@@ -122,7 +178,14 @@ class ItertoolsExtensionTest {
     fun testDedup() {
         val data = listOf(1, 1, 2, 3, 3, 1)
         assertEquals(listOf(1, 2, 3, 1), data.dedup().asSequence().toList())
-        assertEquals(listOf(1, 2, 3, 1), data.iterator().dedup().asSequence().toList())
+        assertEquals(
+            listOf(1, 2, 3, 1),
+            data
+                .iterator()
+                .dedup()
+                .asSequence()
+                .toList(),
+        )
         assertEquals(
             listOf(Pair(2, 1), Pair(1, 2), Pair(2, 3), Pair(1, 1)),
             data.dedupWithCount().asSequence().toList(),
@@ -233,10 +296,14 @@ class ItertoolsExtensionTest {
         assertEquals(10, data.fold1 { a, b -> a + b })
         assertNull(emptyList<Int>().fold1 { a, b -> a + b })
 
-        val sumWhile = data.foldWhile(0) { acc, x ->
-            if (acc + x > 5) FoldWhile.Done(acc)
-            else FoldWhile.Continue(acc + x)
-        }
+        val sumWhile =
+            data.foldWhile(0) { acc, x ->
+                if (acc + x > 5) {
+                    FoldWhile.Done(acc)
+                } else {
+                    FoldWhile.Continue(acc + x)
+                }
+            }
         assertEquals(3, sumWhile.intoInner())
         assertTrue(sumWhile.isDone())
 

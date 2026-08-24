@@ -49,6 +49,25 @@ class ZipLongest<A, B>(
 
     /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint = max(subScalar(aHint, consumed), subScalar(bHint, consumed))
+
+    /** Consumes the iterator and folds elements with [init] and [f]. */
+    fun <R> fold(init: R, f: (R, EitherOrBoth<A, B>) -> R): R {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Folds elements in reverse order. */
+    fun <R> rfold(init: R, f: (R, EitherOrBoth<A, B>) -> R): R {
+        val items = asSequence().toList()
+        var acc = init
+        for (i in items.indices.reversed()) {
+            acc = f(acc, items[i])
+        }
+        return acc
+    }
 }
 
 /**

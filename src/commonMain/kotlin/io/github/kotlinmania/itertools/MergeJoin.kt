@@ -2,6 +2,37 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * Marker object for less-than-or-equal comparison in [MergeBy].
+ */
+object MergeLte
+
+/**
+ * An iterator adaptor that merges the two base iterators in ascending order.
+ * If both base iterators are sorted (ascending), the result is sorted.
+ */
+typealias Merge<T> = MergeBy<T>
+
+/**
+ * Interface representing merge comparison strategy producing either values or [EitherOrBoth].
+ */
+interface OrderingOrBool<L, R, Res> {
+    fun left(left: L): Res
+
+    fun right(right: R): Res
+
+    fun merge(left: L, right: R): Pair<Either<L, R>?, Res>
+
+    fun sizeHint(left: SizeHint, right: SizeHint): SizeHint
+}
+
+/**
+ * Function wrapper for merge join comparison.
+ */
+class MergeFuncLR<F, T>(
+    val f: F,
+)
+
+/**
  * An iterator adaptor that merges the two base iterators in ascending order.
  * If both base iterators are sorted (ascending), the result is sorted.
  *
@@ -55,6 +86,25 @@ class MergeBy<T>(
 
     /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint = subScalar(add(leftHint, rightHint), consumed)
+
+    /** Consumes the iterator and folds elements with [init] and [f]. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Returns the nth element of the iterator. */
+    fun nth(n: Int): T? {
+        var count = n
+        while (count > 0 && hasNext()) {
+            next()
+            count -= 1
+        }
+        return if (hasNext()) next() else null
+    }
 }
 
 /**
@@ -127,7 +177,38 @@ class MergeJoinBy<L, R>(
             }
         return SizeHint(lower, upper)
     }
+
+    /** Consumes the iterator and folds elements with [init] and [f]. */
+    fun <B> fold(init: B, f: (B, EitherOrBoth<L, R>) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Returns the nth element of the iterator. */
+    fun nth(n: Int): EitherOrBoth<L, R>? {
+        var count = n
+        while (count > 0 && hasNext()) {
+            next()
+            count -= 1
+        }
+        return if (hasNext()) next() else null
+    }
 }
+
+/**
+ * Create a `MergeBy` iterator.
+ */
+fun <T> mergeByNew(a: Iterator<T>, b: Iterator<T>, cmp: (T, T) -> Boolean): MergeBy<T> =
+    MergeBy(a, b, cmp)
+
+/**
+ * Create a `MergeBy` iterator from iterables.
+ */
+fun <T> mergeByNew(a: Iterable<T>, b: Iterable<T>, cmp: (T, T) -> Boolean): MergeBy<T> =
+    MergeBy(a.iterator(), b.iterator(), cmp)
 
 /**
  * Create an iterator that merges elements in `i` and `j`.

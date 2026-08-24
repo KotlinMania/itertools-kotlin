@@ -45,7 +45,6 @@ public class UniqueBy<T, V> internal constructor(
         return SizeHint(newLow, upper)
     }
 
-
     /**
      * Counts remaining unique elements.
      */

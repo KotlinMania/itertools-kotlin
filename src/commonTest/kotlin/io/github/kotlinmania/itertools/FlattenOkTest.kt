@@ -1,4 +1,4 @@
-// port-lint: tests tests/flatten_ok.rs
+// port-lint: tests flatten_ok.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
