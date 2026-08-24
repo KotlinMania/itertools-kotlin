@@ -64,6 +64,37 @@ class FlattenOk<T, E> internal constructor(
         peeked = null
         return current
     }
+
+    /**
+     * Folds every element into an accumulator by applying an operation.
+     */
+    fun <B> fold(init: B, f: (B, ItemResult<T, E>) -> B): B {
+        var acc = init
+        val inner = currentInner
+        if (inner != null) {
+            while (inner.hasNext()) {
+                acc = f(acc, ItemResult.Ok(inner.next()))
+            }
+        }
+        while (iter.hasNext()) {
+            when (val item = iter.next()) {
+                is ItemResult.Ok -> {
+                    for (v in item.value) {
+                        acc = f(acc, ItemResult.Ok(v))
+                    }
+                }
+                is ItemResult.Err -> {
+                    acc = f(acc, ItemResult.Err(item.error))
+                }
+            }
+        }
+        return acc
+    }
+
+    /**
+     * Size hint for the iterator adaptor.
+     */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
 }
 
 /**

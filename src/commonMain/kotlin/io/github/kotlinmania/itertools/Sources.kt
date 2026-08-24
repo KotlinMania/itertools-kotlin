@@ -29,11 +29,20 @@ internal class StateRef<St>(
  * // and stops at the maximum representable value.
  *
  * val fibonacci = unfold(1 to 1) { s ->
+ *     // Attempt to get the next Fibonacci number
  *     val (x1, x2) = s.value
  *     val next = if (Int.MAX_VALUE - x1 < x2) Int.MAX_VALUE else x1 + x2
+ *
+ *     // Shift left: ret <- x1 <- x2 <- next
  *     val ret = x1
  *     s.value = x2 to next
- *     if (ret == x2 && ret > 1) null else ret
+ *
+ *     // If addition has saturated at the maximum, we are finished
+ *     if (ret == x2 && ret > 1) {
+ *         null
+ *     } else {
+ *         ret
+ *     }
  * }
  * ```
  */
