@@ -192,3 +192,5 @@ fun <T> combinations(iterable: Iterable<T>, k: Int): Combinations<T> {
  */
 fun <T> combinations(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
     Combinations(iter, k, hint)
+
+

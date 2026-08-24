@@ -33,4 +33,35 @@ class CombinationsWithReplacementTest {
         )
         assertFalse(combinationsWithReplacement(emptyList<Int>(), 2).hasNext())
     }
+
+    @Test
+    fun testCombinationsWithReplacementRangeCount() {
+        for (n in 0..4) {
+            for (k in 0..4) {
+                val positions = if (n == 0) (k - 1).coerceAtLeast(0) else n + k - 1
+                val len = checkedBinomial(positions, k) ?: 0
+                val it = combinationsWithReplacement((0 until n).toList(), k)
+                assertEquals(len, it.sizeHint().lower)
+                assertEquals(len, it.sizeHint().upper)
+                assertEquals(len, combinationsWithReplacement((0 until n).toList(), k).count())
+
+                for (count in (len - 1) downTo 0) {
+                    val elem = it.next()
+                    assertEquals(k, elem.size)
+                    assertEquals(count, it.sizeHint().lower)
+                    assertEquals(count, it.sizeHint().upper)
+                }
+                assertFalse(it.hasNext())
+            }
+        }
+    }
+
+    @Test
+    fun testCombinationsWithReplacementNth() {
+        val all = combinationsWithReplacement(listOf(0, 1, 2), 2).asSequence().toList()
+        for (i in all.indices) {
+            val it = combinationsWithReplacement(listOf(0, 1, 2), 2)
+            assertEquals(all[i], it.nth(i))
+        }
+    }
 }

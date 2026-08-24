@@ -1,6 +1,8 @@
 // port-lint: source zip_eq_impl.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
 /**
  * A pair of elements produced by [zipEq].
  */
@@ -79,20 +81,38 @@ class ZipEq<A, B>(
 /**
  * Zips two iterables but **throws** if they are not of the same length.
  */
+@JvmName("zipEqIterable")
 fun <A, B> zipEq(i: Iterable<A>, j: Iterable<B>): Iterator<Zipped<A, B>> =
     ZipEq(i.iterator(), j.iterator(), sizeHintOf(i), sizeHintOf(j))
 
 /**
  * Zips two iterators but **throws** if they are not of the same length.
  */
+@JvmName("zipEqIter")
 fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>): ZipEq<A, B> =
     ZipEq(i, j, SizeHint(0, null), SizeHint(0, null))
 
 /**
  * Zips two iterators with size hints but **throws** if they are not of the same length.
  */
+@JvmName("zipEqIterWithHints")
 fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
     ZipEq(i, j, aHint, bHint)
+
+/**
+ * Create an iterator which iterates over both this and the specified iterator simultaneously, yielding pairs of elements.
+ * Throws if the iterators are not of equal lengths.
+ */
+fun <A, B> Iterator<A>.zipEq(other: Iterator<B>): ZipEq<A, B> =
+    zipEq(this, other)
+
+/**
+ * Create an iterator which iterates over both this and the specified iterable simultaneously, yielding pairs of elements.
+ * Throws if the iterators are not of equal lengths.
+ */
+fun <A, B> Iterable<A>.zipEq(other: Iterable<B>): Iterator<Zipped<A, B>> =
+    zipEq(this, other)
+
 
 private fun sizeHintOf(it: Iterable<*>): SizeHint =
     when (it) {

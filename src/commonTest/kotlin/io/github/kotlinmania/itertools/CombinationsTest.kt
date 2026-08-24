@@ -43,6 +43,27 @@ class CombinationsTest {
     }
 
     @Test
+    fun testCombinationsRangeCount() {
+        for (n in 0..4) {
+            for (k in 0..4) {
+                val len = checkedBinomial(n, k) ?: 0
+                val it = combinations((0 until n).toList(), k)
+                assertEquals(len, it.sizeHint().lower)
+                assertEquals(len, it.sizeHint().upper)
+                assertEquals(len, combinations((0 until n).toList(), k).count())
+
+                for (count in (len - 1) downTo 0) {
+                    val elem = it.next()
+                    assertEquals(k, elem.size)
+                    assertEquals(count, it.sizeHint().lower)
+                    assertEquals(count, it.sizeHint().upper)
+                }
+                assertFalse(it.hasNext())
+            }
+        }
+    }
+
+    @Test
     fun testCheckedBinomial() {
         val limit = 500
         val row = ArrayList<Int?>()
