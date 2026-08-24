@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 402/504 matched (target 1059) — 79.8%
-- **Class/type parity:** 99/177 matched (target 208) — 55.9%
-- **Combined symbol parity:** 501/681 matched (target 1267) — 73.6%
+- **Function parity:** 415/504 matched (target 1086) — 82.3%
+- **Class/type parity:** 102/177 matched (target 210) — 57.6%
+- **Combined symbol parity:** 517/681 matched (target 1296) — 75.9%
 - **Average inline-code cosine:** 0.44 (function body across 49 matched files)
 - **Average documentation cosine:** 0.62 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 2
@@ -223,19 +223,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/5 matched (target 13)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`, `State`
 
-### 18. adaptors.mod
-
-- **Target:** `adaptors.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 274410.0
-- **Functions:** 9/28 matched (target 32)
-- **Missing functions:** `size_hint`, `fold`, `put_back`, `with_value`, `into_parts`, `count`, `last`, `nth`, `all`, `cartesian_product`, `take_while_ref`, `tuple_combinations`, `from`, `checked_binomial`, `test_checked_binomial`, `collect`, `next_back`, `rfold`, `transpose_result`
-- **Types:** 8/16 matched (target 9)
-- **Missing types:** `Item`, `PutBack`, `Product`, `TakeWhileRef`, `TupleCombinations`, `HasCombination`, `Tuple1Combination`, `Combination`
-- **Tests:** 0/1 matched
-
-### 19. adaptors.coalesce
+### 18. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce`
 - **Similarity:** 0.24
@@ -245,6 +233,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `size_hint`, `fold`, `new`, `coalesce_pair`, `dedup_pair`
 - **Types:** 3/16 matched (target 7)
 - **Missing types:** `CoalescePredicate`, `Item`, `NoCount`, `WithCount`, `CountItem`, `CItem`, `Coalesce`, `DedupPred2CoalescePred`, `DedupPredicate`, `DedupEq`, `Dedup`, `DedupPredWithCount2CoalescePred`, `DedupWithCount`
+
+### 19. adaptors.mod
+
+- **Target:** `adaptors.Mod [STUB]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 114410.0
+- **Functions:** 22/28 matched (target 59)
+- **Missing functions:** `tuple_combinations`, `from`, `test_checked_binomial`, `collect`, `next_back`, `rfold`
+- **Types:** 11/16 matched (target 11)
+- **Missing types:** `Item`, `TupleCombinations`, `HasCombination`, `Tuple1Combination`, `Combination`
+- **Tests:** 0/1 matched
 
 ### 20. combinations
 
