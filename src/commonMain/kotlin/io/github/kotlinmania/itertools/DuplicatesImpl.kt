@@ -1,6 +1,8 @@
 // port-lint: source duplicates_impl.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
 /**
  * Holds a key together with the value it was derived from, and yields one or
  * the other but never both. Models the `KeyXorValue<K, V>` trait from the
@@ -161,10 +163,12 @@ public class DuplicatesBy<T, K> internal constructor(
 }
 
 /** Create a new `DuplicatesBy` iterator. */
+@JvmName("duplicatesByIter")
 public fun <T, K> duplicatesBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> K): DuplicatesBy<T, K> =
     DuplicatesBy(iter, sourceHint, ByFn(f))
 
 /** Filter duplicate elements from [iterable], keeping only elements seen more than once, compared by key produced by [f]. */
+@JvmName("duplicatesByIterable")
 public fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): DuplicatesBy<T, K> =
     duplicatesBy(iterable.iterator(), hintOfIterable(iterable), f)
 
@@ -176,12 +180,39 @@ public fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): DuplicatesBy
 public typealias Duplicates<T> = DuplicatesBy<T, T>
 
 /** Create a new `Duplicates` iterator. */
+@JvmName("duplicatesIter")
 public fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Duplicates<T> =
     DuplicatesBy(iter, sourceHint, ById())
 
 /** Filter duplicate elements from [iterable], keeping only elements seen more than once. */
+@JvmName("duplicatesIterable")
 public fun <T> duplicates(iterable: Iterable<T>): Duplicates<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
+
+/**
+ * Filter duplicate elements from this iterator, keeping only elements seen more than once, compared by key produced by [f].
+ */
+public fun <T, K> Iterator<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
+    duplicatesBy(this, SizeHint(0, null), f)
+
+/**
+ * Filter duplicate elements from this iterable, keeping only elements seen more than once, compared by key produced by [f].
+ */
+public fun <T, K> Iterable<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
+    duplicatesBy(this, f)
+
+/**
+ * Filter duplicate elements from this iterator, keeping only elements seen more than once.
+ */
+public fun <T> Iterator<T>.duplicates(): Duplicates<T> =
+    duplicates(this)
+
+/**
+ * Filter duplicate elements from this iterable, keeping only elements seen more than once.
+ */
+public fun <T> Iterable<T>.duplicates(): Duplicates<T> =
+    duplicates(this)
+
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {

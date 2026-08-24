@@ -108,6 +108,80 @@ class Permutations<T>(
         nextItem = null
         return item
     }
+
+    /**
+     * Size hint for remaining permutations.
+     */
+    fun sizeHint(): SizeHint {
+        if (isExhausted) return SizeHint(0, 0)
+        val (low, upp) = vals.sizeHint()
+        val lowHint = sizeHintFor(state, low).lower
+        val uppHint = upp?.let { sizeHintFor(state, it).upper }
+        val baseHint = SizeHint(lowHint, uppHint)
+        return if (nextItem != null) addScalar(baseHint, 1) else baseHint
+    }
+
+    /**
+     * Count remaining permutations.
+     */
+    fun count(): Int {
+        if (isExhausted) return 0
+        val n = vals.count()
+        val baseCount = sizeHintFor(state, n).upper ?: Int.MAX_VALUE
+        return if (nextItem != null) {
+            if (baseCount == Int.MAX_VALUE) Int.MAX_VALUE else baseCount + 1
+        } else {
+            baseCount
+        }
+    }
+
+    private fun sizeHintFor(state: PermutationState, n: Int): SizeHint {
+        fun atStart(nVal: Int, kVal: Int): SizeHint {
+            if (nVal < kVal) return SizeHint(0, 0)
+            var total: Int? = 1
+            for (i in (nVal - kVal + 1)..nVal) {
+                val current = total ?: break
+                val res = current.toLong() * i.toLong()
+                if (res > Int.MAX_VALUE) {
+                    total = null
+                    break
+                } else {
+                    total = res.toInt()
+                }
+            }
+            return SizeHint(total ?: Int.MAX_VALUE, total)
+        }
+
+        return when (state) {
+            is PermutationState.Start -> {
+                if (n < state.k) SizeHint(0, 0)
+                else atStart(n, state.k)
+            }
+            is PermutationState.Buffered -> {
+                subScalar(atStart(n, state.k), state.minN - state.k + 1)
+            }
+            is PermutationState.Loaded -> {
+                var count: Int? = 0
+                val nTotal = state.indices.size
+                for ((i, c) in state.cycles.withIndex()) {
+                    val current = count ?: break
+                    val mul = current.toLong() * (nTotal - i).toLong()
+                    if (mul > Int.MAX_VALUE) {
+                        count = null
+                        break
+                    }
+                    val add = mul + c.toLong()
+                    if (add > Int.MAX_VALUE) {
+                        count = null
+                        break
+                    }
+                    count = add.toInt()
+                }
+                SizeHint(count ?: Int.MAX_VALUE, count)
+            }
+            is PermutationState.End -> SizeHint(0, 0)
+        }
+    }
 }
 
 private fun IntArray.rotateLeftInPlace(fromIndex: Int) {
@@ -159,3 +233,5 @@ fun <T> permutations(iterable: Iterable<T>, k: Int): Permutations<T> {
  */
 fun <T> permutations(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Permutations<T> =
     Permutations(iter, k, hint)
+
+

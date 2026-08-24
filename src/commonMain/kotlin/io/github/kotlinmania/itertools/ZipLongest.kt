@@ -1,6 +1,8 @@
 // port-lint: source zip_longest.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
 /**
  * An iterator which iterates two other iterators simultaneously
  * and wraps the elements in [EitherOrBoth].
@@ -73,6 +75,7 @@ class ZipLongest<A, B>(
 /**
  * Create a new [ZipLongest] iterator.
  */
+@JvmName("zipLongestIterable")
 fun <A, B> zipLongest(a: Iterable<A>, b: Iterable<B>): ZipLongest<A, B> {
     val aHint =
         when (a) {
@@ -90,5 +93,19 @@ fun <A, B> zipLongest(a: Iterable<A>, b: Iterable<B>): ZipLongest<A, B> {
 /**
  * Create a new [ZipLongest] iterator from iterators.
  */
+@JvmName("zipLongestIter")
 fun <A, B> zipLongest(a: Iterator<A>, b: Iterator<B>, aHint: SizeHint = SizeHint(0, null), bHint: SizeHint = SizeHint(0, null)): ZipLongest<A, B> =
     ZipLongest(a, b, aHint, bHint)
+
+/**
+ * Create an iterator which iterates over both this and the specified iterator simultaneously, yielding [EitherOrBoth] pairs.
+ */
+fun <A, B> Iterator<A>.zipLongest(other: Iterator<B>): ZipLongest<A, B> =
+    zipLongest(this, other)
+
+/**
+ * Create an iterator which iterates over both this and the specified iterable simultaneously, yielding [EitherOrBoth] pairs.
+ */
+fun <A, B> Iterable<A>.zipLongest(other: Iterable<B>): ZipLongest<A, B> =
+    zipLongest(this, other)
+

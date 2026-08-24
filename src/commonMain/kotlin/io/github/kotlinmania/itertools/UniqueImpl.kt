@@ -1,6 +1,8 @@
 // port-lint: source unique_impl.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
 /**
  * An iterator adapter to filter out duplicate elements.
  *
@@ -67,10 +69,12 @@ internal fun <K> countNewKeys(used: HashMap<K, Unit>, iterable: Iterable<K>): In
 }
 
 /** Create a new `UniqueBy` iterator. */
+@JvmName("uniqueByIter")
 public fun <T, V> uniqueBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
     UniqueBy(iter, sourceHint, f)
 
 /** Filter duplicate elements from [iterable], comparing by the key produced by [f]. */
+@JvmName("uniqueByIterable")
 public fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): UniqueBy<T, V> =
     uniqueBy(iterable.iterator(), hintOfIterable(iterable), f)
 
@@ -82,12 +86,39 @@ public fun <T, V> uniqueBy(iterable: Iterable<T>, f: (T) -> V): UniqueBy<T, V> =
 public typealias Unique<T> = UniqueBy<T, T>
 
 /** Create a new `Unique` iterator. */
+@JvmName("uniqueIter")
 public fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Unique<T> =
     UniqueBy(iter, sourceHint) { it }
 
 /** Filter duplicate elements from [iterable], comparing by identity. */
+@JvmName("uniqueIterable")
 public fun <T> unique(iterable: Iterable<T>): Unique<T> =
     unique(iterable.iterator(), hintOfIterable(iterable))
+
+/**
+ * Filter duplicate elements from this iterator, comparing by the key produced by [f].
+ */
+public fun <T, V> Iterator<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
+    uniqueBy(this, SizeHint(0, null), f)
+
+/**
+ * Filter duplicate elements from this iterable, comparing by the key produced by [f].
+ */
+public fun <T, V> Iterable<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
+    uniqueBy(this, f)
+
+/**
+ * Filter duplicate elements from this iterator, comparing by identity.
+ */
+public fun <T> Iterator<T>.unique(): Unique<T> =
+    unique(this)
+
+/**
+ * Filter duplicate elements from this iterable, comparing by identity.
+ */
+public fun <T> Iterable<T>.unique(): Unique<T> =
+    unique(this)
+
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {

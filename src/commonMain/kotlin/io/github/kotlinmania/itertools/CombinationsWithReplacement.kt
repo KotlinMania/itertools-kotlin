@@ -79,12 +79,64 @@ class CombinationsWithReplacement<T>(
         return item
     }
 
+    /**
+     * Returns the n-th combination with replacement without iterating through the preceding ones manually.
+     */
+    fun nth(n: Int): List<T>? {
+        if (nextItem != null) {
+            val item = nextItem
+            nextItem = null
+            if (n == 0) return item
+            return nth(n - 1)
+        }
+        if (isExhausted) return null
+        if (first) {
+            if (indices.isEmpty()) {
+                first = false
+                if (n == 0) return emptyList()
+                isExhausted = true
+                return null
+            }
+            if (pool.length == 0 && !pool.getNext()) {
+                isExhausted = true
+                return null
+            }
+            first = false
+        } else if (incrementIndices()) {
+            isExhausted = true
+            return null
+        }
+        for (step in 0 until n) {
+            if (incrementIndices()) {
+                isExhausted = true
+                return null
+            }
+        }
+        return pool.getAt(indices)
+    }
+
+    /**
+     * Returns the total count of remaining combinations with replacement.
+     */
+    fun count(): Int {
+        if (isExhausted) return 0
+        val n = pool.count()
+        val base = remainingForWithReplacement(n, first, indices) ?: Int.MAX_VALUE
+        return if (nextItem != null) {
+            if (base == Int.MAX_VALUE) Int.MAX_VALUE else base + 1
+        } else {
+            base
+        }
+    }
+
     /** Returns the size hint for remaining combinations with replacement. */
     fun sizeHint(): SizeHint {
+        if (isExhausted) return SizeHint(0, 0)
         val (low, upp) = pool.sizeHint()
         val rLow = remainingForWithReplacement(low, first, indices) ?: Int.MAX_VALUE
         val rUpp = upp?.let { remainingForWithReplacement(it, first, indices) }
-        return SizeHint(rLow, rUpp)
+        val base = SizeHint(rLow, rUpp)
+        return if (nextItem != null) addScalar(base, 1) else base
     }
 }
 
@@ -135,3 +187,5 @@ fun <T> combinationsWithReplacement(
     k: Int,
     hint: SizeHint = SizeHint(0, null),
 ): CombinationsWithReplacement<T> = CombinationsWithReplacement(iter, k, hint)
+
+
