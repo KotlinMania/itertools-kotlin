@@ -5,10 +5,10 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 427/504 matched (target 1152) — 84.7%
-- **Class/type parity:** 103/177 matched (target 213) — 58.2%
-- **Combined symbol parity:** 530/681 matched (target 1365) — 77.8%
-- **Average inline-code cosine:** 0.46 (function body across 49 matched files)
+- **Function parity:** 433/504 matched (target 1159) — 85.9%
+- **Class/type parity:** 115/177 matched (target 225) — 65.0%
+- **Combined symbol parity:** 548/681 matched (target 1384) — 80.5%
+- **Average inline-code cosine:** 0.47 (function body across 49 matched files)
 - **Average documentation cosine:** 0.61 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 2
 - **Critical Issues:** 40 files with <0.60 function similarity
@@ -50,11 +50,11 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. either_or_both
 
 - **Target:** `itertools.EitherOrBoth`
-- **Similarity:** 0.52
+- **Similarity:** 0.55
 - **Dependents:** 3
-- **Priority Score:** 3013604.8
-- **Functions:** 34/35 matched (target 41)
-- **Missing functions:** `from`
+- **Priority Score:** 3003604.5
+- **Functions:** 35/35 matched (target 44)
+- **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
 
@@ -63,79 +63,35 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `itertools.LazyBuffer`
 - **Similarity:** 0.47
 - **Dependents:** 3
-- **Priority Score:** 3011105.2
+- **Priority Score:** 3001105.2
 - **Functions:** 9/9 matched (target 20)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched
-- **Missing types:** `Output`
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
 
 ### 4. peek_nth
 
 - **Target:** `itertools.PeekNth`
 - **Similarity:** 0.61
 - **Dependents:** 2
-- **Priority Score:** 2011203.9
+- **Priority Score:** 2001203.9
 - **Functions:** 10/10 matched (target 14)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
 
 ### 5. repeatn
 
 - **Target:** `itertools.RepeatN`
 - **Similarity:** 0.41
 - **Dependents:** 2
-- **Priority Score:** 2010805.9
+- **Priority Score:** 2000805.9
 - **Functions:** 6/6 matched (target 8)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched (target 1)
-- **Missing types:** `Item`
-
-### 6. powerset
-
-- **Target:** `itertools.Powerset`
-- **Similarity:** 0.60
-- **Dependents:** 1
-- **Priority Score:** 1021004.0
-- **Functions:** 7/8 matched (target 13)
-- **Missing functions:** `remaining_for`
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
-
-### 7. combinations_with_replacement
-
-- **Target:** `itertools.CombinationsWithReplacement`
-- **Similarity:** 0.38
-- **Dependents:** 1
-- **Priority Score:** 1020906.2
-- **Functions:** 6/7 matched (target 14)
-- **Missing functions:** `remaining_for`
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
-
-### 8. tee
-
-- **Target:** `itertools.Tee`
-- **Similarity:** 0.45
-- **Dependents:** 1
-- **Priority Score:** 1020605.4
-- **Functions:** 2/3 matched (target 13)
-- **Missing functions:** `new`
-- **Types:** 2/3 matched
-- **Missing types:** `Item`
-
-### 9. diff
-
-- **Target:** `itertools.Diff`
-- **Similarity:** 0.29
-- **Dependents:** 1
-- **Priority Score:** 1020407.1
-- **Functions:** 1/3 matched (target 13)
-- **Missing functions:** `fmt`, `clone`
-- **Types:** 1/1 matched (target 6)
+- **Types:** 2/2 matched
 - **Missing types:** _none_
 
-### 10. adaptors.multi_product
+### 6. adaptors.multi_product
 
 - **Target:** `adaptors.MultiProduct`
 - **Similarity:** 0.55
@@ -146,71 +102,115 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/4 matched
 - **Missing types:** `Item`
 
-### 11. permutations
+### 7. powerset
+
+- **Target:** `itertools.Powerset`
+- **Similarity:** 0.69
+- **Dependents:** 1
+- **Priority Score:** 1001003.1
+- **Functions:** 8/8 matched (target 13)
+- **Missing functions:** _none_
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
+
+### 8. combinations_with_replacement
+
+- **Target:** `itertools.CombinationsWithReplacement`
+- **Similarity:** 0.50
+- **Dependents:** 1
+- **Priority Score:** 1000905.1
+- **Functions:** 7/7 matched (target 14)
+- **Missing functions:** _none_
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
+
+### 9. permutations
 
 - **Target:** `itertools.Permutations`
 - **Similarity:** 0.54
 - **Dependents:** 1
-- **Priority Score:** 1010904.6
+- **Priority Score:** 1000904.6
 - **Functions:** 6/6 matched (target 15)
 - **Missing functions:** _none_
-- **Types:** 2/3 matched (target 7)
-- **Missing types:** `Item`
+- **Types:** 3/3 matched (target 8)
+- **Missing types:** _none_
 
-### 12. zip_longest
+### 10. zip_longest
 
 - **Target:** `itertools.ZipLongest`
 - **Similarity:** 0.40
 - **Dependents:** 1
-- **Priority Score:** 1010806.0
+- **Priority Score:** 1000806.0
 - **Functions:** 6/6 matched (target 18)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
 
-### 13. flatten_ok
+### 11. flatten_ok
 
 - **Target:** `itertools.FlattenOk`
 - **Similarity:** 0.53
 - **Dependents:** 1
-- **Priority Score:** 1010804.8
+- **Priority Score:** 1000804.8
 - **Functions:** 6/6 matched (target 16)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched (target 5)
-- **Missing types:** `Item`
+- **Types:** 2/2 matched (target 6)
+- **Missing types:** _none_
 
-### 14. with_position
+### 12. with_position
 
 - **Target:** `itertools.WithPosition`
 - **Similarity:** 0.34
 - **Dependents:** 1
-- **Priority Score:** 1010706.6
+- **Priority Score:** 1000706.6
 - **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
-- **Types:** 2/3 matched (target 5)
-- **Missing types:** `Item`
+- **Types:** 3/3 matched (target 6)
+- **Missing types:** _none_
 
-### 15. peeking_take_while
+### 13. peeking_take_while
 
 - **Target:** `itertools.PeekingTakeWhile`
 - **Similarity:** 0.37
 - **Dependents:** 1
-- **Priority Score:** 1010706.3
+- **Priority Score:** 1000706.3
 - **Functions:** 4/4 matched (target 18)
 - **Missing functions:** _none_
-- **Types:** 2/3 matched (target 4)
-- **Missing types:** `Item`
+- **Types:** 3/3 matched (target 5)
+- **Missing types:** _none_
 
-### 16. take_while_inclusive
+### 14. take_while_inclusive
 
 - **Target:** `itertools.TakeWhileInclusive`
 - **Similarity:** 0.53
 - **Dependents:** 1
-- **Priority Score:** 1010604.7
+- **Priority Score:** 1000604.7
 - **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched (target 3)
-- **Missing types:** `Item`
+- **Types:** 2/2 matched (target 4)
+- **Missing types:** _none_
+
+### 15. tee
+
+- **Target:** `itertools.Tee`
+- **Similarity:** 0.57
+- **Dependents:** 1
+- **Priority Score:** 1000604.4
+- **Functions:** 3/3 matched (target 15)
+- **Missing functions:** _none_
+- **Types:** 3/3 matched (target 4)
+- **Missing types:** _none_
+
+### 16. diff
+
+- **Target:** `itertools.Diff`
+- **Similarity:** 0.49
+- **Dependents:** 1
+- **Priority Score:** 1000405.1
+- **Functions:** 3/3 matched (target 15)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched (target 6)
+- **Missing types:** _none_
 
 ### 17. lib
 
