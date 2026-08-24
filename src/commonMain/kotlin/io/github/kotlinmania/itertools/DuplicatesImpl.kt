@@ -110,7 +110,7 @@ internal class Meta<K, V>(
  *
  * See `Itertools.duplicatesBy` for more information.
  */
-internal class DuplicatesBy<T, K> internal constructor(
+public class DuplicatesBy<T, K> internal constructor(
     private val iter: Iterator<T>,
     private val sourceHint: SizeHint,
     keyMethod: KeyMethod<K, T>,
@@ -141,11 +141,7 @@ internal class DuplicatesBy<T, K> internal constructor(
         return buffered.removeFirst()
     }
 
-    /**
-     * Returns the size hint for the iterator. The lower bound is always 0
-     * because we may only encounter unique items from now on; the upper bound
-     * collapses based on how many first-sightings are still pending.
-     */
+    /** Equivalent to upstream size hint. */
     fun sizeHint(): SizeHint {
         val iterRemainingHi =
             sourceHint.upper?.let { hi ->
@@ -165,11 +161,11 @@ internal class DuplicatesBy<T, K> internal constructor(
 }
 
 /** Create a new `DuplicatesBy` iterator. */
-internal fun <T, K> duplicatesBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> K): DuplicatesBy<T, K> =
+public fun <T, K> duplicatesBy(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> K): DuplicatesBy<T, K> =
     DuplicatesBy(iter, sourceHint, ByFn(f))
 
 /** Filter duplicate elements from [iterable], keeping only elements seen more than once, compared by key produced by [f]. */
-fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): Iterator<T> =
+public fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): DuplicatesBy<T, K> =
     duplicatesBy(iterable.iterator(), hintOfIterable(iterable), f)
 
 /**
@@ -177,14 +173,14 @@ fun <T, K> duplicatesBy(iterable: Iterable<T>, f: (T) -> K): Iterator<T> =
  *
  * See `Itertools.duplicates` for more information.
  */
-internal typealias Duplicates<T> = DuplicatesBy<T, T>
+public typealias Duplicates<T> = DuplicatesBy<T, T>
 
 /** Create a new `Duplicates` iterator. */
-internal fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Duplicates<T> =
+public fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): Duplicates<T> =
     DuplicatesBy(iter, sourceHint, ById())
 
 /** Filter duplicate elements from [iterable], keeping only elements seen more than once. */
-fun <T> duplicates(iterable: Iterable<T>): Iterator<T> =
+public fun <T> duplicates(iterable: Iterable<T>): Duplicates<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
