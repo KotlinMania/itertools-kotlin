@@ -1,6 +1,8 @@
 // port-lint: source adaptors/coalesce.rs
 package io.github.kotlinmania.itertools.adaptors
 
+import io.github.kotlinmania.itertools.SizeHint
+
 /**
  * Result of attempting to coalesce two adjacent elements.
  */
@@ -18,13 +20,21 @@ sealed class CoalesceResult<out T> {
 }
 
 /**
+ * Predicate interface for coalescing adjacent items.
+ */
+fun interface CoalescePredicate<T> {
+    /** Attempt to coalesce a pair of items. */
+    fun coalescePair(t: T, item: T): CoalesceResult<T>
+}
+
+/**
  * An iterator adaptor that may join together adjacent elements.
  *
  * See [coalesce] for more information.
  */
 class CoalesceBy<T>(
     private val iter: Iterator<T>,
-    private val f: (T, T) -> CoalesceResult<T>,
+    private val f: CoalescePredicate<T>,
 ) : Iterator<T> {
     private val lastBuf: ArrayDeque<T> = ArrayDeque(1)
 
@@ -43,7 +53,7 @@ class CoalesceBy<T>(
 
         while (iter.hasNext()) {
             val nextItem = iter.next()
-            when (val res = f(current, nextItem)) {
+            when (val res = f.coalescePair(current, nextItem)) {
                 is CoalesceResult.Merged -> {
                     current = res.merged
                 }
@@ -55,19 +65,39 @@ class CoalesceBy<T>(
         }
         return current
     }
+
+    /** Size hint for the coalesce iterator. */
+    fun sizeHint(): SizeHint = SizeHint(if (hasNext()) 1 else 0, null)
+
+    /** Consumes the iterator and folds elements with [init] and [fnAcc]. */
+    fun <Acc> fold(init: Acc, fnAcc: (Acc, T) -> Acc): Acc {
+        var acc = init
+        while (hasNext()) {
+            acc = fnAcc(acc, next())
+        }
+        return acc
+    }
 }
 
 /**
  * Create a new [CoalesceBy] iterator adaptor.
  */
 fun <T> coalesce(iter: Iterator<T>, f: (T, T) -> CoalesceResult<T>): CoalesceBy<T> =
-    CoalesceBy(iter, f)
+    CoalesceBy(iter, CoalescePredicate(f))
 
 /**
  * Create a new [CoalesceBy] iterator adaptor from an [Iterable].
  */
 fun <T> coalesce(iterable: Iterable<T>, f: (T, T) -> CoalesceResult<T>): CoalesceBy<T> =
-    CoalesceBy(iterable.iterator(), f)
+    CoalesceBy(iterable.iterator(), CoalescePredicate(f))
+
+/**
+ * Predicate interface for deduplicating items.
+ */
+fun interface DedupPredicate<T> {
+    /** Determine whether two items should be considered duplicates. */
+    fun dedupPair(a: T, b: T): Boolean
+}
 
 /**
  * An iterator adaptor that removes repeated duplicates, determining equality using a comparison function.
@@ -76,11 +106,11 @@ fun <T> coalesce(iterable: Iterable<T>, f: (T, T) -> CoalesceResult<T>): Coalesc
  */
 class DedupBy<T>(
     private val iter: Iterator<T>,
-    private val same: (T, T) -> Boolean,
+    private val same: DedupPredicate<T>,
 ) : Iterator<T> {
     private val coalesceIter =
         CoalesceBy(iter) { a, b ->
-            if (same(a, b)) {
+            if (same.dedupPair(a, b)) {
                 CoalesceResult.Merged(a)
             } else {
                 CoalesceResult.Separate(a, b)
@@ -90,19 +120,25 @@ class DedupBy<T>(
     override fun hasNext(): Boolean = coalesceIter.hasNext()
 
     override fun next(): T = coalesceIter.next()
+
+    /** Size hint for the dedup iterator. */
+    fun sizeHint(): SizeHint = coalesceIter.sizeHint()
+
+    /** Consumes the iterator and folds elements with [init] and [fnAcc]. */
+    fun <Acc> fold(init: Acc, fnAcc: (Acc, T) -> Acc): Acc = coalesceIter.fold(init, fnAcc)
 }
 
 /**
  * Create a new [DedupBy] iterator.
  */
 fun <T> dedupBy(iter: Iterator<T>, same: (T, T) -> Boolean): DedupBy<T> =
-    DedupBy(iter, same)
+    DedupBy(iter, DedupPredicate(same))
 
 /**
  * Create a new [DedupBy] iterator from an [Iterable].
  */
 fun <T> dedupBy(iterable: Iterable<T>, same: (T, T) -> Boolean): DedupBy<T> =
-    DedupBy(iterable.iterator(), same)
+    DedupBy(iterable.iterator(), DedupPredicate(same))
 
 /**
  * Create a new `dedup` iterator removing repeated equal items.
@@ -122,7 +158,7 @@ fun <T> dedup(iterable: Iterable<T>): DedupBy<T> =
  */
 class DedupByWithCount<T>(
     private val iter: Iterator<T>,
-    private val same: (T, T) -> Boolean,
+    private val same: DedupPredicate<T>,
 ) : Iterator<Pair<Int, T>> {
     private val lastBuf: ArrayDeque<Pair<Int, T>> = ArrayDeque(1)
 
@@ -144,7 +180,7 @@ class DedupByWithCount<T>(
 
         while (iter.hasNext()) {
             val nextItem = iter.next()
-            if (same(item, nextItem)) {
+            if (same.dedupPair(item, nextItem)) {
                 count += 1
             } else {
                 lastBuf.addLast(Pair(1, nextItem))
@@ -153,19 +189,31 @@ class DedupByWithCount<T>(
         }
         return Pair(count, item)
     }
+
+    /** Size hint for the dedup with count iterator. */
+    fun sizeHint(): SizeHint = SizeHint(if (hasNext()) 1 else 0, null)
+
+    /** Consumes the iterator and folds elements with [init] and [fnAcc]. */
+    fun <Acc> fold(init: Acc, fnAcc: (Acc, Pair<Int, T>) -> Acc): Acc {
+        var acc = init
+        while (hasNext()) {
+            acc = fnAcc(acc, next())
+        }
+        return acc
+    }
 }
 
 /**
  * Create a new [DedupByWithCount] iterator.
  */
 fun <T> dedupByWithCount(iter: Iterator<T>, same: (T, T) -> Boolean): DedupByWithCount<T> =
-    DedupByWithCount(iter, same)
+    DedupByWithCount(iter, DedupPredicate(same))
 
 /**
  * Create a new [DedupByWithCount] iterator from an [Iterable].
  */
 fun <T> dedupByWithCount(iterable: Iterable<T>, same: (T, T) -> Boolean): DedupByWithCount<T> =
-    DedupByWithCount(iterable.iterator(), same)
+    DedupByWithCount(iterable.iterator(), DedupPredicate(same))
 
 /**
  * Create a new `dedupWithCount` iterator.

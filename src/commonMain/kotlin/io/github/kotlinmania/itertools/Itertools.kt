@@ -221,13 +221,13 @@ fun <T, U, E> Iterable<ItemResult<T, E>>.filterMapOk(transform: (T) -> U?): Filt
  * Return an iterator adaptor that flattens [ItemResult.Ok] values.
  */
 fun <T, E> Iterator<ItemResult<Iterable<T>, E>>.flattenOk(): FlattenOk<T, E> =
-    FlattenOk(this)
+    io.github.kotlinmania.itertools.flattenOk(this)
 
 /**
  * Return an iterator adaptor that flattens [ItemResult.Ok] values.
  */
 fun <T, E> Iterable<ItemResult<Iterable<T>, E>>.flattenOk(): FlattenOk<T, E> =
-    FlattenOk(iterator())
+    io.github.kotlinmania.itertools.flattenOk(this)
 
 /**
  * Merge two iterators in ascending order.

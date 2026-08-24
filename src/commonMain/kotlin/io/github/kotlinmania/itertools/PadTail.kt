@@ -16,9 +16,18 @@ public class PadUsing<T>(
     private var min: Int,
     private val sourceHint: SizeHint,
     private val filler: (Int) -> T,
+    private val listIterator: ListIterator<T>? = null,
 ) : Iterator<T> {
     private var pos: Int = 0
     private var sourceExhausted: Boolean = false
+
+    constructor(list: List<T>, min: Int, filler: (Int) -> T) : this(
+        list.iterator(),
+        min,
+        SizeHint(list.size, list.size),
+        filler,
+        list.listIterator(list.size),
+    )
 
     override fun hasNext(): Boolean {
         if (!sourceExhausted && iter.hasNext()) return true
@@ -42,6 +51,21 @@ public class PadUsing<T>(
         throw NoSuchElementException("PadUsing exhausted")
     }
 
+    /** Returns the next element from the back when double-ended iteration is available. */
+    fun nextBack(): T? {
+        val li = listIterator ?: return null
+        val remaining = li.previousIndex() + 1
+        return if (min == 0) {
+            if (li.hasPrevious()) li.previous() else null
+        } else if (remaining >= min) {
+            min -= 1
+            li.previous()
+        } else {
+            min -= 1
+            filler(min)
+        }
+    }
+
     /** Returns the size hint. */
     fun sizeHint(): SizeHint {
         val tail = if (pos < min) min - pos else 0
@@ -54,6 +78,25 @@ public class PadUsing<T>(
         var acc = initial
         while (hasNext()) {
             acc = operation(acc, next())
+        }
+        return acc
+    }
+
+    /** Consumes the adaptor with a right fold. */
+    fun <B> rfold(initial: B, operation: (B, T) -> B): B {
+        val li = listIterator
+        if (li != null) {
+            var acc = initial
+            while (true) {
+                val item = nextBack() ?: break
+                acc = operation(acc, item)
+            }
+            return acc
+        }
+        val items = asSequence().toList()
+        var acc = initial
+        for (i in items.indices.reversed()) {
+            acc = operation(acc, items[i])
         }
         return acc
     }
@@ -86,7 +129,11 @@ public fun <T> padUsing(iter: Iterator<T>, min: Int, filler: (Int) -> T): Iterat
  */
 @JvmName("padUsingIterable")
 public fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
-    PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
+    if (iterable is List<T>) {
+        PadUsing(iterable, min, filler)
+    } else {
+        PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
+    }
 
 public fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): Iterator<T> =
     padUsing(this, min, filler)

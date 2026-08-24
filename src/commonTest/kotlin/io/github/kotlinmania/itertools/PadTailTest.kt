@@ -4,6 +4,7 @@ package io.github.kotlinmania.itertools
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class PadTailTest {
     @Test
@@ -59,7 +60,7 @@ class PadTailTest {
     @Test
     fun sizeHintReflectsMinAndRemaining() {
         val src = listOf(1, 2)
-        val it = PadUsing(src.iterator(), 5, SizeHint(src.size, src.size)) { i -> i }
+        val it = PadUsing(src.iterator(), 5, SizeHint(src.size, src.size), { i -> i })
         assertEquals(SizeHint(5, 5), it.sizeHint())
         it.next()
         assertEquals(SizeHint(4, 4), it.sizeHint())
@@ -75,12 +76,31 @@ class PadTailTest {
     @Test
     fun foldVisitsSourceThenFiller() {
         val src = listOf("a", "b")
-        val it = PadUsing(src.iterator(), 4, SizeHint(src.size, src.size)) { i -> "f$i" }
+        val it = PadUsing(src.iterator(), 4, SizeHint(src.size, src.size), { i -> "f$i" })
         val out =
             it.fold(mutableListOf<String>()) { acc, x ->
                 acc.add(x)
                 acc
             }
         assertEquals(listOf("a", "b", "f2", "f3"), out)
+    }
+
+    @Test
+    fun nextBackAndRfold() {
+        val src = listOf(1, 2)
+        val it = PadUsing(src, 5) { i -> (i + 1) * 10 }
+        assertEquals(50, it.nextBack())
+        assertEquals(40, it.nextBack())
+        assertEquals(30, it.nextBack())
+        assertEquals(2, it.nextBack())
+        assertEquals(1, it.nextBack())
+        assertNull(it.nextBack())
+
+        val it2 = PadUsing(src, 5) { i -> (i + 1) * 10 }
+        val rfolded = it2.rfold(mutableListOf<Int>()) { acc, x ->
+            acc.add(x)
+            acc
+        }
+        assertEquals(listOf(50, 40, 30, 2, 1), rfolded)
     }
 }

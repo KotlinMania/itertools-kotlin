@@ -53,6 +53,9 @@ class PeekableIterator<T>(
         }
         return iter.next()
     }
+
+    /** Size hint for the peekable iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
 }
 
 /**
@@ -99,6 +102,9 @@ class PeekingTakeWhile<T>(
         @Suppress("UNCHECKED_CAST")
         return item as T
     }
+
+    /** Size hint for the iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
 }
 
 /**
@@ -106,3 +112,4 @@ class PeekingTakeWhile<T>(
  */
 fun <T> peekingTakeWhile(iter: PeekingNext<T>, predicate: (T) -> Boolean): PeekingTakeWhile<T> =
     PeekingTakeWhile(iter, predicate)
+

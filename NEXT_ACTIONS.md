@@ -5,11 +5,11 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 419/504 matched (target 1112) — 83.1%
-- **Class/type parity:** 102/177 matched (target 210) — 57.6%
-- **Combined symbol parity:** 521/681 matched (target 1322) — 76.5%
-- **Average inline-code cosine:** 0.45 (function body across 49 matched files)
-- **Average documentation cosine:** 0.62 (doc text across 49 matched files)
+- **Function parity:** 427/504 matched (target 1152) — 84.7%
+- **Class/type parity:** 103/177 matched (target 213) — 58.2%
+- **Combined symbol parity:** 530/681 matched (target 1365) — 77.8%
+- **Average inline-code cosine:** 0.46 (function body across 49 matched files)
+- **Average documentation cosine:** 0.61 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 2
 - **Critical Issues:** 40 files with <0.60 function similarity
 
@@ -91,18 +91,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 1)
 - **Missing types:** `Item`
 
-### 6. flatten_ok
-
-- **Target:** `itertools.FlattenOk`
-- **Similarity:** 0.33
-- **Dependents:** 1
-- **Priority Score:** 1030806.7
-- **Functions:** 4/6 matched (target 11)
-- **Missing functions:** `next_back`, `rfold`
-- **Types:** 1/2 matched (target 5)
-- **Missing types:** `Item`
-
-### 7. powerset
+### 6. powerset
 
 - **Target:** `itertools.Powerset`
 - **Similarity:** 0.60
@@ -113,7 +102,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 8. combinations_with_replacement
+### 7. combinations_with_replacement
 
 - **Target:** `itertools.CombinationsWithReplacement`
 - **Similarity:** 0.38
@@ -124,29 +113,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 9. zip_longest
-
-- **Target:** `itertools.ZipLongest`
-- **Similarity:** 0.34
-- **Dependents:** 1
-- **Priority Score:** 1020806.6
-- **Functions:** 5/6 matched (target 15)
-- **Missing functions:** `next_back`
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
-
-### 10. peeking_take_while
-
-- **Target:** `itertools.PeekingTakeWhile`
-- **Similarity:** 0.28
-- **Dependents:** 1
-- **Priority Score:** 1020707.2
-- **Functions:** 3/4 matched (target 16)
-- **Missing functions:** `size_hint`
-- **Types:** 2/3 matched (target 4)
-- **Missing types:** `Item`
-
-### 11. tee
+### 8. tee
 
 - **Target:** `itertools.Tee`
 - **Similarity:** 0.45
@@ -157,7 +124,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
 
-### 12. diff
+### 9. diff
 
 - **Target:** `itertools.Diff`
 - **Similarity:** 0.29
@@ -168,7 +135,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
 
-### 13. adaptors.multi_product
+### 10. adaptors.multi_product
 
 - **Target:** `adaptors.MultiProduct`
 - **Similarity:** 0.55
@@ -179,7 +146,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/4 matched
 - **Missing types:** `Item`
 
-### 14. permutations
+### 11. permutations
 
 - **Target:** `itertools.Permutations`
 - **Similarity:** 0.54
@@ -190,7 +157,29 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 7)
 - **Missing types:** `Item`
 
-### 15. with_position
+### 12. zip_longest
+
+- **Target:** `itertools.ZipLongest`
+- **Similarity:** 0.40
+- **Dependents:** 1
+- **Priority Score:** 1010806.0
+- **Functions:** 6/6 matched (target 18)
+- **Missing functions:** _none_
+- **Types:** 1/2 matched
+- **Missing types:** `Item`
+
+### 13. flatten_ok
+
+- **Target:** `itertools.FlattenOk`
+- **Similarity:** 0.53
+- **Dependents:** 1
+- **Priority Score:** 1010804.8
+- **Functions:** 6/6 matched (target 16)
+- **Missing functions:** _none_
+- **Types:** 1/2 matched (target 5)
+- **Missing types:** `Item`
+
+### 14. with_position
 
 - **Target:** `itertools.WithPosition`
 - **Similarity:** 0.34
@@ -199,6 +188,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
+- **Missing types:** `Item`
+
+### 15. peeking_take_while
+
+- **Target:** `itertools.PeekingTakeWhile`
+- **Similarity:** 0.37
+- **Dependents:** 1
+- **Priority Score:** 1010706.3
+- **Functions:** 4/4 matched (target 18)
+- **Missing functions:** _none_
+- **Types:** 2/3 matched (target 4)
 - **Missing types:** `Item`
 
 ### 16. take_while_inclusive
@@ -226,11 +226,11 @@ Every matched file is listed below with function and type symbol parity.
 ### 18. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce`
-- **Similarity:** 0.24
+- **Similarity:** 0.32
 - **Dependents:** 0
-- **Priority Score:** 182707.6
-- **Functions:** 6/11 matched (target 19)
-- **Missing functions:** `size_hint`, `fold`, `new`, `coalesce_pair`, `dedup_pair`
+- **Priority Score:** 162706.8
+- **Functions:** 8/11 matched (target 27)
+- **Missing functions:** `new`, `coalesce_pair`, `dedup_pair`
 - **Types:** 3/16 matched (target 7)
 - **Missing types:** `CoalescePredicate`, `Item`, `NoCount`, `WithCount`, `CountItem`, `CItem`, `Coalesce`, `DedupPred2CoalescePred`, `DedupPredicate`, `DedupEq`, `Dedup`, `DedupPredWithCount2CoalescePred`, `DedupWithCount`
 
@@ -239,11 +239,11 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `adaptors.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 114410.0
-- **Functions:** 22/28 matched (target 59)
+- **Priority Score:** 104410.0
+- **Functions:** 22/28 matched (target 78)
 - **Missing functions:** `tuple_combinations`, `from`, `test_checked_binomial`, `collect`, `next_back`, `rfold`
-- **Types:** 11/16 matched (target 11)
-- **Missing types:** `Item`, `TupleCombinations`, `HasCombination`, `Tuple1Combination`, `Combination`
+- **Types:** 12/16 matched (target 14)
+- **Missing types:** `Item`, `TupleCombinations`, `HasCombination`, `Combination`
 - **Tests:** 0/1 matched
 
 ### 20. combinations
@@ -358,18 +358,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 5)
 - **Missing types:** `Item`
 
-### 30. pad_tail
-
-- **Target:** `itertools.PadTail`
-- **Similarity:** 0.45
-- **Dependents:** 0
-- **Priority Score:** 30805.5
-- **Functions:** 4/6 matched (target 16)
-- **Missing functions:** `next_back`, `rfold`
-- **Types:** 1/2 matched
-- **Missing types:** `Item`
-
-### 31. kmerge_impl
+### 30. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl`
 - **Similarity:** 0.56
@@ -380,7 +369,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/6 matched (target 5)
 - **Missing types:** `KMergePredicate`, `Item`
 
-### 32. unique_impl
+### 31. unique_impl
 
 - **Target:** `itertools.UniqueImpl`
 - **Similarity:** 0.29
@@ -391,7 +380,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
 
-### 33. multipeek_impl
+### 32. multipeek_impl
 
 - **Target:** `itertools.MultiPeekImpl`
 - **Similarity:** 0.59
@@ -402,7 +391,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
 
-### 34. iter_index
+### 33. iter_index
 
 - **Target:** `itertools.IterIndex`
 - **Similarity:** 0.48
@@ -413,7 +402,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 8)
 - **Missing types:** `Sealed`, `Output`
 
-### 35. grouping_map
+### 34. grouping_map
 
 - **Target:** `itertools.GroupingMap`
 - **Similarity:** 0.64
@@ -424,7 +413,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/5 matched
 - **Missing types:** `Out`
 
-### 36. tuple_impl
+### 35. tuple_impl
 
 - **Target:** `itertools.TupleImpl`
 - **Similarity:** 0.53
@@ -435,7 +424,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 6/7 matched (target 15)
 - **Missing types:** `Item`
 
-### 37. free
+### 36. free
 
 - **Target:** `itertools.Free`
 - **Similarity:** 0.75
@@ -446,7 +435,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/1 matched
 - **Missing types:** `VecIntoIter`
 
-### 38. process_results_impl
+### 37. process_results_impl
 
 - **Target:** `itertools.ProcessResultsImpl`
 - **Similarity:** 0.47
@@ -455,6 +444,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Functions:** 7/7 matched (target 12)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 3)
+- **Missing types:** `Item`
+
+### 38. pad_tail
+
+- **Target:** `itertools.PadTail`
+- **Similarity:** 0.59
+- **Dependents:** 0
+- **Priority Score:** 10804.1
+- **Functions:** 6/6 matched (target 19)
+- **Missing functions:** _none_
+- **Types:** 1/2 matched
 - **Missing types:** `Item`
 
 ### 39. put_back_n_impl
