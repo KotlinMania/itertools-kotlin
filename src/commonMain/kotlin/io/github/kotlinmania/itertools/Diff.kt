@@ -86,6 +86,15 @@ sealed class Diff<T, U> {
         val length: Int,
         val remaining: PutBack<U>,
     ) : Diff<T, U>()
+
+    fun clone(): Diff<T, U> =
+        when (this) {
+            is FirstMismatch -> FirstMismatch(index, firstRemaining, secondRemaining)
+            is Shorter -> Shorter(length, remaining)
+            is Longer -> Longer(length, remaining)
+        }
+
+    fun fmt(): String = toString()
 }
 
 /**

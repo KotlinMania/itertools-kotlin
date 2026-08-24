@@ -122,21 +122,20 @@ class CombinationsWithReplacement<T>(
         if (isExhausted) return 0
         val n = pool.count()
         val base = remainingForWithReplacement(n, first, indices) ?: Int.MAX_VALUE
-        return if (nextItem != null) {
-            if (base == Int.MAX_VALUE) Int.MAX_VALUE else base + 1
-        } else {
-            base
-        }
+        val extra = if (nextItem != null) 1 else 0
+        val total = base.toLong() + extra.toLong()
+        if (total > Int.MAX_VALUE.toLong()) return Int.MAX_VALUE
+        return total.toInt()
     }
 
-    /** Returns the size hint for remaining combinations with replacement. */
+    /**
+     * Equivalent to upstream size hint.
+     */
     fun sizeHint(): SizeHint {
-        if (isExhausted) return SizeHint(0, 0)
         val (low, upp) = pool.sizeHint()
         val rLow = remainingForWithReplacement(low, first, indices) ?: Int.MAX_VALUE
         val rUpp = upp?.let { remainingForWithReplacement(it, first, indices) }
-        val base = SizeHint(rLow, rUpp)
-        return if (nextItem != null) addScalar(base, 1) else base
+        return SizeHint(rLow, rUpp)
     }
 }
 
@@ -167,6 +166,8 @@ private fun remainingForWithReplacement(n: Int, first: Boolean, indices: IntArra
     return sum
 }
 
+
+
 /**
  * Create a new [CombinationsWithReplacement] from an [Iterable].
  */
@@ -187,5 +188,3 @@ fun <T> combinationsWithReplacement(
     k: Int,
     hint: SizeHint = SizeHint(0, null),
 ): CombinationsWithReplacement<T> = CombinationsWithReplacement(iter, k, hint)
-
-

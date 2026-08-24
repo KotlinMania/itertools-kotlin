@@ -272,6 +272,14 @@ sealed class EitherOrBoth<out A, out B> {
         left: @UnsafeVariance A,
         right: @UnsafeVariance B,
     ): Both<A, B> = Both(left, right)
+
+    companion object {
+        fun <A, B> from(either: Either<A, B>): EitherOrBoth<A, B> =
+            when (either) {
+                is Either.Left -> Left(either.value)
+                is Either.Right -> Right(either.value)
+            }
+    }
 }
 
 /**
@@ -284,3 +292,11 @@ fun <T> EitherOrBoth<T, T>.reduce(f: (T, T) -> T): T =
         is EitherOrBoth.Right -> this.value
         is EitherOrBoth.Both -> f(this.left, this.right)
     }
+
+fun <A, B> EitherOrBoth<A, B>.toEither(): Either<A, B>? =
+    when (this) {
+        is EitherOrBoth.Left -> Either.Left(this.value)
+        is EitherOrBoth.Right -> Either.Right(this.value)
+        is EitherOrBoth.Both -> null
+    }
+

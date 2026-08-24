@@ -96,3 +96,19 @@ public fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
         }
     return teeNew(iterable.iterator(), hint)
 }
+
+/**
+ * Splits [iter] into two iterators that both yield the same elements.
+ *
+ * Mirrors `new` from upstream.
+ */
+public fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> = teeNew(iter)
+
+/**
+ * Splits [iterable] into two iterators that both yield the same elements.
+ */
+public fun <T> new(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> = tee(iterable)
+
+
+
+

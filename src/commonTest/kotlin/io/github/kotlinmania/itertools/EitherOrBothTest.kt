@@ -168,4 +168,21 @@ class EitherOrBothTest {
 
         assertEquals(EitherOrBoth.Both(10, "hello"), left.insertBoth(10, "hello"))
     }
+
+    @Test
+    fun testFromAndToEither() {
+        val eitherLeft: Either<Int, String> = Either.Left(10)
+        val eitherRight: Either<Int, String> = Either.Right("foo")
+
+        val fromLeft = EitherOrBoth.from(eitherLeft)
+        val fromRight = EitherOrBoth.from(eitherRight)
+
+        assertEquals(EitherOrBoth.Left(10), fromLeft)
+        assertEquals(EitherOrBoth.Right("foo"), fromRight)
+
+        assertEquals(Either.Left(10), fromLeft.toEither())
+        assertEquals(Either.Right("foo"), fromRight.toEither())
+        assertNull(EitherOrBoth.Both(10, "foo").toEither())
+    }
 }
+
