@@ -9,11 +9,11 @@ import kotlin.test.assertTrue
 
 class UniqueImplTest {
     /**
-     * Mirror of `tests/test_std.rs::unique_by` forward pass.
+     * Mirror of standard tests unique by forward pass.
      *
      * The reverse cases from upstream are not ported because Kotlin's
      * `Iterator` does not implement `DoubleEndedIterator`; the upstream
-     * adaptor only adds a `next_back` impl when the source supports it.
+     * adaptor only adds a reverse iteration impl when the source supports it.
      */
     @Test
     fun uniqueByYieldsEachKeyOnceOnItsFirstOccurrence() {
@@ -23,7 +23,7 @@ class UniqueImplTest {
         assertEquals(ys, actual)
     }
 
-    /** Mirror of `tests/test_std.rs::unique` forward pass. */
+    /** Mirror of standard tests unique forward pass. */
     @Test
     fun uniqueYieldsEachValueOnceOnItsFirstOccurrence() {
         run {

@@ -9,11 +9,11 @@ import kotlin.test.assertTrue
 
 class DuplicatesImplTest {
     /**
-     * Mirror of `tests/test_std.rs::duplicates_by` forward pass.
+     * Mirror of standard tests duplicates by forward pass.
      *
      * The reverse cases from upstream are not ported because Kotlin's
      * `Iterator` does not implement `DoubleEndedIterator`; the upstream
-     * adaptor only adds a `next_back` impl when the source supports it.
+     * adaptor only adds a reverse iteration impl when the source supports it.
      */
     @Test
     fun duplicatesByYieldsEachKeyOnceOnItsSecondOccurrence() {
@@ -23,7 +23,7 @@ class DuplicatesImplTest {
         assertEquals(ys, actual)
     }
 
-    /** Mirror of `tests/test_std.rs::duplicates` forward pass. */
+    /** Mirror of standard tests duplicates forward pass. */
     @Test
     fun duplicatesYieldsEachValueOnceOnItsSecondOccurrence() {
         run {

@@ -40,10 +40,6 @@ internal class IntersperseElementSimple<T>(
 public fun <T> intersperse(iter: Iterator<T>, elt: T): Iterator<T> =
     intersperseWith(iter, IntersperseElementSimple(elt))
 
-/** Convenience overload that derives a source size hint from [iterable]. */
-public fun <T> intersperse(iterable: Iterable<T>, elt: T): Iterator<T> =
-    intersperseWith(iterable, IntersperseElementSimple(elt))
-
 /**
  * An iterator adaptor to insert a particular value created by a function
  * between each element of the adapted iterator.

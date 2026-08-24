@@ -49,6 +49,26 @@ internal class UniqueBy<T, V> internal constructor(
         val newLow = if (sourceHint.lower > 0 && used.isEmpty()) 1 else 0
         return SizeHint(newLow, sourceHint.upper)
     }
+
+    /**
+     * Counts remaining unique elements.
+     */
+    fun count(): Int {
+        val currentUsed = used.size
+        while (iter.hasNext()) {
+            used[f(iter.next())] = Unit
+        }
+        return used.size - currentUsed + buffered.size
+    }
+}
+
+/** Count the number of new unique keys in iterable (`used` is the set already seen). */
+internal fun <K> countNewKeys(used: HashMap<K, Unit>, iterable: Iterable<K>): Int {
+    val currentUsed = used.size
+    for (key in iterable) {
+        used[key] = Unit
+    }
+    return used.size - currentUsed
 }
 
 /** Create a new `UniqueBy` iterator. */

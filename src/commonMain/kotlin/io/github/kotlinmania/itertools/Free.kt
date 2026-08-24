@@ -9,6 +9,12 @@ package io.github.kotlinmania.itertools
  */
 
 /**
+ * Iterate [iterable] with a particular value inserted between each element.
+ */
+fun <T> intersperse(iterable: Iterable<T>, element: T): Iterator<T> =
+    intersperseWith(iterable, IntersperseElementSimple(element))
+
+/**
  * Iterate [iterable] with a particular value created by a function inserted
  * between each element.
  */
