@@ -121,7 +121,3 @@ public fun <T> Iterator<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
  */
 @JvmName("teeIterableExt")
 public fun <T> Iterable<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
-
-
-
-

@@ -108,8 +108,6 @@ private fun remainingFor(n: Int, k: Int): Int? {
     return sum
 }
 
-
-
 /**
  * Create a new [Powerset] from an [Iterable].
  */
@@ -127,4 +125,3 @@ fun <T> powerset(src: Iterable<T>): Powerset<T> {
  */
 fun <T> powerset(src: Iterator<T>, hint: SizeHint = SizeHint(0, null)): Powerset<T> =
     Powerset(src, hint)
-

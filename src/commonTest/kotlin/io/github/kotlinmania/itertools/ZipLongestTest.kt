@@ -86,10 +86,11 @@ class ZipLongestTest {
         val a = listOf(1, 2)
         val b = listOf("x", "y", "z")
         val it = zipLongest(a, b)
-        val list = it.rfold(mutableListOf<EitherOrBoth<Int, String>>()) { acc, item ->
-            acc.add(item)
-            acc
-        }
+        val list =
+            it.rfold(mutableListOf<EitherOrBoth<Int, String>>()) { acc, item ->
+                acc.add(item)
+                acc
+            }
         assertEquals(
             listOf(
                 EitherOrBoth.Right("z"),

@@ -97,10 +97,11 @@ class PadTailTest {
         assertNull(it.nextBack())
 
         val it2 = PadUsing(src, 5) { i -> (i + 1) * 10 }
-        val rfolded = it2.rfold(mutableListOf<Int>()) { acc, x ->
-            acc.add(x)
-            acc
-        }
+        val rfolded =
+            it2.rfold(mutableListOf<Int>()) { acc, x ->
+                acc.add(x)
+                acc
+            }
         assertEquals(listOf(50, 40, 30, 2, 1), rfolded)
     }
 }

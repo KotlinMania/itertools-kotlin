@@ -185,4 +185,3 @@ class EitherOrBothTest {
         assertNull(EitherOrBoth.Both(10, "foo").toEither())
     }
 }
-

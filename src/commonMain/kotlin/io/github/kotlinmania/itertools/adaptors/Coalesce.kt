@@ -80,6 +80,7 @@ class CoalesceBy<T>(
 
     companion object {
         fun <T> new(iter: Iterator<T>, f: CoalescePredicate<T>): CoalesceBy<T> = CoalesceBy(iter, f)
+
         fun <T> new(iter: Iterator<T>, f: (T, T) -> CoalesceResult<T>): CoalesceBy<T> = CoalesceBy(iter, CoalescePredicate(f))
     }
 }
@@ -134,6 +135,7 @@ class DedupBy<T>(
 
     companion object {
         fun <T> new(iter: Iterator<T>, same: DedupPredicate<T>): DedupBy<T> = DedupBy(iter, same)
+
         fun <T> new(iter: Iterator<T>, same: (T, T) -> Boolean): DedupBy<T> = DedupBy(iter, DedupPredicate(same))
     }
 }
@@ -214,6 +216,7 @@ class DedupByWithCount<T>(
 
     companion object {
         fun <T> new(iter: Iterator<T>, same: DedupPredicate<T>): DedupByWithCount<T> = DedupByWithCount(iter, same)
+
         fun <T> new(iter: Iterator<T>, same: (T, T) -> Boolean): DedupByWithCount<T> = DedupByWithCount(iter, DedupPredicate(same))
     }
 }

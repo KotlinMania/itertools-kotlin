@@ -46,4 +46,3 @@ public fun <K, V> Iterator<V>.intoGroupMapBy(f: (V) -> K): Map<K, List<V>> =
  */
 public fun <K, V> Iterable<V>.intoGroupMapBy(f: (V) -> K): Map<K, List<V>> =
     intoGroupMapBy(iterator(), f)
-

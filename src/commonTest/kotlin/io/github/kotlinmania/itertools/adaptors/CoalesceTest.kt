@@ -45,9 +45,10 @@ class CoalesceTest {
     @Test
     fun testCoalesceFoldAndSizeHint() {
         val list = listOf(1, 2, 3, 4)
-        val iter = coalesce(list) { a, b ->
-            CoalesceResult.Merged(a + b)
-        }
+        val iter =
+            coalesce(list) { a, b ->
+                CoalesceResult.Merged(a + b)
+            }
         assertEquals(SizeHint(1, null), iter.sizeHint())
         val sum = iter.fold(0) { acc, x -> acc + x }
         assertEquals(10, sum)

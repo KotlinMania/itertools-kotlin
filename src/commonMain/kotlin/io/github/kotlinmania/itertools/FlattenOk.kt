@@ -203,6 +203,3 @@ fun <T, E> flattenOk(iterable: Iterable<ItemResult<Iterable<T>, E>>): FlattenOk<
     } else {
         FlattenOk(iterable.iterator())
     }
-
-
-
