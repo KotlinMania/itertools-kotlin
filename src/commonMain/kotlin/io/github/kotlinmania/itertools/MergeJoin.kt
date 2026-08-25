@@ -13,15 +13,24 @@ object MergeLte
 typealias Merge<T> = MergeBy<T>
 
 /**
+ * Trait representing a function over L and R.
+ */
+interface FuncLR<L, R, T>
+
+/**
  * Interface representing merge comparison strategy producing either values or [EitherOrBoth].
  */
 interface OrderingOrBool<L, R, Res> {
+    /** Produce the result for a left-only element. */
     fun left(left: L): Res
 
+    /** Produce the result for a right-only element. */
     fun right(right: R): Res
 
+    /** Merge two elements. */
     fun merge(left: L, right: R): Pair<Either<L, R>?, Res>
 
+    /** Compute combined size hint. */
     fun sizeHint(left: SizeHint, right: SizeHint): SizeHint
 }
 
@@ -30,7 +39,15 @@ interface OrderingOrBool<L, R, Res> {
  */
 class MergeFuncLR<F, T>(
     val f: F,
-)
+) : FuncLR<Any?, Any?, T> {
+    companion object {
+        /** Create a left-only [EitherOrBoth] result. */
+        fun <L, R> left(left: L): EitherOrBoth<L, R> = EitherOrBoth.Left(left)
+
+        /** Create a right-only [EitherOrBoth] result. */
+        fun <L, R> right(right: R): EitherOrBoth<L, R> = EitherOrBoth.Right(right)
+    }
+}
 
 /**
  * An iterator adaptor that merges the two base iterators in ascending order.

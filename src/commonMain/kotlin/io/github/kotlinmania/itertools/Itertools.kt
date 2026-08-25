@@ -1515,6 +1515,82 @@ fun <A, B> Iterable<Pair<A, B>>.multiunzip(): Pair<List<A>, List<B>> =
  */
 fun <T> Iterator<T>.tryLen(): ItemResult<Int, SizeHint> = ItemResult.Err(SizeHint(0, null))
 
+/**
+ * Return the element at the given index in the iterator, or `null` if the index is out of bounds.
+ */
+fun <T> Iterator<T>.get(index: Int): T? {
+    if (index < 0) return null
+    var i = 0
+    while (hasNext()) {
+        val elt = next()
+        if (i == index) return elt
+        i += 1
+    }
+    return null
+}
+
+/**
+ * Return the element at the given index in the iterable, or `null` if the index is out of bounds.
+ */
+fun <T> Iterable<T>.get(index: Int): T? = iterator().get(index)
+
+/**
+ * Advances the iterator and returns the next items grouped in a list of size [n], or `null` if not enough elements remain.
+ */
+fun <T> Iterator<T>.nextArray(n: Int): List<T>? {
+    val list = ArrayList<T>(n)
+    for (i in 0 until n) {
+        if (!hasNext()) return null
+        list.add(next())
+    }
+    return list
+}
+
+/**
+ * Collects all items from the iterator into a list of size [n] if exactly [n] elements remain, or `null` otherwise.
+ */
+fun <T> Iterator<T>.collectArray(n: Int): List<T>? {
+    val arr = nextArray(n) ?: return null
+    if (hasNext()) return null
+    return arr
+}
+
+/**
+ * Advances the iterator and returns the next two items as a pair, or `null` if not enough elements remain.
+ */
+fun <T> Iterator<T>.nextTuple(): Pair<T, T>? {
+    if (!hasNext()) return null
+    val a = next()
+    if (!hasNext()) return null
+    val b = next()
+    return Pair(a, b)
+}
+
+/**
+ * Collects all items from the iterator into a pair if exactly two elements remain, or `null` otherwise.
+ */
+fun <T> Iterator<T>.collectTuple(): Pair<T, T>? {
+    val tup = nextTuple() ?: return null
+    if (hasNext()) return null
+    return tup
+}
+
+/**
+ * Return an iterator adaptor that maps each element using [transform].
+ */
+fun <T, R> Iterator<T>.mapInto(transform: (T) -> R): Iterator<R> =
+    iterator {
+        while (hasNext()) {
+            yield(transform(next()))
+        }
+    }
+
+/**
+ * Return an iterable adaptor that maps each element using [transform].
+ */
+fun <T, R> Iterable<T>.mapInto(transform: (T) -> R): Iterator<R> =
+    iterator().mapInto(transform)
+
 // ---------------------------------------------------------------------------
 // Free Functions
 // ---------------------------------------------------------------------------
