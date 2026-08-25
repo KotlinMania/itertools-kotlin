@@ -5,11 +5,11 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 450/504 matched (target 1204) — 89.3%
-- **Class/type parity:** 109/177 matched (target 220) — 61.6%
-- **Combined symbol parity:** 559/681 matched (target 1424) — 82.1%
-- **Average inline-code cosine:** 0.50 (function body across 49 matched files)
-- **Average documentation cosine:** 0.62 (doc text across 49 matched files)
+- **Function parity:** 456/504 matched (target 1216) — 90.5%
+- **Class/type parity:** 119/177 matched (target 230) — 67.2%
+- **Combined symbol parity:** 575/681 matched (target 1446) — 84.4%
+- **Average inline-code cosine:** 0.51 (function body across 49 matched files)
+- **Average documentation cosine:** 0.63 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
 - **Critical Issues:** 37 files with <0.60 function similarity
 
@@ -223,30 +223,19 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/5 matched (target 14)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
 
-### 18. adaptors.coalesce
-
-- **Target:** `adaptors.Coalesce`
-- **Similarity:** 0.34
-- **Dependents:** 0
-- **Priority Score:** 152706.6
-- **Functions:** 9/11 matched (target 33)
-- **Missing functions:** `coalesce_pair`, `dedup_pair`
-- **Types:** 3/16 matched (target 7)
-- **Missing types:** `CoalescePredicate`, `Item`, `NoCount`, `WithCount`, `CountItem`, `CItem`, `Coalesce`, `DedupPred2CoalescePred`, `DedupPredicate`, `DedupEq`, `Dedup`, `DedupPredWithCount2CoalescePred`, `DedupWithCount`
-
-### 19. adaptors.mod
+### 18. adaptors.mod
 
 - **Target:** `adaptors.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 104410.0
-- **Functions:** 22/28 matched (target 78)
-- **Missing functions:** `tuple_combinations`, `from`, `test_checked_binomial`, `collect`, `next_back`, `rfold`
-- **Types:** 12/16 matched (target 14)
-- **Missing types:** `Item`, `TupleCombinations`, `HasCombination`, `Combination`
+- **Priority Score:** 74410.0
+- **Functions:** 23/28 matched (target 83)
+- **Missing functions:** `from`, `test_checked_binomial`, `collect`, `next_back`, `rfold`
+- **Types:** 14/16 matched
+- **Missing types:** `Item`, `Combination`
 - **Tests:** 0/1 matched
 
-### 20. groupbylazy
+### 19. groupbylazy
 
 - **Target:** `itertools.Groupbylazy`
 - **Similarity:** 0.35
@@ -257,6 +246,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 10/13 matched (target 11)
 - **Missing types:** `Key`, `Item`, `IntoIter`
 - **Lint issues:** 1
+
+### 20. adaptors.coalesce
+
+- **Target:** `adaptors.Coalesce`
+- **Similarity:** 0.52
+- **Dependents:** 0
+- **Priority Score:** 52704.8
+- **Functions:** 11/11 matched (target 36)
+- **Missing functions:** _none_
+- **Types:** 11/16 matched (target 15)
+- **Missing types:** `CoalescePredicate`, `Item`, `CountItem`, `CItem`, `DedupPredicate`
 
 ### 21. next_array
 
@@ -270,18 +270,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
 
-### 22. rciter_impl
-
-- **Target:** `itertools.RcIterImpl`
-- **Similarity:** 0.18
-- **Dependents:** 0
-- **Priority Score:** 50808.2
-- **Functions:** 2/5 matched (target 9)
-- **Missing functions:** `size_hint`, `next_back`, `into_iter`
-- **Types:** 1/3 matched (target 2)
-- **Missing types:** `Item`, `IntoIter`
-
-### 23. duplicates_impl
+### 22. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl`
 - **Similarity:** 0.61
@@ -292,7 +281,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 9/11 matched (target 10)
 - **Missing types:** `Item`, `Container`
 
-### 24. format
+### 23. format
 
 - **Target:** `itertools.Format`
 - **Similarity:** 0.17
@@ -303,7 +292,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `PutBackOnDrop`
 
-### 25. merge_join
+### 24. merge_join
 
 - **Target:** `itertools.MergeJoin`
 - **Similarity:** 0.23
@@ -314,7 +303,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 7/10 matched (target 8)
 - **Missing types:** `T`, `MergeResult`, `Item`
 
-### 26. adaptors.map
+### 25. adaptors.map
 
 - **Target:** `adaptors.Map`
 - **Similarity:** 0.39
@@ -325,7 +314,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 6/8 matched (target 7)
 - **Missing types:** `Item`, `Out`
 
-### 27. intersperse
+### 26. intersperse
 
 - **Target:** `itertools.Intersperse`
 - **Similarity:** 0.50
@@ -336,7 +325,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/5 matched (target 6)
 - **Missing types:** `IntersperseElement`, `Intersperse`, `Item`
 
-### 28. kmerge_impl
+### 27. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl`
 - **Similarity:** 0.54
@@ -347,7 +336,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/6 matched (target 5)
 - **Missing types:** `KMergePredicate`, `Item`
 
-### 29. exactly_one_err
+### 28. exactly_one_err
 
 - **Target:** `itertools.ExactlyOneErr`
 - **Similarity:** 0.33
@@ -357,6 +346,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fmt`
 - **Types:** 1/2 matched (target 5)
 - **Missing types:** `Item`
+
+### 29. rciter_impl
+
+- **Target:** `itertools.RcIterImpl`
+- **Similarity:** 0.55
+- **Dependents:** 0
+- **Priority Score:** 20804.5
+- **Functions:** 5/5 matched (target 13)
+- **Missing functions:** _none_
+- **Types:** 1/3 matched (target 2)
+- **Missing types:** `Item`, `IntoIter`
 
 ### 30. iter_index
 

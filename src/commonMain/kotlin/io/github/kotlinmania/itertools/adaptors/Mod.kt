@@ -369,6 +369,51 @@ class Tuple3Combination<T>(
 }
 
 /**
+ * Trait/interface for combination types.
+ */
+interface HasCombination<T>
+
+/**
+ * An iterator adaptor that produces combinations of elements.
+ */
+class TupleCombinations<T, C>(
+    private val combination: Iterator<C>,
+) : Iterator<C> {
+    override fun hasNext(): Boolean = combination.hasNext()
+
+    override fun next(): C = combination.next()
+
+    fun count(): Int =
+        when (combination) {
+            is Tuple1Combination<*> -> combination.count()
+            is Tuple2Combination<*> -> combination.count()
+            is Tuple3Combination<*> -> combination.count()
+            else -> {
+                var c = 0
+                while (combination.hasNext()) {
+                    combination.next()
+                    c++
+                }
+                c
+            }
+        }
+
+    fun <B> fold(init: B, f: (B, C) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [TupleCombinations] iterator for 2-combinations.
+ */
+fun <T> tupleCombinations(iterable: Iterable<T>): Tuple2Combination<T> =
+    Tuple2Combination(iterable.toList())
+
+/**
  * An iterator to iterate through all combinations in a sequence that produces tuples of size 2.
  */
 fun <T> tupleCombinations2(iterable: Iterable<T>): Tuple2Combination<T> =
