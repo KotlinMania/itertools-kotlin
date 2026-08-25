@@ -826,6 +826,8 @@ private sealed class Result<out T, out E> {
     ) : Result<Nothing, E>()
 }
 
+private typealias State<T> = Result<T, T?>
+
 /**
  * Synonym for [treeReduce].
  */

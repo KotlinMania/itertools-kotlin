@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 441/504 matched (target 1178) — 87.5%
-- **Class/type parity:** 105/177 matched (target 215) — 59.3%
-- **Combined symbol parity:** 546/681 matched (target 1393) — 80.2%
+- **Function parity:** 447/504 matched (target 1186) — 88.7%
+- **Class/type parity:** 106/177 matched (target 216) — 59.9%
+- **Combined symbol parity:** 553/681 matched (target 1402) — 81.2%
 - **Average inline-code cosine:** 0.48 (function body across 49 matched files)
 - **Average documentation cosine:** 0.61 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 2
@@ -215,13 +215,13 @@ Every matched file is listed below with function and type symbol parity.
 ### 17. lib
 
 - **Target:** `itertools.Itertools`
-- **Similarity:** 0.37
+- **Similarity:** 0.39
 - **Dependents:** 0
-- **Priority Score:** 424206.3
-- **Functions:** 100/137 matched (target 183)
-- **Missing functions:** `get`, `zip_longest`, `zip_eq`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `map_into`, `process_results`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `take_while_inclusive`, `tuple_combinations`, `array_combinations`, `pad_using`, `with_position`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple`, `format`, `format_with`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`
-- **Types:** 1/5 matched (target 13)
-- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`, `State`
+- **Priority Score:** 354206.2
+- **Functions:** 106/137 matched (target 191)
+- **Missing functions:** `zip_longest`, `zip_eq`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `process_results`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `take_while_inclusive`, `tuple_combinations`, `array_combinations`, `pad_using`, `with_position`, `format`, `format_with`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`
+- **Types:** 2/5 matched (target 14)
+- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
 
 ### 18. adaptors.coalesce
 
