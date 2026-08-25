@@ -8,7 +8,7 @@ import kotlin.test.assertNull
 
 class FlattenOkTest {
     @Test
-    fun testFlattenOkMixed() {
+    fun flattenOkMixed() {
         val input: List<ItemResult<List<Int>, String>> =
             listOf(
                 ItemResult.Ok(listOf(0, 1)),
@@ -34,7 +34,7 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkEmpty() {
+    fun flattenOkEmpty() {
         val input = emptyList<ItemResult<List<Int>, String>>()
         val it = flattenOk(input)
         assertFalse(it.hasNext())
@@ -42,7 +42,7 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkMixedExpectedForward() {
+    fun flattenOkMixedExpectedForward() {
         val mixData =
             listOf(
                 ItemResult.Ok(listOf(0, 1)),
@@ -66,7 +66,7 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkMixedExpectedReverse() {
+    fun flattenOkMixedExpectedReverse() {
         val mixData =
             listOf(
                 ItemResult.Ok(listOf(0, 1)),
@@ -96,7 +96,50 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkCollectOkForward() {
+    fun flattenOkCollectMixedForward() {
+        val mixData =
+            listOf(
+                ItemResult.Ok(listOf(0, 1)),
+                ItemResult.Err(false),
+                ItemResult.Ok(listOf(2, 3)),
+                ItemResult.Err(true),
+                ItemResult.Ok(listOf(4, 5)),
+            )
+        val it = flattenOk(mixData)
+        var firstErr: Boolean? = null
+        for (item in it) {
+            if (item is ItemResult.Err) {
+                firstErr = item.error
+                break
+            }
+        }
+        assertEquals(false, firstErr)
+    }
+
+    @Test
+    fun flattenOkCollectMixedReverse() {
+        val mixData =
+            listOf(
+                ItemResult.Ok(listOf(0, 1)),
+                ItemResult.Err(false),
+                ItemResult.Ok(listOf(2, 3)),
+                ItemResult.Err(true),
+                ItemResult.Ok(listOf(4, 5)),
+            )
+        val it = flattenOk(mixData)
+        var firstErr: Boolean? = null
+        while (true) {
+            val item = it.nextBack() ?: break
+            if (item is ItemResult.Err) {
+                firstErr = item.error
+                break
+            }
+        }
+        assertEquals(true, firstErr)
+    }
+
+    @Test
+    fun flattenOkCollectOkForward() {
         val okData =
             listOf(
                 ItemResult.Ok(listOf(0, 1)),
@@ -108,7 +151,7 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkCollectOkReverse() {
+    fun flattenOkCollectOkReverse() {
         val okData: List<ItemResult<List<Int>, String>> =
             listOf(
                 ItemResult.Ok(listOf(0, 1)),
@@ -126,7 +169,7 @@ class FlattenOkTest {
     }
 
     @Test
-    fun testFlattenOkFoldAndRfold() {
+    fun flattenOkFoldAndRfold() {
         val okData: List<ItemResult<List<Int>, String>> =
             listOf(
                 ItemResult.Ok(listOf(1, 2)),

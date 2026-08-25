@@ -2,43 +2,86 @@
 package io.github.kotlinmania.itertools
 
 /**
- * An iterator to iterate through all the `k`-length combinations in an iterator.
- *
- * See [combinations] for more information.
+ * A type holding indices of elements in a pool or buffer of items from an inner iterator
+ * and used to pick out different combinations in a generic way.
  */
-class Combinations<T>(
+interface PoolIndex<T, R> {
+    /** Extracts an item from the pool corresponding to current indices. */
+    fun extractItem(pool: List<T>): R
+
+    /** Returns the length of the indices. */
+    fun len(): Int
+
+    /** Number of elements in the indices. */
+    val size: Int get() = len()
+
+    /** Gets the index at position [i]. */
+    operator fun get(i: Int): Int
+
+    /** Sets the index at position [i] to [value]. */
+    operator fun set(i: Int, value: Int)
+
+    /** Returns an IntArray copy of the indices. */
+    fun toIntArray(): IntArray
+}
+
+/**
+ * PoolIndex implementation for List<T> results.
+ */
+class ListPoolIndex<T>(var indices: IntArray) : PoolIndex<T, List<T>> {
+    override fun extractItem(pool: List<T>): List<T> = pool
+    override fun len(): Int = indices.size
+    override operator fun get(i: Int): Int = indices[i]
+    override operator fun set(i: Int, value: Int) { indices[i] = value }
+    override fun toIntArray(): IntArray = indices
+    fun reset(k: Int) {
+        indices = IntArray(k) { it }
+    }
+}
+
+/**
+ * PoolIndex implementation for array-like results.
+ */
+class ArrayPoolIndex<T>(private val indices: IntArray) : PoolIndex<T, List<T>> {
+    override fun extractItem(pool: List<T>): List<T> = pool
+    override fun len(): Int = indices.size
+    override operator fun get(i: Int): Int = indices[i]
+    override operator fun set(i: Int, value: Int) { indices[i] = value }
+    override fun toIntArray(): IntArray = indices
+}
+
+/**
+ * An iterator to iterate through all combinations in an iterator in a generic way.
+ *
+ * See [combinations] and [arrayCombinations] for more information.
+ */
+open class CombinationsGeneric<T, Idx : PoolIndex<T, R>, R>(
     iter: Iterator<T>,
-    private var kVal: Int,
+    internal val indices: Idx,
     sourceHint: SizeHint = SizeHint(0, null),
-) : Iterator<List<T>> {
-    private var indices: IntArray = IntArray(kVal) { it }
+) : Iterator<R> {
     private val pool: LazyBuffer<T> = LazyBuffer(iter, sourceHint)
-    private var first: Boolean = true
+    protected var first: Boolean = true
 
     /** Returns the length of a combination produced by this iterator. */
-    fun k(): Int = indices.size
+    fun k(): Int = indices.len()
 
     /** Returns the length of a combination produced by this iterator. */
-    fun len(): Int = indices.size
+    fun len(): Int = indices.len()
 
     /**
      * Returns the current length of the pool from which combination elements are selected.
      */
     fun n(): Int = pool.length
 
-    companion object {
-        fun <T> new(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
-            Combinations(iter, k, hint)
-    }
-
     internal fun src(): LazyBuffer<T> = pool
 
     internal fun nAndCount(): Pair<Int, Int> {
         val n = pool.count()
-        return Pair(n, remainingFor(n, first, indices) ?: 0)
+        return Pair(n, remainingFor(n, first, indices.toIntArray()) ?: 0)
     }
 
-    private fun init(): Boolean {
+    protected fun init(): Boolean {
         pool.prefill(k())
         val done = k() > n()
         if (!done) {
@@ -47,16 +90,16 @@ class Combinations<T>(
         return done
     }
 
-    private fun incrementIndices(): Boolean {
-        if (indices.isEmpty()) {
+    protected fun incrementIndices(): Boolean {
+        if (indices.len() == 0) {
             return true
         }
-        var i = indices.size - 1
+        var i = indices.len() - 1
         if (indices[i] == pool.length - 1) {
             pool.getNext()
         }
 
-        while (indices[i] == i + pool.length - indices.size) {
+        while (indices[i] == i + pool.length - indices.len()) {
             if (i > 0) {
                 i -= 1
             } else {
@@ -65,13 +108,13 @@ class Combinations<T>(
         }
 
         indices[i] += 1
-        for (j in (i + 1) until indices.size) {
+        for (j in (i + 1) until indices.len()) {
             indices[j] = indices[j - 1] + 1
         }
         return false
     }
 
-    internal fun tryNthResult(n: Int): ItemResult<List<T>, Int> {
+    internal fun tryNthResult(n: Int): ItemResult<R, Int> {
         val done =
             if (first) {
                 init()
@@ -84,17 +127,17 @@ class Combinations<T>(
                 return ItemResult.Err(i + 1)
             }
         }
-        return ItemResult.Ok(pool.getAt(indices))
+        return ItemResult.Ok(indices.extractItem(pool.getAt(indices.toIntArray())))
     }
 
-    internal fun tryNth(n: Int): List<T>? =
+    internal fun tryNth(n: Int): R? =
         when (val res = tryNthResult(n)) {
             is ItemResult.Ok -> res.value
             is ItemResult.Err -> null
         }
 
     /** Returns the n-th combination without iterating through the preceding ones manually. */
-    fun nth(n: Int): List<T>? = tryNth(n)
+    fun nth(n: Int): R? = tryNth(n)
 
     /** Returns the total count of remaining combinations. */
     fun count(): Int = nAndCount().second
@@ -104,19 +147,18 @@ class Combinations<T>(
             pool.prefill(k())
             return k() <= n()
         }
-        // Check if next combination can be produced
-        if (indices.isEmpty()) return false
-        var i = indices.size - 1
+        if (indices.len() == 0) return false
+        var i = indices.len() - 1
         if (indices[i] == pool.length - 1) {
             pool.getNext()
         }
-        while (i >= 0 && indices[i] == i + pool.length - indices.size) {
+        while (i >= 0 && indices[i] == i + pool.length - indices.len()) {
             if (i > 0) i -= 1 else return false
         }
         return true
     }
 
-    override fun next(): List<T> {
+    override fun next(): R {
         val done =
             if (first) {
                 init()
@@ -126,24 +168,53 @@ class Combinations<T>(
         if (done) {
             throw NoSuchElementException("Combinations exhausted")
         }
-        return pool.getAt(indices)
-    }
-
-    internal fun reset(newK: Int) {
-        first = true
-        kVal = newK
-        indices = IntArray(newK) { it }
-        pool.prefill(newK)
+        return indices.extractItem(pool.getAt(indices.toIntArray()))
     }
 
     /** Size hint for remaining combinations. */
     fun sizeHint(): SizeHint {
         val (low, upp) = pool.sizeHint()
-        val rLow = remainingFor(low, first, indices) ?: Int.MAX_VALUE
-        val rUpp = upp?.let { remainingFor(it, first, indices) }
+        val rLow = remainingFor(low, first, indices.toIntArray()) ?: Int.MAX_VALUE
+        val rUpp = upp?.let { remainingFor(it, first, indices.toIntArray()) }
         return SizeHint(rLow, rUpp)
     }
+
+    internal fun resetPool(newK: Int) {
+        first = true
+        pool.prefill(newK)
+    }
 }
+
+/**
+ * An iterator to iterate through all the `k`-length combinations in an iterator.
+ *
+ * See [combinations] for more information.
+ */
+class Combinations<T>(
+    iter: Iterator<T>,
+    kVal: Int,
+    sourceHint: SizeHint = SizeHint(0, null),
+) : CombinationsGeneric<T, ListPoolIndex<T>, List<T>>(
+    iter,
+    ListPoolIndex(IntArray(kVal) { it }),
+    sourceHint,
+) {
+    companion object {
+        fun <T> new(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
+            Combinations(iter, k, hint)
+    }
+
+    internal fun reset(newK: Int) {
+        first = true
+        indices.reset(newK)
+        resetPool(newK)
+    }
+}
+
+/**
+ * An iterator for fixed-size combinations returned by [arrayCombinations].
+ */
+typealias ArrayCombinations<T> = Combinations<T>
 
 /**
  * Calculates binomial coefficient (n choose k), or null if overflow occurs.
@@ -151,7 +222,7 @@ class Combinations<T>(
 internal fun checkedBinomial(n: Int, k: Int): Int? {
     if (n < k || k < 0 || n < 0) return 0
     var nVar = n
-    var kVar = (n - k).coerceAtMost(k)
+    val kVar = (n - k).coerceAtMost(k)
     var c: Long = 1
     for (i in 1..kVar) {
         val term1 = (c / i) * nVar
@@ -190,6 +261,15 @@ fun <T> combinations(iterable: Iterable<T>, k: Int): Combinations<T> {
     val hint =
         when (iterable) {
             is Collection<*> -> SizeHint(iterable.size, iterable.size)
+            is IntProgression -> {
+                val count =
+                    if (iterable.step > 0) {
+                        if (iterable.first <= iterable.last) (iterable.last - iterable.first) / iterable.step + 1 else 0
+                    } else {
+                        if (iterable.first >= iterable.last) (iterable.first - iterable.last) / (-iterable.step) + 1 else 0
+                    }
+                SizeHint(count, count)
+            }
             else -> SizeHint(0, null)
         }
     return Combinations(iterable.iterator(), k, hint)
@@ -199,4 +279,16 @@ fun <T> combinations(iterable: Iterable<T>, k: Int): Combinations<T> {
  * Create a new [Combinations] iterator adaptor from an iterator.
  */
 fun <T> combinations(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
+    Combinations(iter, k, hint)
+
+/**
+ * Create a new [ArrayCombinations] iterator adaptor.
+ */
+fun <T> arrayCombinations(iterable: Iterable<T>, k: Int): Combinations<T> =
+    combinations(iterable, k)
+
+/**
+ * Create a new [ArrayCombinations] iterator adaptor from an iterator.
+ */
+fun <T> arrayCombinations(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
     Combinations(iter, k, hint)

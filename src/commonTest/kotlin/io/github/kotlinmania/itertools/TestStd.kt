@@ -90,7 +90,7 @@ class TestStd {
     }
 
     @Test
-    fun testIntersperse() {
+    fun intersperse() {
         val xs = listOf("a", "", "b", "c")
         val v = intersperse(xs, ", ").asSequence().toList()
         val text = v.joinToString("")
@@ -102,7 +102,7 @@ class TestStd {
     }
 
     @Test
-    fun testDedup() {
+    fun dedup() {
         val xs = listOf(0, 1, 1, 1, 2, 1, 3, 3)
         val ys = listOf(0, 1, 2, 1, 3)
         assertEquals(ys, dedup(xs).asSequence().toList())
@@ -113,7 +113,7 @@ class TestStd {
     }
 
     @Test
-    fun testCoalesce() {
+    fun coalesce() {
         val data = listOf(-1.0, -2.0, -3.0, 3.0, 1.0, 0.0, -1.0)
         val it =
             coalesce(data) { x: Double, y: Double ->
@@ -127,7 +127,7 @@ class TestStd {
     }
 
     @Test
-    fun testDedupBy() {
+    fun dedupBy() {
         val xs =
             listOf(
                 Pair(0, 0),
@@ -167,7 +167,7 @@ class TestStd {
     }
 
     @Test
-    fun testDedupWithCount() {
+    fun dedupWithCount() {
         val xs = listOf(0, 1, 1, 1, 2, 1, 3, 3)
         val ys = listOf(Pair(1, 0), Pair(3, 1), Pair(1, 2), Pair(1, 1), Pair(2, 3))
         assertEquals(
@@ -190,7 +190,7 @@ class TestStd {
     }
 
     @Test
-    fun testDedupByWithCount() {
+    fun dedupByWithCount() {
         val xs =
             listOf(
                 Pair(0, 0),
@@ -254,7 +254,7 @@ class TestStd {
     }
 
     @Test
-    fun testTee() {
+    fun tee() {
         val xs = listOf(0, 1, 2, 3)
         val (t1, t2) = tee(xs)
         assertEquals(0, t1.next())
@@ -284,6 +284,15 @@ class TestStd {
     }
 
     @Test
+    fun traitPointers() {
+        val it: Iterator<Int> = (0 until 10).iterator()
+        assertEquals(0, it.next())
+        assertEquals(1, it.next())
+        assertEquals(2, it.next())
+        assertEquals(Pair(1, 4), it.findPosition { it == 4 })
+    }
+
+    @Test
     fun mergeBy() {
         val odd = listOf(Pair(1, "hello"), Pair(3, "world"), Pair(5, "!"))
         val even = listOf(Pair(2, "foo"), Pair(4, "bar"), Pair(6, "baz"))
@@ -301,13 +310,25 @@ class TestStd {
     }
 
     @Test
-    fun testKmerge() {
+    fun mergeByBtree() {
+        val bt1 = mapOf("hello" to 1, "world" to 3).toList().sortedBy { it.first }
+        val bt2 = mapOf("foo" to 2, "bar" to 4).toList().sortedBy { it.first }
+        val results =
+            mergeBy(bt1, bt2) { a, b ->
+                a.first <= b.first
+            }.asSequence().toList()
+        val expected = listOf(Pair("bar", 4), Pair("foo", 2), Pair("hello", 1), Pair("world", 3))
+        assertEquals(expected, results)
+    }
+
+    @Test
+    fun kmerge() {
         val its = (0 until 4).map { s -> (s until 10 step 4).toList() }
         assertEquals((0 until 10).toList(), kmerge(its).asSequence().toList())
     }
 
     @Test
-    fun testKmerge2() {
+    fun kmerge2() {
         val its = listOf(3, 2, 1, 0).map { s -> (s until 10 step 4).toList() }
         assertEquals((0 until 10).toList(), kmerge(its).asSequence().toList())
     }
@@ -316,6 +337,18 @@ class TestStd {
     fun kmergeEmpty() {
         val its = (0 until 4).map { emptyList<Int>() }
         assertFalse(kmerge(its).hasNext())
+    }
+
+    @Test
+    fun kmergeSizeHint() {
+        val its = (0 until 5).map { (0 until 10).toList() }
+        assertEquals(SizeHint(50, 50), kmerge(its).sizeHint())
+    }
+
+    @Test
+    fun kmergeEmptySizeHint() {
+        val its = (0 until 5).map { emptyList<Int>() }
+        assertEquals(SizeHint(0, 0), kmerge(its).sizeHint())
     }
 
     @Test
@@ -509,7 +542,7 @@ class TestStd {
     }
 
     @Test
-    fun testPadUsing() {
+    fun padUsing() {
         val v = listOf(0, 1, 2)
         val r = padUsing(v, 5) { it }.asSequence().toList()
         assertEquals(listOf(0, 1, 2, 3, 4), r)
@@ -519,7 +552,50 @@ class TestStd {
     }
 
     @Test
-    fun testCombinations() {
+    fun chunkByLazy2() {
+        val data = listOf(0, 1)
+        val chunks = data.chunkBy { it }
+        val gs = chunks.asSequence().toList()
+        assertEquals(data, gs.flatMap { it.second })
+
+        val data2 = listOf(0, 1, 1, 0, 0)
+        val chunks2 = data2.chunkBy { it }
+        val gs2 = chunks2.asSequence().toList().toMutableList()
+        val tail = gs2.subList(1, gs2.size).reversed()
+        val reordered: List<Pair<Int, List<Int>>> = listOf(gs2[0]) + tail
+        assertEquals(listOf(0, 0, 0, 1, 1), reordered.flatMap { it.second })
+    }
+
+    @Test
+    fun chunkByLazy3() {
+        val data = listOf(0, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2)
+        val grouper = data.chunkBy { it }.asSequence().toList()
+        var last: Pair<Int, List<Int>>? = null
+        for (chunk in grouper) {
+            val prev = last
+            if (prev != null) {
+                for (elt in prev.second) {
+                    assertTrue(elt != chunk.first && kotlin.math.abs(elt - chunk.first) == 1)
+                }
+            }
+            last = chunk
+        }
+    }
+
+    @Test
+    fun concatEmpty() {
+        val data: List<List<Int>> = emptyList()
+        assertEquals(emptyList<Int>(), data.concat().asSequence().toList())
+    }
+
+    @Test
+    fun concatNonEmpty() {
+        val data = listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))
+        assertEquals(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9), data.concat().asSequence().toList())
+    }
+
+    @Test
+    fun combinations() {
         assertFalse(combinations(1 until 3, 5).hasNext())
 
         val it1 = combinations(1 until 3, 2).asSequence().toList()
@@ -545,19 +621,98 @@ class TestStd {
     }
 
     @Test
-    fun testCombinationsZero() {
+    fun combinationsOfTooShort() {
+        for (i in 1 until 10) {
+            assertFalse(combinations(0 until 0, i).hasNext())
+            assertFalse(combinations(0 until (i - 1), i).hasNext())
+        }
+    }
+
+    @Test
+    fun combinationsZero() {
         assertEquals(listOf(emptyList()), combinations(1 until 3, 0).asSequence().toList())
         assertEquals(listOf(emptyList()), combinations(emptyList<Int>(), 0).asSequence().toList())
     }
 
+    private fun binomial(n: Int, k: Int): Int {
+        if (k > n || k < 0 || n < 0) return 0
+        var res = 1
+        val kMin = minOf(k, n - k)
+        for (i in 1..kMin) {
+            res = res * (n - i + 1) / i
+        }
+        return res
+    }
+
     @Test
-    fun testPermutationsZero() {
+    fun combinationsRangeCount() {
+        for (n in 0..7) {
+            for (k in 0..7) {
+                val len = binomial(n, k)
+                val it = combinations(0 until n, k)
+                assertEquals(len, it.count())
+                assertEquals(len, it.sizeHint().lower)
+                assertEquals(len, it.sizeHint().upper)
+                val it2 = combinations(0 until n, k)
+                for (count in (len - 1) downTo 0) {
+                    assertTrue(it2.hasNext())
+                    it2.next()
+                    assertEquals(count, it2.count())
+                }
+                assertFalse(it2.hasNext())
+            }
+        }
+    }
+
+    @Test
+    fun combinationsInexactSizeHints() {
+        for (k in 0..7) {
+            val numbers = (0 until 18).filter { it % 2 == 0 } // 9 elements
+            val it = combinations(numbers, k)
+            val realN = numbers.size
+            val len = binomial(realN, k)
+            assertEquals(len, it.count())
+        }
+    }
+
+    @Test
+    fun permutationsZero() {
         assertEquals(listOf(emptyList()), permutations(1 until 3, 0).asSequence().toList())
         assertEquals(listOf(emptyList()), permutations(emptyList<Int>(), 0).asSequence().toList())
     }
 
     @Test
-    fun testCombinationsWithReplacement() {
+    fun permutationsRangeCount() {
+        for (n in 0..4) {
+            for (k in 0..4) {
+                val len =
+                    if (k <= n) {
+                        var prod = 1
+                        for (x in (n - k + 1)..n) prod *= x
+                        prod
+                    } else {
+                        0
+                    }
+                val it = permutations(0 until n, k)
+                assertEquals(len, it.count())
+            }
+        }
+    }
+
+    @Test
+    fun permutationsOverflowedSizeHints() {
+        val it = permutations(generateSequence { 1 }.iterator(), 2, hint = SizeHint(Int.MAX_VALUE, null))
+        assertEquals(Int.MAX_VALUE, it.sizeHint().lower)
+        assertNull(it.sizeHint().upper)
+        for (nbGenerated in 1..1000) {
+            it.next()
+            assertTrue(it.sizeHint().lower >= Int.MAX_VALUE - nbGenerated)
+            assertNull(it.sizeHint().upper)
+        }
+    }
+
+    @Test
+    fun combinationsWithReplacement() {
         assertEquals(listOf(listOf(0, 0)), combinationsWithReplacement(0 until 1, 2).asSequence().toList())
         assertEquals(
             listOf(
@@ -576,7 +731,18 @@ class TestStd {
     }
 
     @Test
-    fun testPowerset() {
+    fun combinationsWithReplacementRangeCount() {
+        for (n in 0..4) {
+            for (k in 0..4) {
+                val len = binomial((n + k - 1).coerceAtLeast(0), k)
+                val it = combinationsWithReplacement(0 until n, k)
+                assertEquals(len, it.count())
+            }
+        }
+    }
+
+    @Test
+    fun powerset() {
         assertEquals(listOf(emptyList()), powerset(emptyList<Int>()).asSequence().toList())
         assertEquals(listOf(emptyList(), listOf(0)), powerset(0 until 1).asSequence().toList())
         assertEquals(
@@ -602,7 +768,7 @@ class TestStd {
     }
 
     @Test
-    fun testDiff() {
+    fun diffMismatch() {
         val a = listOf(1, 2, 3, 4)
         val b = listOf(1, 5, 3, 4)
         val diff = diffWith(a, b) { x, y -> x == y }
@@ -610,13 +776,21 @@ class TestStd {
         assertTrue(diff is Diff.FirstMismatch)
         assertEquals(1, diff.index)
         assertEquals(listOf(5, 3, 4), diff.secondRemaining.asSequence().toList())
+    }
 
+    @Test
+    fun diffLonger() {
+        val a = listOf(1, 2, 3, 4)
         val bLonger = listOf(1, 2, 3, 4, 5, 6)
         val diffLonger = diffWith(a, bLonger) { x, y -> x == y }
         assertNotNull(diffLonger)
         assertTrue(diffLonger is Diff.Longer)
         assertEquals(listOf(5, 6), diffLonger.remaining.asSequence().toList())
+    }
 
+    @Test
+    fun diffShorter() {
+        val a = listOf(1, 2, 3, 4)
         val bShorter = listOf(1, 2)
         val diffShorter = diffWith(a, bShorter) { x, y -> x == y }
         assertNotNull(diffShorter)
@@ -632,7 +806,7 @@ class TestStd {
     }
 
     @Test
-    fun testExtremaSet() {
+    fun extremaSet() {
         val data = listOf(Val(0, 1), Val(2, 0), Val(0, 2), Val(1, 0), Val(2, 1))
 
         val minSet = data.minSet()
@@ -655,7 +829,7 @@ class TestStd {
     }
 
     @Test
-    fun testMinmax() {
+    fun minmax() {
         assertEquals<MinMaxResult<Int>>(MinMaxResult.NoElements, emptyList<Int>().minmax())
         assertEquals<MinMaxResult<Int>>(MinMaxResult.OneElement(1), listOf(1).minmax())
 
@@ -668,14 +842,14 @@ class TestStd {
     }
 
     @Test
-    fun testFormat() {
+    fun format() {
         val data = listOf(0, 1, 2, 3)
         assertEquals("0, 1, 2, 3", newFormatDefault(data.iterator(), ", ").toString())
         assertEquals("0--1--2--3", newFormatDefault(data.iterator(), "--").toString())
     }
 
     @Test
-    fun testWhileSome() {
+    fun whileSome() {
         val ns =
             whileSome((1 until 10).map { x -> if (x % 5 != 0) x else null })
                 .asSequence()
@@ -684,7 +858,7 @@ class TestStd {
     }
 
     @Test
-    fun testFoldWhile() {
+    fun foldWhile() {
         var iterations = 0
         val vec = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val sum =
@@ -703,7 +877,7 @@ class TestStd {
     }
 
     @Test
-    fun testTreeReduce() {
+    fun treeReduce() {
         val x =
             listOf(
                 "",
@@ -734,7 +908,13 @@ class TestStd {
     }
 
     @Test
-    fun testMultiunzip() {
+    fun exactlyOneQuestionMarkSyntaxWorks() {
+        val res = emptyList<Int>().exactlyOne()
+        assertTrue(res is ItemResult.Err)
+    }
+
+    @Test
+    fun multiunzip() {
         val (a, b, c) =
             multiUnzip(
                 listOf(
@@ -749,7 +929,7 @@ class TestStd {
     }
 
     @Test
-    fun testMultiCartesianProduct() {
+    fun multiCartesianProduct() {
         val a = listOf(1, 2)
         val b = listOf(3, 4)
         val c = listOf(5, 6)

@@ -448,6 +448,20 @@ fun <T> Iterable<T>.combinations(k: Int): Combinations<T> =
         .combinations(this, k)
 
 /**
+ * Return an iterator adaptor that yields all fixed-size combinations of size [k].
+ */
+fun <T> Iterator<T>.arrayCombinations(k: Int): Combinations<T> =
+    io.github.kotlinmania.itertools
+        .arrayCombinations(this, k)
+
+/**
+ * Return an iterator adaptor that yields all fixed-size combinations of size [k].
+ */
+fun <T> Iterable<T>.arrayCombinations(k: Int): Combinations<T> =
+    io.github.kotlinmania.itertools
+        .arrayCombinations(this, k)
+
+/**
  * Return an iterator adaptor that yields all combinations with replacement of size [k].
  */
 fun <T> Iterator<T>.combinationsWithReplacement(k: Int): CombinationsWithReplacement<T> =

@@ -49,7 +49,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testEmpty() {
+    fun empty() {
         val left = emptyList<Int>()
         val right = emptyList<Int>()
         val expected = emptyList<EitherOrBoth<Int, Int>>()
@@ -58,7 +58,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testLeftOnly() {
+    fun leftOnly() {
         val left = listOf(1, 2, 3)
         val right = emptyList<Int>()
         val expected = listOf(EitherOrBoth.Left(1), EitherOrBoth.Left(2), EitherOrBoth.Left(3))
@@ -67,7 +67,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testRightOnly() {
+    fun rightOnly() {
         val left = emptyList<Int>()
         val right = listOf(1, 2, 3)
         val expected = listOf(EitherOrBoth.Right(1), EitherOrBoth.Right(2), EitherOrBoth.Right(3))
@@ -76,7 +76,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testFirstLeftThenRight() {
+    fun firstLeftThenRight() {
         val left = listOf(1, 2, 3)
         val right = listOf(4, 5, 6)
         val expected =
@@ -93,7 +93,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testFirstRightThenLeft() {
+    fun firstRightThenLeft() {
         val left = listOf(4, 5, 6)
         val right = listOf(1, 2, 3)
         val expected =
@@ -110,7 +110,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testInterspersedLeftAndRight() {
+    fun interspersedLeftAndRight() {
         val left = listOf(1, 3, 5)
         val right = listOf(2, 4, 6)
         val expected =
@@ -127,7 +127,7 @@ class MergeJoinTest {
     }
 
     @Test
-    fun testOverlappingLeftAndRight() {
+    fun overlappingLeftAndRight() {
         val left = listOf(1, 3, 4, 6)
         val right = listOf(2, 3, 4, 5)
         val expected =
