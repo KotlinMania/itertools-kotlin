@@ -245,7 +245,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `into_iter`, `drop`
 - **Types:** 10/13 matched (target 11)
 - **Missing types:** `Key`, `Item`, `IntoIter`
-- **Lint issues:** 1
 
 ### 20. adaptors.coalesce
 
