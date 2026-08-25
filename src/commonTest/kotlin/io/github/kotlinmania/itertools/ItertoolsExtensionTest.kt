@@ -369,4 +369,24 @@ class ItertoolsExtensionTest {
         assertTrue(mutList.subList(0, split).all { it % 2 == 0 })
         assertTrue(mutList.subList(split, mutList.size).all { it % 2 != 0 })
     }
+
+    @Test
+    fun testGetNextArrayCollectTupleAndMapInto() {
+        val list = listOf(10, 20, 30, 40)
+        assertEquals(10, list.iterator().get(0))
+        assertEquals(30, list.iterator().get(2))
+        assertNull(list.iterator().get(5))
+        assertNull(list.iterator().get(-1))
+
+        val iter = list.iterator()
+        val arr = iter.nextArray(2)
+        assertEquals(listOf(10, 20), arr)
+        assertEquals(listOf(30, 40), iter.collectArray(2))
+
+        val pairIter = listOf("a", "b").iterator()
+        assertEquals(Pair("a", "b"), pairIter.collectTuple())
+
+        val mapped = listOf(1, 2, 3).mapInto { it * 10 }.asSequence().toList()
+        assertEquals(listOf(10, 20, 30), mapped)
+    }
 }

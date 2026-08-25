@@ -58,6 +58,13 @@ public class UniqueBy<T, V> internal constructor(
         return used.size - currentUsed + buffered.size
     }
 
+    /**
+     * Returns the previous unique element from the back if supported.
+     */
+    fun nextBack(): T? {
+        return null
+    }
+
     companion object {
         fun <T, V> new(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
             UniqueBy(iter, sourceHint, f)

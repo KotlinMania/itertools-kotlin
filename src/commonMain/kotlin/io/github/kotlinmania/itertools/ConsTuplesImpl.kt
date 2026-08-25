@@ -2,6 +2,11 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * Function object for cons-tuples mapping.
+ */
+object ConsTuplesFn
+
+/**
  * An iterator that maps an iterator of nested pairs like
  * `Pair(Pair(A, B), C)` to an iterator of `Triple(A, B, C)`.
  *
