@@ -5,7 +5,7 @@ package io.github.kotlinmania.itertools
  * A trait to unify key function for grouping.
  */
 interface KeyFunction<A, K> {
-    fun callMut(arg: A): K
+    fun callMut(_arg: A): K
 }
 
 /**
@@ -16,7 +16,7 @@ class ChunkIndex(
     var index: Int = 0,
     var key: Int = 0,
 ) : KeyFunction<Any?, Int> {
-    override fun callMut(arg: Any?): Int {
+    override fun callMut(_arg: Any?): Int {
         if (index == size) {
             key += 1
             index = 0
