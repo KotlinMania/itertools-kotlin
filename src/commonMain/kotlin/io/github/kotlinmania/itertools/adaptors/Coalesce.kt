@@ -77,6 +77,11 @@ class CoalesceBy<T>(
         }
         return acc
     }
+
+    companion object {
+        fun <T> new(iter: Iterator<T>, f: CoalescePredicate<T>): CoalesceBy<T> = CoalesceBy(iter, f)
+        fun <T> new(iter: Iterator<T>, f: (T, T) -> CoalesceResult<T>): CoalesceBy<T> = CoalesceBy(iter, CoalescePredicate(f))
+    }
 }
 
 /**
@@ -126,6 +131,11 @@ class DedupBy<T>(
 
     /** Consumes the iterator and folds elements with [init] and [fnAcc]. */
     fun <Acc> fold(init: Acc, fnAcc: (Acc, T) -> Acc): Acc = coalesceIter.fold(init, fnAcc)
+
+    companion object {
+        fun <T> new(iter: Iterator<T>, same: DedupPredicate<T>): DedupBy<T> = DedupBy(iter, same)
+        fun <T> new(iter: Iterator<T>, same: (T, T) -> Boolean): DedupBy<T> = DedupBy(iter, DedupPredicate(same))
+    }
 }
 
 /**
@@ -200,6 +210,11 @@ class DedupByWithCount<T>(
             acc = fnAcc(acc, next())
         }
         return acc
+    }
+
+    companion object {
+        fun <T> new(iter: Iterator<T>, same: DedupPredicate<T>): DedupByWithCount<T> = DedupByWithCount(iter, same)
+        fun <T> new(iter: Iterator<T>, same: (T, T) -> Boolean): DedupByWithCount<T> = DedupByWithCount(iter, DedupPredicate(same))
     }
 }
 

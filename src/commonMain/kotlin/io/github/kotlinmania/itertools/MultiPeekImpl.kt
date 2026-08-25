@@ -68,6 +68,20 @@ class MultiPeek<T>(
 
     /** Hints at the size of the iterator. */
     fun sizeHint(): SizeHint = addScalar(sourceHint, buf.size)
+
+    /**
+     * Consumes the adaptor with a left fold.
+     */
+    fun <B> fold(initial: B, operation: (B, T) -> B): B {
+        var acc = initial
+        while (buf.isNotEmpty()) {
+            acc = operation(acc, buf.removeFirst())
+        }
+        while (iter.hasNext()) {
+            acc = operation(acc, iter.next())
+        }
+        return acc
+    }
 }
 
 /**

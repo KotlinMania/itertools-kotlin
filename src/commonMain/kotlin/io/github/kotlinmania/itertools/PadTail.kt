@@ -111,34 +111,21 @@ public class PadUsing<T>(
  * called.
  */
 @JvmName("padUsingIter")
-public fun <T> padUsing(iter: Iterator<T>, min: Int, filler: (Int) -> T): Iterator<T> =
+public fun <T> padUsing(iter: Iterator<T>, min: Int, filler: (Int) -> T): PadUsing<T> =
     PadUsing(iter, min, SizeHint(0, null), filler)
 
-/**
- * Create a new [PadUsing] iterator.
- *
- * Drains [iterable]; if fewer than [min] elements have been produced, calls
- * [filler] with each missing zero-based position until the minimum length is
- * reached. If the source produces at least [min] elements, [filler] is never
- * called.
- *
- * ```
- * val padded = padUsing(listOf(1, 2), 5) { i -> i * 10 }.asSequence().toList()
- * // padded == [1, 2, 20, 30, 40]
- * ```
- */
 @JvmName("padUsingIterable")
-public fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Iterator<T> =
+public fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): PadUsing<T> =
     if (iterable is List<T>) {
         PadUsing(iterable, min, filler)
     } else {
         PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
     }
 
-public fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): Iterator<T> =
+public fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
     padUsing(this, min, filler)
 
-public fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): Iterator<T> =
+public fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
     padUsing(this, min, filler)
 
 private fun padTailIterableHint(it: Iterable<*>): SizeHint =
