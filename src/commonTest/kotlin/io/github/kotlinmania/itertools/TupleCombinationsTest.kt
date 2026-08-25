@@ -65,4 +65,31 @@ class TupleCombinationsTest {
         assertFalse(comb3.hasNext())
         assertEquals(0, comb3.count())
     }
+
+    @Test
+    fun testCheckedBinomial() {
+        val limit = 50
+        var row = MutableList<Int?>(limit + 1) { 0 }
+        row[0] = 1
+        for (n in 0..limit) {
+            for (k in 0..limit) {
+                assertEquals(row[k], checkedBinomial(n, k))
+            }
+            val newRow = mutableListOf<Int?>(1)
+            for (k in 1..limit) {
+                val prev = row[k - 1]
+                val curr = row[k]
+                val sum =
+                    if (prev != null && curr != null) {
+                        val s = prev.toLong() + curr.toLong()
+                        if (s > Int.MAX_VALUE) null else s.toInt()
+                    } else {
+                        null
+                    }
+                newRow.add(sum)
+            }
+            row = newRow
+        }
+    }
 }
+
