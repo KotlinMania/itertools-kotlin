@@ -18,10 +18,18 @@ class Combinations<T>(
     /** Returns the length of a combination produced by this iterator. */
     fun k(): Int = indices.size
 
+    /** Returns the length of a combination produced by this iterator. */
+    fun len(): Int = indices.size
+
     /**
      * Returns the current length of the pool from which combination elements are selected.
      */
     fun n(): Int = pool.length
+
+    companion object {
+        fun <T> new(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
+            Combinations(iter, k, hint)
+    }
 
     internal fun src(): LazyBuffer<T> = pool
 

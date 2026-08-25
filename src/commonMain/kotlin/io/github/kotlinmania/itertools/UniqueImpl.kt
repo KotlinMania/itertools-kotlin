@@ -57,6 +57,11 @@ public class UniqueBy<T, V> internal constructor(
         }
         return used.size - currentUsed + buffered.size
     }
+
+    companion object {
+        fun <T, V> new(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
+            UniqueBy(iter, sourceHint, f)
+    }
 }
 
 /** Count the number of new unique keys in iterable (`used` is the set already seen). */

@@ -91,6 +91,14 @@ class ExactlyOneError<T>(
         } else {
             "got zero elements when exactly one was expected"
         }
+
+    companion object {
+        fun <T> new(
+            firstTwo: FirstTwo<T>?,
+            inner: Iterator<T>,
+            innerHint: SizeHint = SizeHint(0, null),
+        ): ExactlyOneError<T> = ExactlyOneError(firstTwo, inner, innerHint)
+    }
 }
 
 /**

@@ -93,6 +93,10 @@ class WithPosition<T>(
         }
         return acc
     }
+    companion object {
+        fun <T> new(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): WithPosition<T> =
+            WithPosition(iter, sourceHint)
+    }
 }
 
 /**
@@ -127,19 +131,26 @@ enum class Position {
  * ```
  */
 @JvmName("withPositionIterable")
-fun <T> withPosition(iterable: Iterable<T>): Iterator<Positioned<T>> =
+fun <T> withPosition(iterable: Iterable<T>): WithPosition<T> =
     WithPosition(iterable.iterator(), withPositionSizeHint(iterable))
 
 /**
  * Create a new [WithPosition] iterator from an [Iterator].
  */
-fun <T> Iterator<T>.withPosition(): Iterator<Positioned<T>> =
+@JvmName("withPositionIter")
+fun <T> withPosition(iter: Iterator<T>): WithPosition<T> =
+    WithPosition(iter)
+
+/**
+ * Create a new [WithPosition] iterator from an [Iterator].
+ */
+fun <T> Iterator<T>.withPosition(): WithPosition<T> =
     WithPosition(this)
 
 /**
  * Create a new [WithPosition] iterator from an [Iterable].
  */
-fun <T> Iterable<T>.withPosition(): Iterator<Positioned<T>> =
+fun <T> Iterable<T>.withPosition(): WithPosition<T> =
     withPosition(this)
 
 private fun withPositionSizeHint(it: Iterable<*>): SizeHint =

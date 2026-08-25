@@ -94,19 +94,23 @@ class TakeWhileInclusive<T>(
  * ```
  */
 @JvmName("takeWhileInclusiveIterable")
-fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Iterator<T> =
+fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): TakeWhileInclusive<T> =
     TakeWhileInclusive(iterable.iterator(), predicate, sourceSizeHint(iterable))
+
+@JvmName("takeWhileInclusiveIter")
+fun <T> takeWhileInclusive(iter: Iterator<T>, predicate: (T) -> Boolean): TakeWhileInclusive<T> =
+    TakeWhileInclusive(iter, predicate)
 
 /**
  * `Iterator`-enabled extension for [TakeWhileInclusive].
  */
-fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
+fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): TakeWhileInclusive<T> =
     TakeWhileInclusive(this, predicate)
 
 /**
  * `Iterable`-enabled extension for [TakeWhileInclusive].
  */
-fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): Iterator<T> =
+fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): TakeWhileInclusive<T> =
     takeWhileInclusive(this, predicate)
 
 private fun sourceSizeHint(it: Iterable<*>): SizeHint =

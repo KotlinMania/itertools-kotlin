@@ -1,6 +1,8 @@
 // port-lint: source tee.rs
 package io.github.kotlinmania.itertools
 
+import kotlin.jvm.JvmName
+
 /**
  * Common buffer object for the two tee halves.
  *
@@ -70,6 +72,7 @@ public class Tee<T> internal constructor(
 /**
  * Splits [iter] into two iterators that both yield the same elements.
  */
+@JvmName("teeIter")
 public fun <T> tee(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> =
     teeNew(iter)
 
@@ -88,6 +91,7 @@ public fun <T> teeNew(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null
 /**
  * Convenience overload that derives a size hint from [iterable] when possible.
  */
+@JvmName("teeIterable")
 public fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
     val hint: SizeHint =
         when (iterable) {
@@ -97,17 +101,26 @@ public fun <T> tee(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> {
     return teeNew(iterable.iterator(), hint)
 }
 
-/**
- * Splits [iter] into two iterators that both yield the same elements.
- *
- * Mirrors `new` from upstream.
- */
+@JvmName("newIter")
 public fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> = teeNew(iter)
 
 /**
  * Splits [iterable] into two iterators that both yield the same elements.
  */
+@JvmName("newIterable")
 public fun <T> new(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> = tee(iterable)
+
+/**
+ * Splits [this] into two iterators that both yield the same elements.
+ */
+@JvmName("teeIterExt")
+public fun <T> Iterator<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
+
+/**
+ * Splits [this] into two iterators that both yield the same elements.
+ */
+@JvmName("teeIterableExt")
+public fun <T> Iterable<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
 
 
 
