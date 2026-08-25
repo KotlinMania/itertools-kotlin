@@ -159,7 +159,7 @@ internal fun checkedBinomial(n: Int, k: Int): Int? {
 /**
  * For a given size `n`, return the count of remaining combinations or null if it would overflow.
  */
-internal fun remainingFor(n: Int, first: Boolean, indices: IntArray): Int? {
+private fun remainingFor(n: Int, first: Boolean, indices: IntArray): Int? {
     val k = indices.size
     if (n < k) return 0
     if (first) return checkedBinomial(n, k)

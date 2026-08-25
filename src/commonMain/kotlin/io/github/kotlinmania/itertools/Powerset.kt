@@ -62,8 +62,8 @@ class Powerset<T>(
     fun sizeHint(): SizeHint {
         val k = combs.k()
         val (nMin, nMax) = combs.src().sizeHint()
-        val low = remainingForPowerset(nMin, k) ?: Int.MAX_VALUE
-        val upp = nMax?.let { remainingForPowerset(it, k) }
+        val low = remainingFor(nMin, k) ?: Int.MAX_VALUE
+        val upp = nMax?.let { remainingFor(it, k) }
         return add(combs.sizeHint(), SizeHint(low, upp))
     }
 
@@ -71,7 +71,7 @@ class Powerset<T>(
     fun count(): Int {
         val k = combs.k()
         val (n, combsCount) = combs.nAndCount()
-        return combsCount + (remainingForPowerset(n, k) ?: 0)
+        return combsCount + (remainingFor(n, k) ?: 0)
     }
 
     /** Folds the elements of the powerset. */
@@ -97,7 +97,7 @@ class Powerset<T>(
     }
 }
 
-private fun remainingForPowerset(n: Int, k: Int): Int? {
+private fun remainingFor(n: Int, k: Int): Int? {
     var sum = 0
     for (i in (k + 1)..n) {
         val bin = checkedBinomial(n, i) ?: return null
