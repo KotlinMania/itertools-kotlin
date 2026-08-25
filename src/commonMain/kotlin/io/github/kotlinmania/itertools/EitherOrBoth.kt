@@ -299,4 +299,3 @@ fun <A, B> EitherOrBoth<A, B>.toEither(): Either<A, B>? =
         is EitherOrBoth.Right -> Either.Right(this.value)
         is EitherOrBoth.Both -> null
     }
-

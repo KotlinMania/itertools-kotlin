@@ -154,8 +154,11 @@ class Permutations<T>(
 
         return when (state) {
             is PermutationState.Start -> {
-                if (n < state.k) SizeHint(0, 0)
-                else atStart(n, state.k)
+                if (n < state.k) {
+                    SizeHint(0, 0)
+                } else {
+                    atStart(n, state.k)
+                }
             }
             is PermutationState.Buffered -> {
                 subScalar(atStart(n, state.k), state.minN - state.k + 1)
@@ -233,7 +236,3 @@ fun <T> permutations(iterable: Iterable<T>, k: Int): Permutations<T> {
  */
 fun <T> permutations(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Permutations<T> =
     Permutations(iter, k, hint)
-
-
-
-

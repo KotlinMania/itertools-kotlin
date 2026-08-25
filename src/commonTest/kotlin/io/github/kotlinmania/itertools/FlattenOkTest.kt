@@ -132,15 +132,17 @@ class FlattenOkTest {
                 ItemResult.Ok(listOf(1, 2)),
                 ItemResult.Ok(listOf(3, 4)),
             )
-        val folded = flattenOk(okData).fold(0) { acc, res ->
-            if (res is ItemResult.Ok) acc + res.value else acc
-        }
+        val folded =
+            flattenOk(okData).fold(0) { acc, res ->
+                if (res is ItemResult.Ok) acc + res.value else acc
+            }
         assertEquals(10, folded)
 
-        val rfolded = flattenOk(okData).rfold(mutableListOf<Int>()) { acc, res ->
-            if (res is ItemResult.Ok) acc.add(res.value)
-            acc
-        }
+        val rfolded =
+            flattenOk(okData).rfold(mutableListOf<Int>()) { acc, res ->
+                if (res is ItemResult.Ok) acc.add(res.value)
+                acc
+            }
         assertEquals(listOf(4, 3, 2, 1), rfolded)
     }
 }

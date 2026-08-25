@@ -113,7 +113,6 @@ fun <A, B> Iterator<A>.zipEq(other: Iterator<B>): ZipEq<A, B> =
 fun <A, B> Iterable<A>.zipEq(other: Iterable<B>): Iterator<Zipped<A, B>> =
     zipEq(this, other)
 
-
 private fun sizeHintOf(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)

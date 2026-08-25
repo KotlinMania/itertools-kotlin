@@ -166,8 +166,6 @@ private fun remainingFor(n: Int, first: Boolean, indices: IntArray): Int? {
     return sum
 }
 
-
-
 /**
  * Create a new [CombinationsWithReplacement] from an [Iterable].
  */

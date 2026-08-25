@@ -94,5 +94,3 @@ internal class LazyBuffer<T>(
         fun <T> new(iterable: Iterable<T>): LazyBuffer<T> = LazyBuffer(iterable)
     }
 }
-
-

@@ -2,8 +2,6 @@
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.Tuple1Combination
-import io.github.kotlinmania.itertools.adaptors.Tuple2Combination
-import io.github.kotlinmania.itertools.adaptors.Tuple3Combination
 import io.github.kotlinmania.itertools.adaptors.tupleCombinations2
 import io.github.kotlinmania.itertools.adaptors.tupleCombinations3
 import kotlin.test.Test

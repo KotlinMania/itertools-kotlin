@@ -100,6 +100,3 @@ fun <T> peekNth(iterable: Iterable<T>): PeekNth<T> {
  */
 fun <T> peekNth(iter: Iterator<T>, hint: SizeHint = SizeHint(0, null)): PeekNth<T> =
     PeekNth(iter, hint)
-
-
-

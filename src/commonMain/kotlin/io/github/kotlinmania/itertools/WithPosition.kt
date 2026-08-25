@@ -93,6 +93,7 @@ class WithPosition<T>(
         }
         return acc
     }
+
     companion object {
         fun <T> new(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): WithPosition<T> =
             WithPosition(iter, sourceHint)
@@ -158,5 +159,3 @@ private fun withPositionSizeHint(it: Iterable<*>): SizeHint =
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-
-

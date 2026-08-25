@@ -124,7 +124,6 @@ public fun <T> Iterator<T>.unique(): Unique<T> =
 public fun <T> Iterable<T>.unique(): Unique<T> =
     unique(this)
 
-
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
