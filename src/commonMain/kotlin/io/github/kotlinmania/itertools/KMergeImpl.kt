@@ -7,27 +7,31 @@ package io.github.kotlinmania.itertools
 internal class HeadTail<T>(
     var head: T,
     val tail: Iterator<T>,
+    private val tailHint: SizeHint = SizeHint(0, null),
 ) {
+    private var tailConsumed: Int = 0
+
     fun next(): T? {
         if (tail.hasNext()) {
             val oldHead = head
             head = tail.next()
+            tailConsumed += 1
             return oldHead
         }
         return null
     }
 
     /** Hints at the size of the sequence, same as the Iterator method. */
-    fun sizeHint(tailHint: SizeHint = SizeHint(0, null)): SizeHint =
-        addScalar(tailHint, 1)
+    fun sizeHint(): SizeHint =
+        addScalar(subScalar(tailHint, tailConsumed), 1)
 
     companion object {
-        fun <T> create(it: Iterator<T>): HeadTail<T>? {
+        fun <T> create(it: Iterator<T>, hint: SizeHint = SizeHint(0, null)): HeadTail<T>? {
             if (!it.hasNext()) return null
-            return HeadTail(it.next(), it)
+            return HeadTail(it.next(), it, hint)
         }
 
-        fun <T> new(it: Iterator<T>): HeadTail<T>? = create(it)
+        fun <T> new(it: Iterator<T>, hint: SizeHint = SizeHint(0, null)): HeadTail<T>? = create(it, hint)
     }
 }
 
@@ -115,8 +119,10 @@ class KMergeBy<T> internal constructor(
     }
 
     /** Returns the size hint for the merged iterators. */
-    fun sizeHint(): SizeHint =
-        SizeHint(heap.size, null)
+    fun sizeHint(): SizeHint {
+        if (heap.isEmpty()) return SizeHint(0, 0)
+        return heap.map { it.sizeHint() }.reduce { a, b -> add(a, b) }
+    }
 }
 
 /**
@@ -131,7 +137,12 @@ fun <T : Comparable<*>> kmerge(iterable: Iterable<Iterable<T>>): KMergeBy<T> =
 fun <T> kmergeBy(iterable: Iterable<Iterable<T>>, lessThan: (T, T) -> Boolean): KMergeBy<T> {
     val heap = mutableListOf<HeadTail<T>>()
     for (it in iterable) {
-        val ht = HeadTail.create(it.iterator())
+        val hint =
+            when (it) {
+                is Collection<*> -> SizeHint((it.size - 1).coerceAtLeast(0), (it.size - 1).coerceAtLeast(0))
+                else -> SizeHint(0, null)
+            }
+        val ht = HeadTail.create(it.iterator(), hint)
         if (ht != null) {
             heap.add(ht)
         }

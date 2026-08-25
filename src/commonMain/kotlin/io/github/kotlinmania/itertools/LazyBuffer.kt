@@ -22,6 +22,15 @@ internal class LazyBuffer<T>(
         iterable.iterator(),
         when (iterable) {
             is Collection<*> -> SizeHint(iterable.size, iterable.size)
+            is IntProgression -> {
+                val count =
+                    if (iterable.step > 0) {
+                        if (iterable.first <= iterable.last) (iterable.last - iterable.first) / iterable.step + 1 else 0
+                    } else {
+                        if (iterable.first >= iterable.last) (iterable.first - iterable.last) / (-iterable.step) + 1 else 0
+                    }
+                SizeHint(count, count)
+            }
             else -> SizeHint(0, null)
         },
     )
