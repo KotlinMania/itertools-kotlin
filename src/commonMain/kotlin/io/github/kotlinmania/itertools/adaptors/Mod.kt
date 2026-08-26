@@ -5,6 +5,137 @@ import io.github.kotlinmania.itertools.ItemResult
 import io.github.kotlinmania.itertools.SizeHint
 
 /**
+ * An iterator adaptor that alternates elements from two iterators until both run out.
+ *
+ * This iterator is *fused*.
+ */
+class Interleave<T>(
+    private val i: Iterator<T>,
+    private val j: Iterator<T>,
+) : Iterator<T> {
+    private var nextComingFromJ = false
+
+    override fun hasNext(): Boolean = i.hasNext() || j.hasNext()
+
+    override fun next(): T {
+        nextComingFromJ = !nextComingFromJ
+        return if (nextComingFromJ) {
+            if (i.hasNext()) {
+                i.next()
+            } else if (j.hasNext()) {
+                j.next()
+            } else {
+                throw NoSuchElementException("Interleave exhausted")
+            }
+        } else {
+            if (j.hasNext()) {
+                j.next()
+            } else if (i.hasNext()) {
+                i.next()
+            } else {
+                throw NoSuchElementException("Interleave exhausted")
+            }
+        }
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint {
+        val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
+        val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
+        return io.github.kotlinmania.itertools.add(iHint, jHint)
+    }
+
+    /** Fold over elements. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+}
+
+/**
+ * Create an iterator that interleaves elements in [i] and [j].
+ */
+fun <T> interleave(i: Iterator<T>, j: Iterator<T>): Interleave<T> = Interleave(i, j)
+
+/**
+ * Create an iterator that interleaves elements in [i] and [j].
+ */
+fun <T> interleave(i: Iterable<T>, j: Iterable<T>): Interleave<T> = Interleave(i.iterator(), j.iterator())
+
+/**
+ * An iterator adaptor that alternates elements from the two iterators until one of them runs out.
+ *
+ * This iterator is *fused*.
+ */
+class InterleaveShortest<T>(
+    private val i: Iterator<T>,
+    private val j: Iterator<T>,
+) : Iterator<T> {
+    private var nextComingFromJ = false
+
+    override fun hasNext(): Boolean =
+        if (nextComingFromJ) {
+            j.hasNext()
+        } else {
+            i.hasNext()
+        }
+
+    override fun next(): T {
+        if (!hasNext()) {
+            throw NoSuchElementException("InterleaveShortest exhausted")
+        }
+        val e =
+            if (nextComingFromJ) {
+                j.next()
+            } else {
+                i.next()
+            }
+        nextComingFromJ = !nextComingFromJ
+        return e
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint {
+        val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
+        val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
+        val (currHint, nextHint) = if (nextComingFromJ) Pair(jHint, iHint) else Pair(iHint, jHint)
+        val minHint = io.github.kotlinmania.itertools.min(currHint, nextHint)
+        val combined = io.github.kotlinmania.itertools.mulScalar(minHint, 2)
+        val lower = if (currHint.lower > nextHint.lower) combined.lower + 1 else combined.lower
+        val upper =
+            if (currHint.upper != null && nextHint.upper != null && currHint.upper > nextHint.upper) {
+                combined.upper?.plus(1)
+            } else {
+                combined.upper
+            }
+        return SizeHint(lower, upper)
+    }
+
+    /** Fold over elements. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [InterleaveShortest] iterator.
+ */
+fun <T> interleaveShortest(i: Iterator<T>, j: Iterator<T>): InterleaveShortest<T> = InterleaveShortest(i, j)
+
+/**
+ * Create a new [InterleaveShortest] iterator from iterables.
+ */
+fun <T> interleaveShortest(i: Iterable<T>, j: Iterable<T>): InterleaveShortest<T> =
+    InterleaveShortest(i.iterator(), j.iterator())
+
+/**
  * An iterator adaptor that allows putting back a single item to the front of the iterator.
  */
 class PutBack<T>(
@@ -150,8 +281,10 @@ class Product<A, B>(
         return Pair(curA.first(), curIterB.next())
     }
 
+    /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint = SizeHint(0, null)
 
+    /** Fold over elements. */
     fun <Acc> fold(init: Acc, f: (Acc, Pair<A, B>) -> Acc): Acc {
         var acc = init
         while (hasNext()) {
@@ -168,7 +301,54 @@ fun <A, B> cartesianProduct(a: Iterable<A>, b: Iterable<B>): Product<A, B> =
     Product(a.iterator()) { b.iterator() }
 
 /**
- * An iterator adapter that yields elements while [predicate] returns true, passing references.
+ * Create a new cartesian product iterator from iterators.
+ */
+fun <A, B> cartesianProduct(a: Iterator<A>, bFactory: () -> Iterator<B>): Product<A, B> =
+    Product(a, bFactory)
+
+/**
+ * A "meta iterator adaptor". Its closure receives a reference to the iterator
+ * and may pick off as many elements as it likes, to produce the next iterator element.
+ */
+class Batching<T, R>(
+    private val iter: Iterator<T>,
+    private val f: (Iterator<T>) -> R?,
+) : Iterator<R> {
+    private var nextItem: R? = null
+    private var hasNextCalculated = false
+
+    override fun hasNext(): Boolean {
+        if (!hasNextCalculated) {
+            nextItem = f(iter)
+            hasNextCalculated = true
+        }
+        return nextItem != null
+    }
+
+    override fun next(): R {
+        if (!hasNext()) {
+            throw NoSuchElementException("Batching iterator exhausted")
+        }
+        val item = nextItem ?: throw NoSuchElementException("Batching iterator exhausted")
+        nextItem = null
+        hasNextCalculated = false
+        return item
+    }
+}
+
+/**
+ * Create a new [Batching] iterator.
+ */
+fun <T, R> batching(iter: Iterator<T>, f: (Iterator<T>) -> R?): Batching<T, R> = Batching(iter, f)
+
+/**
+ * Create a new [Batching] iterator from an [Iterable].
+ */
+fun <T, R> batching(iterable: Iterable<T>, f: (Iterator<T>) -> R?): Batching<T, R> =
+    Batching(iterable.iterator(), f)
+
+/**
+ * An iterator adapter that yields elements while [predicate] returns true.
  */
 class TakeWhileRef<T>(
     private val iter: Iterator<T>,
@@ -199,6 +379,9 @@ class TakeWhileRef<T>(
         }
         return peeked.removeFirst()
     }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
 }
 
 /**
@@ -208,11 +391,91 @@ fun <T> takeWhileRef(iterable: Iterable<T>, predicate: (T) -> Boolean): TakeWhil
     TakeWhileRef(iterable.iterator(), predicate)
 
 /**
+ * Create a new [TakeWhileRef] iterator from an [Iterator].
+ */
+fun <T> takeWhileRef(iter: Iterator<T>, predicate: (T) -> Boolean): TakeWhileRef<T> =
+    TakeWhileRef(iter, predicate)
+
+/**
+ * An iterator adaptor that filters nullable iterator elements and produces non-null elements.
+ * Stops on the first null encountered.
+ */
+class WhileSome<T : Any>(
+    private val iter: Iterator<T?>,
+) : Iterator<T> {
+    private var nextItem: T? = null
+    private var hasNextCalculated = false
+    private var exhausted = false
+
+    override fun hasNext(): Boolean {
+        if (exhausted) return false
+        if (!hasNextCalculated) {
+            if (iter.hasNext()) {
+                val item = iter.next()
+                if (item != null) {
+                    nextItem = item
+                    hasNextCalculated = true
+                } else {
+                    exhausted = true
+                    return false
+                }
+            } else {
+                exhausted = true
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun next(): T {
+        if (!hasNext()) {
+            throw NoSuchElementException("WhileSome iterator exhausted")
+        }
+        val item = nextItem ?: throw NoSuchElementException("WhileSome iterator exhausted")
+        nextItem = null
+        hasNextCalculated = false
+        return item
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Fold over elements. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [WhileSome] iterator.
+ */
+fun <T : Any> whileSome(iter: Iterator<T?>): WhileSome<T> = WhileSome(iter)
+
+/**
+ * Create a new [WhileSome] iterator from an [Iterable].
+ */
+fun <T : Any> whileSome(iterable: Iterable<T?>): WhileSome<T> = WhileSome(iterable.iterator())
+
+/**
+ * Trait/interface for combination types.
+ */
+interface HasCombination<T>
+
+/**
  * An iterator that produces 1-combinations (single element tuples).
  */
 class Tuple1Combination<T>(
     private val iter: Iterator<T>,
-) : Iterator<T> {
+) : Iterator<T>, HasCombination<T> {
+    companion object {
+        /** Create from an iterator. */
+        fun <T> from(iter: Iterator<T>): Tuple1Combination<T> = Tuple1Combination(iter)
+    }
+
     override fun hasNext(): Boolean = iter.hasNext()
 
     override fun next(): T {
@@ -222,8 +485,10 @@ class Tuple1Combination<T>(
         return iter.next()
     }
 
+    /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint = SizeHint(0, null)
 
+    /** Count remaining elements. */
     fun count(): Int {
         var c = 0
         while (iter.hasNext()) {
@@ -233,6 +498,7 @@ class Tuple1Combination<T>(
         return c
     }
 
+    /** Fold over elements. */
     fun <B> fold(init: B, f: (B, T) -> B): B {
         var acc = init
         while (hasNext()) {
@@ -247,9 +513,21 @@ class Tuple1Combination<T>(
  */
 class Tuple2Combination<T>(
     private val items: List<T>,
-) : Iterator<Pair<T, T>> {
+) : Iterator<Pair<T, T>>, HasCombination<T> {
     private var i = 0
     private var j = 1
+
+    companion object {
+        /** Create from a list. */
+        fun <T> from(items: List<T>): Tuple2Combination<T> = Tuple2Combination(items)
+
+        /** Create from an iterator. */
+        fun <T> from(iter: Iterator<T>): Tuple2Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple2Combination(list)
+        }
+    }
 
     override fun hasNext(): Boolean {
         while (i < items.size) {
@@ -269,11 +547,13 @@ class Tuple2Combination<T>(
         return result
     }
 
+    /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint {
         val rem = countRemaining()
         return SizeHint(rem, rem)
     }
 
+    /** Count remaining elements. */
     fun count(): Int = countRemaining()
 
     private fun countRemaining(): Int {
@@ -287,6 +567,7 @@ class Tuple2Combination<T>(
         return total
     }
 
+    /** Fold over elements. */
     fun <B> fold(init: B, f: (B, Pair<T, T>) -> B): B {
         var acc = init
         while (hasNext()) {
@@ -301,10 +582,22 @@ class Tuple2Combination<T>(
  */
 class Tuple3Combination<T>(
     private val items: List<T>,
-) : Iterator<Triple<T, T, T>> {
+) : Iterator<Triple<T, T, T>>, HasCombination<T> {
     private var i = 0
     private var j = 1
     private var k = 2
+
+    companion object {
+        /** Create from a list. */
+        fun <T> from(items: List<T>): Tuple3Combination<T> = Tuple3Combination(items)
+
+        /** Create from an iterator. */
+        fun <T> from(iter: Iterator<T>): Tuple3Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple3Combination(list)
+        }
+    }
 
     override fun hasNext(): Boolean {
         val n = items.size
@@ -330,11 +623,13 @@ class Tuple3Combination<T>(
         return result
     }
 
+    /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint {
         val rem = countRemaining()
         return SizeHint(rem, rem)
     }
 
+    /** Count remaining elements. */
     fun count(): Int = countRemaining()
 
     private fun countRemaining(): Int {
@@ -359,6 +654,7 @@ class Tuple3Combination<T>(
         return total
     }
 
+    /** Fold over elements. */
     fun <B> fold(init: B, f: (B, Triple<T, T, T>) -> B): B {
         var acc = init
         while (hasNext()) {
@@ -367,11 +663,6 @@ class Tuple3Combination<T>(
         return acc
     }
 }
-
-/**
- * Trait/interface for combination types.
- */
-interface HasCombination<T>
 
 /**
  * An iterator adaptor that produces combinations of elements.
@@ -383,6 +674,7 @@ class TupleCombinations<T, C>(
 
     override fun next(): C = combination.next()
 
+    /** Count remaining elements. */
     fun count(): Int =
         when (combination) {
             is Tuple1Combination<*> -> combination.count()
@@ -398,6 +690,7 @@ class TupleCombinations<T, C>(
             }
         }
 
+    /** Fold over elements. */
     fun <B> fold(init: B, f: (B, C) -> B): B {
         var acc = init
         while (hasNext()) {
@@ -444,6 +737,357 @@ fun checkedBinomial(n: Int, k: Int): Int? {
 }
 
 /**
+ * An iterator adapter to filter values within a nested [ItemResult.Ok].
+ */
+class FilterOk<T, E> internal constructor(
+    private val iter: Iterator<ItemResult<T, E>>,
+    private val predicate: (T) -> Boolean,
+) : Iterator<ItemResult<T, E>> {
+    private var nextItem: ItemResult<T, E>? = null
+    private var hasNextCalculated = false
+
+    override fun hasNext(): Boolean {
+        if (!hasNextCalculated) {
+            while (iter.hasNext()) {
+                val item = iter.next()
+                when (item) {
+                    is ItemResult.Ok -> {
+                        if (predicate(item.value)) {
+                            nextItem = item
+                            hasNextCalculated = true
+                            return true
+                        }
+                    }
+                    is ItemResult.Err -> {
+                        nextItem = item
+                        hasNextCalculated = true
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        return true
+    }
+
+    override fun next(): ItemResult<T, E> {
+        if (!hasNext()) {
+            throw NoSuchElementException("FilterOk iterator exhausted")
+        }
+        val item = nextItem ?: throw NoSuchElementException("FilterOk iterator exhausted")
+        nextItem = null
+        hasNextCalculated = false
+        return item
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Fold over elements. */
+    fun <Acc> fold(init: Acc, f: (Acc, ItemResult<T, E>) -> Acc): Acc {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Collect remaining elements into a list. */
+    fun collect(): List<ItemResult<T, E>> {
+        val result = mutableListOf<ItemResult<T, E>>()
+        while (hasNext()) {
+            result.add(next())
+        }
+        return result
+    }
+
+    /** Yield the next element from the back if double-ended. */
+    fun nextBack(): ItemResult<T, E>? {
+        val list = collect()
+        return list.lastOrNull()
+    }
+
+    /** Fold from the back. */
+    fun <Acc> rfold(init: Acc, f: (Acc, ItemResult<T, E>) -> Acc): Acc {
+        val list = collect()
+        var acc = init
+        for (i in list.indices.reversed()) {
+            acc = f(acc, list[i])
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [FilterOk] iterator.
+ */
+fun <T, E> filterOk(iter: Iterator<ItemResult<T, E>>, predicate: (T) -> Boolean): FilterOk<T, E> =
+    FilterOk(iter, predicate)
+
+/**
+ * Create a new [FilterOk] iterator from an [Iterable].
+ */
+fun <T, E> filterOk(iterable: Iterable<ItemResult<T, E>>, predicate: (T) -> Boolean): FilterOk<T, E> =
+    FilterOk(iterable.iterator(), predicate)
+
+/**
+ * An iterator adapter to filter and apply a transformation on values within a nested [ItemResult.Ok].
+ */
+class FilterMapOk<T, U, E> internal constructor(
+    private val iter: Iterator<ItemResult<T, E>>,
+    private val transform: (T) -> U?,
+) : Iterator<ItemResult<U, E>> {
+    private var nextItem: ItemResult<U, E>? = null
+    private var hasNextCalculated = false
+
+    override fun hasNext(): Boolean {
+        if (!hasNextCalculated) {
+            while (iter.hasNext()) {
+                val item = iter.next()
+                when (item) {
+                    is ItemResult.Ok -> {
+                        val mapped = transform(item.value)
+                        if (mapped != null) {
+                            nextItem = ItemResult.Ok(mapped)
+                            hasNextCalculated = true
+                            return true
+                        }
+                    }
+                    is ItemResult.Err -> {
+                        nextItem = ItemResult.Err(item.error)
+                        hasNextCalculated = true
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        return true
+    }
+
+    override fun next(): ItemResult<U, E> {
+        if (!hasNext()) {
+            throw NoSuchElementException("FilterMapOk iterator exhausted")
+        }
+        val item = nextItem ?: throw NoSuchElementException("FilterMapOk iterator exhausted")
+        nextItem = null
+        hasNextCalculated = false
+        return item
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Fold over elements. */
+    fun <Acc> fold(init: Acc, f: (Acc, ItemResult<U, E>) -> Acc): Acc {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+
+    /** Collect remaining elements into a list. */
+    fun collect(): List<ItemResult<U, E>> {
+        val result = mutableListOf<ItemResult<U, E>>()
+        while (hasNext()) {
+            result.add(next())
+        }
+        return result
+    }
+
+    /** Yield the next element from the back if double-ended. */
+    fun nextBack(): ItemResult<U, E>? {
+        val list = collect()
+        return list.lastOrNull()
+    }
+
+    /** Fold from the back. */
+    fun <Acc> rfold(init: Acc, f: (Acc, ItemResult<U, E>) -> Acc): Acc {
+        val list = collect()
+        var acc = init
+        for (i in list.indices.reversed()) {
+            acc = f(acc, list[i])
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [FilterMapOk] iterator.
+ */
+fun <T, U, E> filterMapOk(iter: Iterator<ItemResult<T, E>>, transform: (T) -> U?): FilterMapOk<T, U, E> =
+    FilterMapOk(iter, transform)
+
+/**
+ * Create a new [FilterMapOk] iterator from an [Iterable].
+ */
+fun <T, U, E> filterMapOk(iterable: Iterable<ItemResult<T, E>>, transform: (T) -> U?): FilterMapOk<T, U, E> =
+    FilterMapOk(iterable.iterator(), transform)
+
+/**
+ * An iterator adapter to get the positions of each element that matches a predicate.
+ */
+class Positions<T>(
+    private val iter: Iterator<T>,
+    private val predicate: (T) -> Boolean,
+) : Iterator<Int> {
+    private var currentIndex = 0
+    private var nextIndex: Int? = null
+    private var hasNextCalculated = false
+
+    override fun hasNext(): Boolean {
+        if (!hasNextCalculated) {
+            while (iter.hasNext()) {
+                val item = iter.next()
+                val idx = currentIndex
+                currentIndex++
+                if (predicate(item)) {
+                    nextIndex = idx
+                    hasNextCalculated = true
+                    return true
+                }
+            }
+            return false
+        }
+        return true
+    }
+
+    override fun next(): Int {
+        if (!hasNext()) {
+            throw NoSuchElementException("Positions iterator exhausted")
+        }
+        val idx = nextIndex ?: throw NoSuchElementException("Positions iterator exhausted")
+        nextIndex = null
+        hasNextCalculated = false
+        return idx
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Yield the previous matching position from the back. */
+    fun nextBack(): Int? {
+        val list = mutableListOf<Int>()
+        while (hasNext()) {
+            list.add(next())
+        }
+        return list.lastOrNull()
+    }
+
+    /** Fold over matching positions from the back. */
+    fun <B> rfold(init: B, f: (B, Int) -> B): B {
+        val list = mutableListOf<Int>()
+        while (hasNext()) {
+            list.add(next())
+        }
+        var acc = init
+        for (i in list.indices.reversed()) {
+            acc = f(acc, list[i])
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [Positions] iterator.
+ */
+fun <T> positions(iter: Iterator<T>, predicate: (T) -> Boolean): Positions<T> =
+    Positions(iter, predicate)
+
+/**
+ * Create a new [Positions] iterator from an [Iterable].
+ */
+fun <T> positions(iterable: Iterable<T>, predicate: (T) -> Boolean): Positions<T> =
+    Positions(iterable.iterator(), predicate)
+
+/**
+ * An iterator adapter to apply a mutating function to each element before yielding it.
+ */
+class Update<T>(
+    private val iter: Iterator<T>,
+    private val action: (T) -> Unit,
+) : Iterator<T> {
+    override fun hasNext(): Boolean = iter.hasNext()
+
+    override fun next(): T {
+        val item = iter.next()
+        action(item)
+        return item
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint = SizeHint(0, null)
+
+    /** Fold over elements. */
+    fun <Acc> fold(init: Acc, g: (Acc, T) -> Acc): Acc {
+        var acc = init
+        while (hasNext()) {
+            val item = iter.next()
+            action(item)
+            acc = g(acc, item)
+        }
+        return acc
+    }
+
+    /** Collect remaining elements. */
+    fun collect(): List<T> {
+        val result = mutableListOf<T>()
+        while (hasNext()) {
+            result.add(next())
+        }
+        return result
+    }
+
+    /** Yield the previous element from the back. */
+    fun nextBack(): T? {
+        val list = collect()
+        return list.lastOrNull()
+    }
+}
+
+/**
+ * Create a new [Update] iterator.
+ */
+fun <T> update(iter: Iterator<T>, action: (T) -> Unit): Update<T> =
+    Update(iter, action)
+
+/**
+ * Create a new [Update] iterator from an [Iterable].
+ */
+fun <T> update(iterable: Iterable<T>, action: (T) -> Unit): Update<T> =
+    Update(iterable.iterator(), action)
+
+/**
+ * Test checked binomial recurrence relation.
+ */
+internal fun testCheckedBinomial() {
+    val limit = 500
+    var row = MutableList<Int?>(limit + 1) { 0 }
+    row[0] = 1
+    for (n in 0..limit) {
+        for (k in 0..limit) {
+            val expected = row[k]
+            val actual = checkedBinomial(n, k)
+            if (expected != actual) {
+                throw AssertionError("Mismatch at n=$n, k=$k: expected=$expected, actual=$actual")
+            }
+        }
+        val nextRow = mutableListOf<Int?>(1)
+        for (k in 1..limit) {
+            val a = row[k - 1]
+            val b = row[k]
+            val sum = if (a != null && b != null) {
+                val s = a.toLong() + b.toLong()
+                if (s > Int.MAX_VALUE) null else s.toInt()
+            } else null
+            nextRow.add(sum)
+        }
+        row = nextRow
+    }
+}
+
+/**
  * Transposes an ItemResult of an Iterator into an Iterator of ItemResult.
  */
 fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemResult<T, E>> =
@@ -469,3 +1113,7 @@ fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemRes
                 }
             }
     }
+
+private interface SizedIterator<T> : Iterator<T> {
+    fun sizeHint(): SizeHint
+}

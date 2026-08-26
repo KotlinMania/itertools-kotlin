@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 456/504 matched (target 1216) — 90.5%
-- **Class/type parity:** 119/177 matched (target 230) — 67.2%
-- **Combined symbol parity:** 575/681 matched (target 1446) — 84.4%
+- **Function parity:** 461/504 matched (target 1258) — 91.5%
+- **Class/type parity:** 119/177 matched (target 232) — 67.2%
+- **Combined symbol parity:** 580/681 matched (target 1490) — 85.2%
 - **Average inline-code cosine:** 0.51 (function body across 49 matched files)
 - **Average documentation cosine:** 0.63 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -223,19 +223,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/5 matched (target 14)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
 
-### 18. adaptors.mod
-
-- **Target:** `adaptors.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 74410.0
-- **Functions:** 23/28 matched (target 83)
-- **Missing functions:** `from`, `test_checked_binomial`, `collect`, `next_back`, `rfold`
-- **Types:** 14/16 matched
-- **Missing types:** `Item`, `Combination`
-- **Tests:** 0/1 matched
-
-### 19. groupbylazy
+### 18. groupbylazy
 
 - **Target:** `itertools.Groupbylazy`
 - **Similarity:** 0.35
@@ -246,7 +234,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 10/13 matched (target 11)
 - **Missing types:** `Key`, `Item`, `IntoIter`
 
-### 20. adaptors.coalesce
+### 19. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce`
 - **Similarity:** 0.52
@@ -257,7 +245,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 11/16 matched (target 15)
 - **Missing types:** `CoalescePredicate`, `Item`, `CountItem`, `CItem`, `DedupPredicate`
 
-### 21. next_array
+### 20. next_array
 
 - **Target:** `itertools.NextArray`
 - **Similarity:** 0.41
@@ -269,7 +257,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
 
-### 22. duplicates_impl
+### 21. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl`
 - **Similarity:** 0.61
@@ -280,7 +268,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 9/11 matched (target 10)
 - **Missing types:** `Item`, `Container`
 
-### 23. format
+### 22. format
 
 - **Target:** `itertools.Format`
 - **Similarity:** 0.17
@@ -291,7 +279,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `PutBackOnDrop`
 
-### 24. merge_join
+### 23. merge_join
 
 - **Target:** `itertools.MergeJoin`
 - **Similarity:** 0.23
@@ -302,7 +290,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 7/10 matched (target 8)
 - **Missing types:** `T`, `MergeResult`, `Item`
 
-### 25. adaptors.map
+### 24. adaptors.map
 
 - **Target:** `adaptors.Map`
 - **Similarity:** 0.39
@@ -313,7 +301,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 6/8 matched (target 7)
 - **Missing types:** `Item`, `Out`
 
-### 26. intersperse
+### 25. intersperse
 
 - **Target:** `itertools.Intersperse`
 - **Similarity:** 0.50
@@ -323,6 +311,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/5 matched (target 6)
 - **Missing types:** `IntersperseElement`, `Intersperse`, `Item`
+
+### 26. adaptors.mod
+
+- **Target:** `adaptors.Mod [STUB]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 24410.0
+- **Functions:** 28/28 matched (target 125)
+- **Missing functions:** _none_
+- **Types:** 14/16 matched (target 18)
+- **Missing types:** `Item`, `Combination`
+- **Tests:** 1/1 matched
 
 ### 27. kmerge_impl
 
