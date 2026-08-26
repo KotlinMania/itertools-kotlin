@@ -5,11 +5,11 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 461/504 matched (target 1258) — 91.5%
+- **Function parity:** 490/504 matched (target 1268) — 97.2%
 - **Class/type parity:** 119/177 matched (target 232) — 67.2%
-- **Combined symbol parity:** 580/681 matched (target 1490) — 85.2%
-- **Average inline-code cosine:** 0.51 (function body across 49 matched files)
-- **Average documentation cosine:** 0.63 (doc text across 49 matched files)
+- **Combined symbol parity:** 609/681 matched (target 1500) — 89.4%
+- **Average inline-code cosine:** 0.52 (function body across 49 matched files)
+- **Average documentation cosine:** 0.64 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
 - **Critical Issues:** 37 files with <0.60 function similarity
 
@@ -138,10 +138,10 @@ Every matched file is listed below with function and type symbol parity.
 ### 10. zip_longest
 
 - **Target:** `itertools.ZipLongest`
-- **Similarity:** 0.40
+- **Similarity:** 0.39
 - **Dependents:** 1
-- **Priority Score:** 1010806.0
-- **Functions:** 6/6 matched (target 18)
+- **Priority Score:** 1010806.1
+- **Functions:** 6/6 matched (target 16)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
@@ -174,7 +174,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.39
 - **Dependents:** 1
 - **Priority Score:** 1010706.1
-- **Functions:** 4/4 matched (target 19)
+- **Functions:** 4/4 matched (target 17)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 5)
 - **Missing types:** `Item`
@@ -185,7 +185,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.53
 - **Dependents:** 1
 - **Priority Score:** 1010604.7
-- **Functions:** 4/4 matched (target 18)
+- **Functions:** 4/4 matched (target 16)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
@@ -196,7 +196,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.57
 - **Dependents:** 1
 - **Priority Score:** 1010604.4
-- **Functions:** 3/3 matched (target 17)
+- **Functions:** 3/3 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
@@ -212,18 +212,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
 
-### 17. lib
-
-- **Target:** `itertools.Itertools`
-- **Similarity:** 0.39
-- **Dependents:** 0
-- **Priority Score:** 344206.1
-- **Functions:** 107/137 matched (target 193)
-- **Missing functions:** `zip_longest`, `zip_eq`, `tuple_windows`, `circular_tuple_windows`, `tuples`, `tee`, `process_results`, `duplicates`, `duplicates_by`, `unique`, `unique_by`, `take_while_inclusive`, `tuple_combinations`, `pad_using`, `with_position`, `format`, `format_with`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by`, `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by`
-- **Types:** 2/5 matched (target 14)
-- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
-
-### 18. groupbylazy
+### 17. groupbylazy
 
 - **Target:** `itertools.Groupbylazy`
 - **Similarity:** 0.35
@@ -234,7 +223,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 10/13 matched (target 11)
 - **Missing types:** `Key`, `Item`, `IntoIter`
 
-### 19. adaptors.coalesce
+### 18. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce`
 - **Similarity:** 0.52
@@ -245,7 +234,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 11/16 matched (target 15)
 - **Missing types:** `CoalescePredicate`, `Item`, `CountItem`, `CItem`, `DedupPredicate`
 
-### 20. next_array
+### 19. next_array
 
 - **Target:** `itertools.NextArray`
 - **Similarity:** 0.41
@@ -257,27 +246,38 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
 
-### 21. duplicates_impl
+### 20. format
+
+- **Target:** `itertools.Format`
+- **Similarity:** 0.15
+- **Dependents:** 0
+- **Priority Score:** 50908.5
+- **Functions:** 2/6 matched (target 14)
+- **Missing functions:** `fmt`, `format`, `clone`, `drop`
+- **Types:** 2/3 matched (target 4)
+- **Missing types:** `PutBackOnDrop`
+
+### 21. lib
+
+- **Target:** `itertools.Itertools`
+- **Similarity:** 0.53
+- **Dependents:** 0
+- **Priority Score:** 44204.7
+- **Functions:** 137/137 matched (target 253)
+- **Missing functions:** _none_
+- **Types:** 2/5 matched (target 14)
+- **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
+
+### 22. duplicates_impl
 
 - **Target:** `itertools.DuplicatesImpl`
 - **Similarity:** 0.61
 - **Dependents:** 0
 - **Priority Score:** 42203.9
-- **Functions:** 9/11 matched (target 31)
+- **Functions:** 9/11 matched (target 27)
 - **Missing functions:** `new`, `next_back`
 - **Types:** 9/11 matched (target 10)
 - **Missing types:** `Item`, `Container`
-
-### 22. format
-
-- **Target:** `itertools.Format`
-- **Similarity:** 0.17
-- **Dependents:** 0
-- **Priority Score:** 40908.3
-- **Functions:** 3/6 matched (target 18)
-- **Missing functions:** `fmt`, `clone`, `drop`
-- **Types:** 2/3 matched (target 4)
-- **Missing types:** `PutBackOnDrop`
 
 ### 23. merge_join
 
@@ -374,7 +374,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.64
 - **Dependents:** 0
 - **Priority Score:** 12503.6
-- **Functions:** 20/20 matched (target 34)
+- **Functions:** 20/20 matched (target 30)
 - **Missing functions:** _none_
 - **Types:** 4/5 matched
 - **Missing types:** `Out`
@@ -418,7 +418,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.30
 - **Dependents:** 0
 - **Priority Score:** 11007.0
-- **Functions:** 7/7 matched (target 23)
+- **Functions:** 7/7 matched (target 19)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched
 - **Missing types:** `Item`
@@ -451,7 +451,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.59
 - **Dependents:** 0
 - **Priority Score:** 10804.1
-- **Functions:** 6/6 matched (target 19)
+- **Functions:** 6/6 matched (target 17)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
 - **Missing types:** `Item`
@@ -484,7 +484,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.29
 - **Dependents:** 0
 - **Priority Score:** 10507.1
-- **Functions:** 3/3 matched (target 16)
+- **Functions:** 3/3 matched (target 14)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
@@ -528,7 +528,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.54
 - **Dependents:** 0
 - **Priority Score:** 304.6
-- **Functions:** 2/2 matched (target 20)
+- **Functions:** 2/2 matched (target 14)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
@@ -550,7 +550,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.71
 - **Dependents:** 0
 - **Priority Score:** 202.9
-- **Functions:** 2/2 matched (target 6)
+- **Functions:** 2/2 matched
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
@@ -561,7 +561,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.88
 - **Dependents:** 0
 - **Priority Score:** 201.2
-- **Functions:** 2/2 matched (target 14)
+- **Functions:** 2/2 matched
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
