@@ -99,22 +99,10 @@ fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>): ZipEq<A, B> =
 fun <A, B> zipEq(i: Iterator<A>, j: Iterator<B>, aHint: SizeHint, bHint: SizeHint): ZipEq<A, B> =
     ZipEq(i, j, aHint, bHint)
 
-/**
- * Create an iterator which iterates over both this and the specified iterator simultaneously, yielding pairs of elements.
- * Throws if the iterators are not of equal lengths.
- */
-fun <A, B> Iterator<A>.zipEq(other: Iterator<B>): ZipEq<A, B> =
-    zipEq(this, other)
-
-/**
- * Create an iterator which iterates over both this and the specified iterable simultaneously, yielding pairs of elements.
- * Throws if the iterators are not of equal lengths.
- */
-fun <A, B> Iterable<A>.zipEq(other: Iterable<B>): Iterator<Zipped<A, B>> =
-    zipEq(this, other)
 
 private fun sizeHintOf(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+

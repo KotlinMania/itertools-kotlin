@@ -122,14 +122,10 @@ public fun <T> padUsing(iterable: Iterable<T>, min: Int, filler: (Int) -> T): Pa
         PadUsing(iterable.iterator(), min, padTailIterableHint(iterable), filler)
     }
 
-public fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
-    padUsing(this, min, filler)
-
-public fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
-    padUsing(this, min, filler)
 
 private fun padTailIterableHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+

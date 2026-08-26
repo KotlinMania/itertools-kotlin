@@ -189,32 +189,10 @@ public fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, 
 public fun <T> duplicates(iterable: Iterable<T>): Duplicates<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
 
-/**
- * Filter duplicate elements from this iterator, keeping only elements seen more than once, compared by key produced by [f].
- */
-public fun <T, K> Iterator<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
-    duplicatesBy(this, SizeHint(0, null), f)
-
-/**
- * Filter duplicate elements from this iterable, keeping only elements seen more than once, compared by key produced by [f].
- */
-public fun <T, K> Iterable<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
-    duplicatesBy(this, f)
-
-/**
- * Filter duplicate elements from this iterator, keeping only elements seen more than once.
- */
-public fun <T> Iterator<T>.duplicates(): Duplicates<T> =
-    duplicates(this)
-
-/**
- * Filter duplicate elements from this iterable, keeping only elements seen more than once.
- */
-public fun <T> Iterable<T>.duplicates(): Duplicates<T> =
-    duplicates(this)
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+
