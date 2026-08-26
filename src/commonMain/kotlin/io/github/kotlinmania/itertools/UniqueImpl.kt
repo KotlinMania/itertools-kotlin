@@ -107,32 +107,10 @@ public fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null
 public fun <T> unique(iterable: Iterable<T>): Unique<T> =
     unique(iterable.iterator(), hintOfIterable(iterable))
 
-/**
- * Filter duplicate elements from this iterator, comparing by the key produced by [f].
- */
-public fun <T, V> Iterator<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
-    uniqueBy(this, SizeHint(0, null), f)
-
-/**
- * Filter duplicate elements from this iterable, comparing by the key produced by [f].
- */
-public fun <T, V> Iterable<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
-    uniqueBy(this, f)
-
-/**
- * Filter duplicate elements from this iterator, comparing by identity.
- */
-public fun <T> Iterator<T>.unique(): Unique<T> =
-    unique(this)
-
-/**
- * Filter duplicate elements from this iterable, comparing by identity.
- */
-public fun <T> Iterable<T>.unique(): Unique<T> =
-    unique(this)
 
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+

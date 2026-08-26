@@ -142,20 +142,10 @@ fun <T> withPosition(iterable: Iterable<T>): WithPosition<T> =
 fun <T> withPosition(iter: Iterator<T>): WithPosition<T> =
     WithPosition(iter)
 
-/**
- * Create a new [WithPosition] iterator from an [Iterator].
- */
-fun <T> Iterator<T>.withPosition(): WithPosition<T> =
-    WithPosition(this)
-
-/**
- * Create a new [WithPosition] iterator from an [Iterable].
- */
-fun <T> Iterable<T>.withPosition(): WithPosition<T> =
-    withPosition(this)
 
 private fun withPositionSizeHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
+

@@ -1607,6 +1607,370 @@ fun <T, R> Iterator<T>.mapInto(transform: (T) -> R): Iterator<R> =
 fun <T, R> Iterable<T>.mapInto(transform: (T) -> R): Iterator<R> =
     iterator().mapInto(transform)
 
+/**
+ * Create an iterator that iterates over both this and the specified iterator simultaneously,
+ * yielding pairs of [EitherOrBoth].
+ */
+fun <T, U> Iterator<T>.zipLongest(other: Iterator<U>): ZipLongest<T, U> =
+    io.github.kotlinmania.itertools.zipLongest(this, other)
+
+/**
+ * Create an iterator that iterates over both this and the specified iterable simultaneously,
+ * yielding pairs of [EitherOrBoth].
+ */
+fun <T, U> Iterable<T>.zipLongest(other: Iterable<U>): ZipLongest<T, U> =
+    iterator().zipLongest(other.iterator())
+
+/**
+ * Create an iterator which iterates over both this and the specified iterator simultaneously,
+ * yielding pairs of elements.
+ */
+fun <T, U> Iterator<T>.zipEq(other: Iterator<U>): ZipEq<T, U> =
+    io.github.kotlinmania.itertools.zipEq(this, other)
+
+/**
+ * Create an iterator which iterates over both this and the specified iterable simultaneously,
+ * yielding pairs of elements.
+ */
+fun <T, U> Iterable<T>.zipEq(other: Iterable<U>): ZipEq<T, U> =
+    iterator().zipEq(other.iterator())
+
+/**
+ * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
+ */
+fun <T> Iterator<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.tupleWindows(this, size)
+
+/**
+ * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
+ */
+fun <T> Iterable<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.tupleWindows(iterator(), size)
+
+/**
+ * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterator.
+ */
+fun <T> Iterator<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.circularTupleWindows(this, size)
+
+/**
+ * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterable.
+ */
+fun <T> Iterable<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.circularTupleWindows(iterator(), size)
+
+/**
+ * Return an iterator that groups the items in tuples of a specific [size] (default 2).
+ */
+fun <T> Iterator<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.tuples(this, size)
+
+/**
+ * Return an iterator that groups the items in tuples of a specific [size] (default 2).
+ */
+fun <T> Iterable<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
+    io.github.kotlinmania.itertools.tuples(iterator(), size)
+
+/**
+ * Split into an iterator pair that both yield all elements from the original iterator.
+ */
+fun <T> Iterator<T>.tee(): Pair<Tee<T>, Tee<T>> =
+    io.github.kotlinmania.itertools.tee(this)
+
+/**
+ * Split into an iterator pair that both yield all elements from the original iterable.
+ */
+fun <T> Iterable<T>.tee(): Pair<Tee<T>, Tee<T>> =
+    io.github.kotlinmania.itertools.tee(this)
+
+/**
+ * “Lift” a function of the values of the current iterator so as to process an iterator of [ItemResult] values instead.
+ */
+fun <T, E, R> Iterator<ItemResult<T, E>>.processResults(processor: (Iterator<T>) -> R): ItemResult<R, E> =
+    io.github.kotlinmania.itertools.processResults(asSequence().asIterable(), processor)
+
+/**
+ * “Lift” a function of the values of the current iterable so as to process an iterator of [ItemResult] values instead.
+ */
+fun <T, E, R> Iterable<ItemResult<T, E>>.processResults(processor: (Iterator<T>) -> R): ItemResult<R, E> =
+    io.github.kotlinmania.itertools.processResults(this, processor)
+
+/**
+ * Filter duplicate elements from this iterator, keeping only elements seen more than once.
+ */
+fun <T> Iterator<T>.duplicates(): Duplicates<T> =
+    io.github.kotlinmania.itertools.duplicates(this)
+
+/**
+ * Filter duplicate elements from this iterable, keeping only elements seen more than once.
+ */
+fun <T> Iterable<T>.duplicates(): Duplicates<T> =
+    io.github.kotlinmania.itertools.duplicates(this)
+
+/**
+ * Filter duplicate elements from this iterator, keeping only elements seen more than once, compared by key produced by [f].
+ */
+fun <T, K> Iterator<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
+    io.github.kotlinmania.itertools.duplicatesBy(this, SizeHint(0, null), f)
+
+/**
+ * Filter duplicate elements from this iterable, keeping only elements seen more than once, compared by key produced by [f].
+ */
+fun <T, K> Iterable<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
+    io.github.kotlinmania.itertools.duplicatesBy(this, f)
+
+/**
+ * Return an iterator adaptor that filters out elements that have already been produced once.
+ */
+fun <T> Iterator<T>.unique(): Unique<T> =
+    io.github.kotlinmania.itertools.unique(this)
+
+/**
+ * Return an iterator adaptor that filters out elements that have already been produced once.
+ */
+fun <T> Iterable<T>.unique(): Unique<T> =
+    io.github.kotlinmania.itertools.unique(this)
+
+/**
+ * Return an iterator adaptor that filters out elements that have already been produced once, comparing using the key returned by [f].
+ */
+fun <T, V> Iterator<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
+    io.github.kotlinmania.itertools.uniqueBy(this, SizeHint(0, null), f)
+
+/**
+ * Return an iterator adaptor that filters out elements that have already been produced once, comparing using the key returned by [f].
+ */
+fun <T, V> Iterable<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
+    io.github.kotlinmania.itertools.uniqueBy(this, f)
+
+/**
+ * An iterator adaptor that consumes elements while [predicate] returns `true`, including the element for which it first returns `false`.
+ */
+fun <T> Iterator<T>.takeWhileInclusive(predicate: (T) -> Boolean): TakeWhileInclusive<T> =
+    TakeWhileInclusive(this, predicate)
+
+/**
+ * An iterable adaptor that consumes elements while [predicate] returns `true`, including the element for which it first returns `false`.
+ */
+fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): TakeWhileInclusive<T> =
+    takeWhileInclusive(this, predicate)
+
+/**
+ * Return an iterator adaptor that produces all k-combinations of elements in the iterator as tuples.
+ */
+fun <T> Iterator<T>.tupleCombinations(): io.github.kotlinmania.itertools.adaptors.Tuple2Combination<T> =
+    io.github.kotlinmania.itertools.adaptors.tupleCombinations(asSequence().asIterable())
+
+/**
+ * Return an iterator adaptor that produces all k-combinations of elements in the iterable as tuples.
+ */
+fun <T> Iterable<T>.tupleCombinations(): io.github.kotlinmania.itertools.adaptors.Tuple2Combination<T> =
+    io.github.kotlinmania.itertools.adaptors.tupleCombinations(this)
+
+/**
+ * An iterator adaptor that pads a sequence to a minimum length by filling missing elements using a function.
+ */
+fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
+    io.github.kotlinmania.itertools.padUsing(this, min, filler)
+
+/**
+ * An iterable adaptor that pads a sequence to a minimum length by filling missing elements using a function.
+ */
+fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
+    io.github.kotlinmania.itertools.padUsing(this, min, filler)
+
+/**
+ * An iterator adaptor that wraps each element in a [Positioned] value.
+ */
+fun <T> Iterator<T>.withPosition(): WithPosition<T> =
+    WithPosition(this)
+
+/**
+ * An iterable adaptor that wraps each element in a [Positioned] value.
+ */
+fun <T> Iterable<T>.withPosition(): WithPosition<T> =
+    withPosition(this)
+
+/**
+ * Format all iterator elements lazily, separated by [separator].
+ */
+fun <T> Iterator<T>.format(separator: String): Formatted =
+    newFormatDefault(this, separator)
+
+/**
+ * Format all iterable elements lazily, separated by [separator].
+ */
+fun <T> Iterable<T>.format(separator: String): Formatted =
+    iterator().format(separator)
+
+/**
+ * Format all iterator elements lazily, separated by [separator], using [f].
+ */
+fun <T> Iterator<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) -> Unit): Formatted =
+    newFormat(this, separator, f)
+
+/**
+ * Format all iterable elements lazily, separated by [separator], using [f].
+ */
+fun <T> Iterable<T>.formatWith(separator: String, f: (T, (Any?) -> Unit) -> Unit): Formatted =
+    iterator().formatWith(separator, f)
+
+/**
+ * Groups elements of this iterator of pairs into a Map of lists.
+ */
+fun <K, V> Iterator<Pair<K, V>>.intoGroupMap(): Map<K, List<V>> =
+    intoGroupingMap().collect()
+
+/**
+ * Groups elements of this iterable of pairs into a Map of lists.
+ */
+fun <K, V> Iterable<Pair<K, V>>.intoGroupMap(): Map<K, List<V>> =
+    iterator().intoGroupMap()
+
+/**
+ * Groups elements of this iterator by [keyMapper] into a Map of lists.
+ */
+fun <T, K> Iterator<T>.intoGroupMapBy(keyMapper: (T) -> K): Map<K, List<T>> =
+    intoGroupingMapBy(keyMapper).collect()
+
+/**
+ * Groups elements of this iterable by [keyMapper] into a Map of lists.
+ */
+fun <T, K> Iterable<T>.intoGroupMapBy(keyMapper: (T) -> K): Map<K, List<T>> =
+    iterator().intoGroupMapBy(keyMapper)
+
+/**
+ * Creates a [GroupingMap] from an iterator of pairs.
+ */
+fun <K, V> Iterator<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
+    GroupingMap(this)
+
+/**
+ * Creates a [GroupingMap] from an iterable of pairs.
+ */
+fun <K, V> Iterable<Pair<K, V>>.intoGroupingMap(): GroupingMap<K, V> =
+    GroupingMap(iterator())
+
+/**
+ * Groups elements of this iterator by [keyMapper] into a [GroupingMap].
+ */
+fun <T, K> Iterator<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T> =
+    GroupingMap(newMapForGrouping(this, keyMapper))
+
+/**
+ * Groups elements of this iterable by [keyMapper] into a [GroupingMap].
+ */
+fun <T, K> Iterable<T>.intoGroupingMapBy(keyMapper: (T) -> K): GroupingMap<K, T> =
+    GroupingMap(newMapForGrouping(this.iterator(), keyMapper))
+
+/**
+ * Return all minimum elements of an iterator.
+ */
+fun <T : Comparable<T>> Iterator<T>.minSet(): List<T> =
+    minSetImpl(this, { }) { x, y, _, _ -> x.compareTo(y) }
+
+/**
+ * Return all minimum elements of an iterable.
+ */
+fun <T : Comparable<T>> Iterable<T>.minSet(): List<T> =
+    iterator().minSet()
+
+/**
+ * Return all minimum elements of an iterator, as determined by the comparison function.
+ */
+fun <T> Iterator<T>.minSetBy(compare: (T, T) -> Int): List<T> =
+    minSetImpl(this, { }) { x, y, _, _ -> compare(x, y) }
+
+/**
+ * Return all minimum elements of an iterable, as determined by the comparison function.
+ */
+fun <T> Iterable<T>.minSetBy(compare: (T, T) -> Int): List<T> =
+    iterator().minSetBy(compare)
+
+/**
+ * Return all minimum elements of an iterator, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterator<T>.minSetByKey(key: (T) -> K): List<T> =
+    minSetImpl(this, key) { _, _, kx, ky -> kx.compareTo(ky) }
+
+/**
+ * Return all minimum elements of an iterable, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterable<T>.minSetByKey(key: (T) -> K): List<T> =
+    iterator().minSetByKey(key)
+
+/**
+ * Return all maximum elements of an iterator.
+ */
+fun <T : Comparable<T>> Iterator<T>.maxSet(): List<T> =
+    maxSetImpl(this, { }) { x, y, _, _ -> x.compareTo(y) }
+
+/**
+ * Return all maximum elements of an iterable.
+ */
+fun <T : Comparable<T>> Iterable<T>.maxSet(): List<T> =
+    iterator().maxSet()
+
+/**
+ * Return all maximum elements of an iterator, as determined by the comparison function.
+ */
+fun <T> Iterator<T>.maxSetBy(compare: (T, T) -> Int): List<T> =
+    maxSetImpl(this, { }) { x, y, _, _ -> compare(x, y) }
+
+/**
+ * Return all maximum elements of an iterable, as determined by the comparison function.
+ */
+fun <T> Iterable<T>.maxSetBy(compare: (T, T) -> Int): List<T> =
+    iterator().maxSetBy(compare)
+
+/**
+ * Return all maximum elements of an iterator, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterator<T>.maxSetByKey(key: (T) -> K): List<T> =
+    maxSetImpl(this, key) { _, _, kx, ky -> kx.compareTo(ky) }
+
+/**
+ * Return all maximum elements of an iterable, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterable<T>.maxSetByKey(key: (T) -> K): List<T> =
+    iterator().maxSetByKey(key)
+
+/**
+ * Return the minimum and maximum element of an iterator.
+ */
+fun <T : Comparable<T>> Iterator<T>.minmax(): MinMaxResult<T> =
+    minmaxImpl(this, { }) { x, y, _, _ -> x < y }
+
+/**
+ * Return the minimum and maximum element of an iterable.
+ */
+fun <T : Comparable<T>> Iterable<T>.minmax(): MinMaxResult<T> =
+    iterator().minmax()
+
+/**
+ * Return the minimum and maximum element of an iterator, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterator<T>.minmaxByKey(key: (T) -> K): MinMaxResult<T> =
+    minmaxImpl(this, key) { _, _, kx, ky -> kx < ky }
+
+/**
+ * Return the minimum and maximum element of an iterable, as determined by the key function.
+ */
+fun <T, K : Comparable<K>> Iterable<T>.minmaxByKey(key: (T) -> K): MinMaxResult<T> =
+    iterator().minmaxByKey(key)
+
+/**
+ * Return the minimum and maximum element of an iterator, as determined by the comparison function.
+ */
+fun <T> Iterator<T>.minmaxBy(compare: (T, T) -> Int): MinMaxResult<T> =
+    minmaxImpl(this, { }) { x, y, _, _ -> compare(x, y) < 0 }
+
+/**
+ * Return the minimum and maximum element of an iterable, as determined by the comparison function.
+ */
+fun <T> Iterable<T>.minmaxBy(compare: (T, T) -> Int): MinMaxResult<T> =
+    iterator().minmaxBy(compare)
+
 // ---------------------------------------------------------------------------
 // Free Functions
 // ---------------------------------------------------------------------------

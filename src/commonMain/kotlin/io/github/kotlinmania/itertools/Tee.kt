@@ -110,14 +110,3 @@ public fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> = teeNew(iter)
 @JvmName("newIterable")
 public fun <T> new(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> = tee(iterable)
 
-/**
- * Splits [this] into two iterators that both yield the same elements.
- */
-@JvmName("teeIterExt")
-public fun <T> Iterator<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
-
-/**
- * Splits [this] into two iterators that both yield the same elements.
- */
-@JvmName("teeIterableExt")
-public fun <T> Iterable<T>.tee(): Pair<Tee<T>, Tee<T>> = tee(this)
