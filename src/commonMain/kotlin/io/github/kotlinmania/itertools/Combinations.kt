@@ -28,12 +28,21 @@ interface PoolIndex<T, R> {
 /**
  * PoolIndex implementation for List<T> results.
  */
-class ListPoolIndex<T>(var indices: IntArray) : PoolIndex<T, List<T>> {
+class ListPoolIndex<T>(
+    var indices: IntArray,
+) : PoolIndex<T, List<T>> {
     override fun extractItem(pool: List<T>): List<T> = pool
+
     override fun len(): Int = indices.size
+
     override operator fun get(i: Int): Int = indices[i]
-    override operator fun set(i: Int, value: Int) { indices[i] = value }
+
+    override operator fun set(i: Int, value: Int) {
+        indices[i] = value
+    }
+
     override fun toIntArray(): IntArray = indices
+
     fun reset(k: Int) {
         indices = IntArray(k) { it }
     }
@@ -42,11 +51,19 @@ class ListPoolIndex<T>(var indices: IntArray) : PoolIndex<T, List<T>> {
 /**
  * PoolIndex implementation for array-like results.
  */
-class ArrayPoolIndex<T>(private val indices: IntArray) : PoolIndex<T, List<T>> {
+class ArrayPoolIndex<T>(
+    private val indices: IntArray,
+) : PoolIndex<T, List<T>> {
     override fun extractItem(pool: List<T>): List<T> = pool
+
     override fun len(): Int = indices.size
+
     override operator fun get(i: Int): Int = indices[i]
-    override operator fun set(i: Int, value: Int) { indices[i] = value }
+
+    override operator fun set(i: Int, value: Int) {
+        indices[i] = value
+    }
+
     override fun toIntArray(): IntArray = indices
 }
 
@@ -195,10 +212,10 @@ class Combinations<T>(
     kVal: Int,
     sourceHint: SizeHint = SizeHint(0, null),
 ) : CombinationsGeneric<T, ListPoolIndex<T>, List<T>>(
-    iter,
-    ListPoolIndex(IntArray(kVal) { it }),
-    sourceHint,
-) {
+        iter,
+        ListPoolIndex(IntArray(kVal) { it }),
+        sourceHint,
+    ) {
     companion object {
         fun <T> new(iter: Iterator<T>, k: Int, hint: SizeHint = SizeHint(0, null)): Combinations<T> =
             Combinations(iter, k, hint)

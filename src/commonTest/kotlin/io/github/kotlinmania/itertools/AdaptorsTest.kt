@@ -1,21 +1,6 @@
 // port-lint: tests adaptors/mod.rs
 package io.github.kotlinmania.itertools
 
-import io.github.kotlinmania.itertools.adaptors.Batching
-import io.github.kotlinmania.itertools.adaptors.FilterMapOk
-import io.github.kotlinmania.itertools.adaptors.FilterOk
-import io.github.kotlinmania.itertools.adaptors.Interleave
-import io.github.kotlinmania.itertools.adaptors.InterleaveShortest
-import io.github.kotlinmania.itertools.adaptors.Positions
-import io.github.kotlinmania.itertools.adaptors.Product
-import io.github.kotlinmania.itertools.adaptors.PutBack
-import io.github.kotlinmania.itertools.adaptors.TakeWhileRef
-import io.github.kotlinmania.itertools.adaptors.Tuple1Combination
-import io.github.kotlinmania.itertools.adaptors.Tuple2Combination
-import io.github.kotlinmania.itertools.adaptors.Tuple3Combination
-import io.github.kotlinmania.itertools.adaptors.TupleCombinations
-import io.github.kotlinmania.itertools.adaptors.Update
-import io.github.kotlinmania.itertools.adaptors.WhileSome
 import io.github.kotlinmania.itertools.adaptors.batching
 import io.github.kotlinmania.itertools.adaptors.cartesianProduct
 import io.github.kotlinmania.itertools.adaptors.checkedBinomial
@@ -26,16 +11,11 @@ import io.github.kotlinmania.itertools.adaptors.interleaveShortest
 import io.github.kotlinmania.itertools.adaptors.positions
 import io.github.kotlinmania.itertools.adaptors.putBack
 import io.github.kotlinmania.itertools.adaptors.takeWhileRef
-import io.github.kotlinmania.itertools.adaptors.tupleCombinations
-import io.github.kotlinmania.itertools.adaptors.tupleCombinations2
-import io.github.kotlinmania.itertools.adaptors.tupleCombinations3
 import io.github.kotlinmania.itertools.adaptors.update
 import io.github.kotlinmania.itertools.adaptors.whileSome
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class AdaptorsTest {
     @Test

@@ -109,4 +109,3 @@ public fun <T> new(iter: Iterator<T>): Pair<Tee<T>, Tee<T>> = teeNew(iter)
  */
 @JvmName("newIterable")
 public fun <T> new(iterable: Iterable<T>): Pair<Tee<T>, Tee<T>> = tee(iterable)
-

@@ -21,28 +21,53 @@ public class Formatted internal constructor(
  *
  * See `Itertools.formatWith` for more information.
  */
-internal class FormatWith<T> internal constructor(
+public class FormatWith<T> internal constructor(
     private val sep: String,
     iter: Iterator<T>,
     f: (T, (Any?) -> Unit) -> Unit,
 ) {
     private var inner: Pair<Iterator<T>, (T, (Any?) -> Unit) -> Unit>? = iter to f
 
-    override fun toString(): String {
+    /**
+     * Preserves state on drop/clone.
+     */
+    internal class PutBackOnDrop<T>(
+        private val into: FormatWith<T>,
+        private var saved: Pair<Iterator<T>, (T, (Any?) -> Unit) -> Unit>?,
+    ) {
+        fun drop() {
+            into.inner = saved
+        }
+    }
+
+    /**
+     * Formats the remaining elements into the provided [StringBuilder] or formatter.
+     */
+    public fun fmt(f: StringBuilder): StringBuilder {
         val taken = inner ?: throw IllegalStateException("FormatWith: was already formatted once")
         inner = null
         val (iter, format) = taken
-        val sb = StringBuilder()
-        val emit: (Any?) -> Unit = { value -> sb.append(value) }
+        val emit: (Any?) -> Unit = { value -> f.append(value) }
         if (iter.hasNext()) {
             val first = iter.next()
             format(first, emit)
             while (iter.hasNext()) {
-                if (sep.isNotEmpty()) sb.append(sep)
+                if (sep.isNotEmpty()) f.append(sep)
                 val element = iter.next()
                 format(element, emit)
             }
         }
+        return f
+    }
+
+    public fun clone(): FormatWith<T> {
+        val taken = inner
+        return FormatWith(sep, taken?.first ?: emptyList<T>().iterator(), taken?.second ?: { _, _ -> })
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        fmt(sb)
         return sb.toString()
     }
 }
@@ -55,27 +80,55 @@ internal class FormatWith<T> internal constructor(
  *
  * See `Itertools.format` for more information.
  */
-internal class Format<T> internal constructor(
+public class Format<T> internal constructor(
     private val sep: String,
     iter: Iterator<T>,
 ) {
     private var inner: Iterator<T>? = iter
 
-    override fun toString(): String = formatInner { element, sb -> sb.append(element) }
+    /**
+     * Preserves state on drop/clone.
+     */
+    internal class PutBackOnDrop<T>(
+        private val into: Format<T>,
+        private var saved: Iterator<T>?,
+    ) {
+        fun drop() {
+            into.inner = saved
+        }
+    }
 
-    private inline fun formatInner(cb: (T, StringBuilder) -> Unit): String {
+    /**
+     * Formats the elements using a custom callback.
+     */
+    public fun format(f: StringBuilder, cb: (T, StringBuilder) -> Unit): StringBuilder {
         val taken = inner ?: throw IllegalStateException("Format: was already formatted once")
         inner = null
-        val sb = StringBuilder()
         if (taken.hasNext()) {
             val first = taken.next()
-            cb(first, sb)
+            cb(first, f)
             while (taken.hasNext()) {
-                if (sep.isNotEmpty()) sb.append(sep)
+                if (sep.isNotEmpty()) f.append(sep)
                 val element = taken.next()
-                cb(element, sb)
+                cb(element, f)
             }
         }
+        return f
+    }
+
+    /**
+     * Formats using the default string representation.
+     */
+    public fun fmt(f: StringBuilder): StringBuilder = format(f) { element, sb -> sb.append(element) }
+
+    public fun clone(): Format<T> {
+        val taken = inner
+        return Format(sep, taken ?: emptyList<T>().iterator())
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        fmt(sb)
         return sb.toString()
     }
 }

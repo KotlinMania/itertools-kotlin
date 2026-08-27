@@ -189,10 +189,8 @@ public fun <T> duplicates(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, 
 public fun <T> duplicates(iterable: Iterable<T>): Duplicates<T> =
     duplicates(iterable.iterator(), hintOfIterable(iterable))
 
-
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-

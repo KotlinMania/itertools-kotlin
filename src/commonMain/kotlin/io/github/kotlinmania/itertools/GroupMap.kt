@@ -22,4 +22,3 @@ internal fun <K, V> intoGroupMap(iter: Iterator<Pair<K, V>>): MutableMap<K, Muta
 @JvmName("internalIntoGroupMapBy")
 internal fun <K, V> intoGroupMapBy(iter: Iterator<V>, f: (V) -> K): MutableMap<K, MutableList<V>> =
     intoGroupMap(iter.asSequence().map { v -> f(v) to v }.iterator())
-
