@@ -2,14 +2,14 @@
 package io.github.kotlinmania.itertools
 
 /**
- * A trait to unify key function for grouping.
+ * A trait to unify `FnMut` for `ChunkBy` with the chunk key in `IntoChunks`.
  */
 interface KeyFunction<A, K> {
     fun callMut(_arg: A): K
 }
 
 /**
- * [ChunkIndex] acts like the grouping key function for [IntoChunks].
+ * `ChunkIndex` acts like the grouping key function for `IntoChunks`.
  */
 class ChunkIndex(
     val size: Int,
@@ -39,13 +39,22 @@ internal class GroupInner<K, T>(
 ) {
     private var currentKey: K? = null
     private var currentElt: T? = null
+    /** Flag set if iterator is exhausted */
     private var done: Boolean = false
+    /** Index of group we are currently buffering or visiting */
     private var topGroup: Int = 0
+    /** Least index for which we still have elements buffered */
     private var oldestBufferedGroup: Int = 0
+    /** Group index for buffer[0] */
     private var bottomGroup: Int = 0
+    /** Buffered groups */
     private val buffer: MutableList<MutableList<T>> = mutableListOf()
+    /** Index of last group iter that was dropped */
     private var droppedGroup: Int = -1
 
+    /**
+     * Take the next element from the iterator, and set the done flag if exhausted.
+     */
     fun nextElement(): T? {
         if (done) return null
         return if (iter.hasNext()) {
@@ -56,6 +65,9 @@ internal class GroupInner<K, T>(
         }
     }
 
+    /**
+     * `client`: Index of group that requests next element
+     */
     fun step(client: Int): T? =
         if (client < oldestBufferedGroup) {
             null
@@ -113,6 +125,9 @@ internal class GroupInner<K, T>(
         buffer.add(group)
     }
 
+    /**
+     * This is the immediate case, where we use no buffering.
+     */
     fun stepCurrent(): T? {
         currentElt?.let {
             currentElt = null
@@ -131,6 +146,10 @@ internal class GroupInner<K, T>(
         return elt
     }
 
+    /**
+     * Request the just started groups' key.
+     * `client`: Index of group
+     */
     fun groupKey(client: Int): K? {
         val oldKey = currentKey
         val elt = nextElement()
@@ -145,6 +164,9 @@ internal class GroupInner<K, T>(
         return oldKey
     }
 
+    /**
+     * Called when a group is dropped.
+     */
     fun dropGroup(client: Int) {
         if (droppedGroup == -1 || client > droppedGroup) {
             droppedGroup = client
@@ -155,12 +177,20 @@ internal class GroupInner<K, T>(
 /**
  * Deprecated alias for [ChunkBy].
  */
+@Deprecated("Use ChunkBy instead", ReplaceWith("ChunkBy<K, T>"))
 typealias GroupBy<K, T> = ChunkBy<K, T>
 
 /**
- * An iterator that groups consecutive elements with the same key together.
+ * `ChunkBy` is the storage for the lazy grouping operation.
+ *
+ * If the groups are consumed in their original order, or if each
+ * group is dropped without keeping it around, then `ChunkBy` uses
+ * no allocations. It needs allocations only if several group iterators
+ * are alive at the same time.
  *
  * Each group is returned as a `Pair<K, List<T>>`.
+ *
+ * See [chunkBy] for more information.
  */
 class ChunkBy<K, T>(
     private val iter: Iterator<T>,
@@ -201,6 +231,11 @@ class ChunkBy<K, T>(
 
 /**
  * An iterator that yields the Group iterators.
+ *
+ * Iterator element type is `(K, Group)`:
+ * the group's key `K` and the group's iterator.
+ *
+ * See [chunkBy] for more information.
  */
 class Groups<K, T>(
     val parent: ChunkBy<K, T>,
@@ -208,6 +243,8 @@ class Groups<K, T>(
 
 /**
  * An iterator for the elements in a single group.
+ *
+ * Iterator element type is `T`.
  */
 class Group<K, T>(
     val key: K,
@@ -215,7 +252,14 @@ class Group<K, T>(
 ) : Iterator<T> by elements.iterator()
 
 /**
- * An iterator that yields chunks of a given size.
+ * `IntoChunks` is the storage for a lazy chunking operation.
+ *
+ * `IntoChunks` behaves just like `ChunkBy`: it is iterable, and
+ * it only buffers if several chunk iterators are alive at the same time.
+ *
+ * Iterator element type is `List<T>`, each chunk's elements.
+ *
+ * See [chunks] for more information.
  */
 class IntoChunks<T>(
     private val iter: Iterator<T>,
@@ -240,12 +284,18 @@ class IntoChunks<T>(
 }
 
 /**
- * Storage for a chunking operation.
+ * An iterator that yields the Chunk iterators.
+ *
+ * Iterator element type is `Chunk`.
+ *
+ * See [chunks] for more information.
  */
 typealias Chunks<T> = IntoChunks<T>
 
 /**
- * An individual chunk iterator.
+ * An iterator for the elements in a single chunk.
+ *
+ * Iterator element type is `T`.
  */
 class Chunk<T>(
     val elements: List<T>,
