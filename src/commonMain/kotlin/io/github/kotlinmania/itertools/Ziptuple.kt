@@ -2,6 +2,13 @@
 package io.github.kotlinmania.itertools
 
 /**
+ * An iterator adaptor for running multiple iterators in lockstep.
+ */
+class Zip<T>(
+    val t: T,
+)
+
+/**
  * An iterator that generalizes `.zip()` and allows running multiple iterators in lockstep.
  */
 class Zip2<A, B>(

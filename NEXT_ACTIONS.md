@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 490/504 matched (target 1270) — 97.2%
-- **Class/type parity:** 122/177 matched (target 235) — 68.9%
-- **Combined symbol parity:** 612/681 matched (target 1505) — 89.9%
+- **Function parity:** 490/504 matched (target 1272) — 97.2%
+- **Class/type parity:** 123/177 matched (target 236) — 69.5%
+- **Combined symbol parity:** 613/681 matched (target 1508) — 90.0%
 - **Average inline-code cosine:** 0.52 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -212,7 +212,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
 
-### 17. adaptors.coalesce
+### 17. groupbylazy
+
+- **Target:** `itertools.Groupbylazy`
+- **Similarity:** 0.35
+- **Dependents:** 0
+- **Priority Score:** 52706.5
+- **Functions:** 12/14 matched (target 24)
+- **Missing functions:** `into_iter`, `drop`
+- **Types:** 10/13 matched (target 11)
+- **Missing types:** `Key`, `Item`, `IntoIter`
+
+### 18. adaptors.coalesce
 
 - **Target:** `adaptors.Coalesce`
 - **Similarity:** 0.52
@@ -223,7 +234,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 11/16 matched (target 15)
 - **Missing types:** `CoalescePredicate`, `Item`, `CountItem`, `CItem`, `DedupPredicate`
 
-### 18. next_array
+### 19. next_array
 
 - **Target:** `itertools.NextArray`
 - **Similarity:** 0.41
@@ -235,7 +246,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** `TrackedDrop`
 - **Tests:** 3/4 matched
 
-### 19. format
+### 20. format
 
 - **Target:** `itertools.Format`
 - **Similarity:** 0.15
@@ -246,7 +257,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `PutBackOnDrop`
 
-### 20. lib
+### 21. lib
 
 - **Target:** `itertools.Itertools`
 - **Similarity:** 0.53
@@ -256,17 +267,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/5 matched (target 14)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
-
-### 21. groupbylazy
-
-- **Target:** `itertools.Groupbylazy`
-- **Similarity:** 0.35
-- **Dependents:** 0
-- **Priority Score:** 42706.5
-- **Functions:** 12/14 matched (target 24)
-- **Missing functions:** `into_iter`, `drop`
-- **Types:** 11/13 matched (target 12)
-- **Missing types:** `Item`, `IntoIter`
 
 ### 22. duplicates_impl
 
@@ -477,29 +477,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
 
-### 41. unziptuple
-
-- **Target:** `itertools.UnzipTuple`
-- **Similarity:** 0.18
-- **Dependents:** 0
-- **Priority Score:** 10208.2
-- **Functions:** 1/1 matched (target 2)
-- **Missing functions:** _none_
-- **Types:** 0/1 matched (target 0)
-- **Missing types:** `MultiUnzip`
-
-### 42. ziptuple
-
-- **Target:** `itertools.Ziptuple`
-- **Similarity:** 0.20
-- **Dependents:** 0
-- **Priority Score:** 10208.0
-- **Functions:** 1/1 matched (target 18)
-- **Missing functions:** _none_
-- **Types:** 0/1 matched (target 4)
-- **Missing types:** `Zip`
-
-### 43. adaptors.mod
+### 41. adaptors.mod
 
 - **Target:** `adaptors.Mod [STUB]`
 - **Similarity:** 0.00
@@ -511,7 +489,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 44. k_smallest
+### 42. k_smallest
 
 - **Target:** `itertools.KSmallest`
 - **Similarity:** 0.78
@@ -522,7 +500,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 45. minmax
+### 43. minmax
 
 - **Target:** `itertools.MinMax`
 - **Similarity:** 0.54
@@ -533,7 +511,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
 
-### 46. cons_tuples_impl
+### 44. cons_tuples_impl
 
 - **Target:** `itertools.ConsTuplesImpl`
 - **Similarity:** 0.71
@@ -542,6 +520,28 @@ Every matched file is listed below with function and type symbol parity.
 - **Functions:** 1/1 matched (target 8)
 - **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
+
+### 45. unziptuple
+
+- **Target:** `itertools.UnzipTuple`
+- **Similarity:** 0.19
+- **Dependents:** 0
+- **Priority Score:** 208.1
+- **Functions:** 1/1 matched (target 4)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched
+- **Missing types:** _none_
+
+### 46. ziptuple
+
+- **Target:** `itertools.Ziptuple`
+- **Similarity:** 0.20
+- **Dependents:** 0
+- **Priority Score:** 208.0
+- **Functions:** 1/1 matched (target 18)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
 
 ### 47. group_map

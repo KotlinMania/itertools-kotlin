@@ -27,6 +27,20 @@ fun <A, B> multiUnzip(i: Iterable<Pair<A, B>>): Pair<List<A>, List<B>> {
     return resA to resB
 }
 
+/**
+ * Converts an iterator of tuples into a tuple of containers.
+ */
+fun <A, B> multiUnzip(i: Iterator<Pair<A, B>>): Pair<List<A>, List<B>> {
+    val resA = mutableListOf<A>()
+    val resB = mutableListOf<B>()
+    while (i.hasNext()) {
+        val (a, b) = i.next()
+        resA.add(a)
+        resB.add(b)
+    }
+    return resA to resB
+}
+
 /** [Triple] overload of [multiUnzip]. */
 fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
     val resA = mutableListOf<A>()
@@ -39,3 +53,28 @@ fun <A, B, C> multiUnzip(i: Iterable<Triple<A, B, C>>): Triple<List<A>, List<B>,
     }
     return Triple(resA, resB, resC)
 }
+
+/** [Triple] overload of [multiUnzip] for [Iterator]. */
+fun <A, B, C> multiUnzip(i: Iterator<Triple<A, B, C>>): Triple<List<A>, List<B>, List<C>> {
+    val resA = mutableListOf<A>()
+    val resB = mutableListOf<B>()
+    val resC = mutableListOf<C>()
+    while (i.hasNext()) {
+        val (a, b, c) = i.next()
+        resA.add(a)
+        resB.add(b)
+        resC.add(c)
+    }
+    return Triple(resA, resB, resC)
+}
+
+/**
+ * An iterator that can be unzipped into multiple collections.
+ */
+interface MultiUnzip<FromI> {
+    /**
+     * Unzip this iterator into multiple collections.
+     */
+    fun multiunzip(): FromI
+}
+
