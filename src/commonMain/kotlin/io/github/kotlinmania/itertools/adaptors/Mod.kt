@@ -466,6 +466,16 @@ fun <T : Any> whileSome(iterable: Iterable<T?>): WhileSome<T> = WhileSome(iterab
 interface HasCombination<T>
 
 /**
+ * Combination type alias.
+ */
+typealias Combination<T> = Iterator<T>
+
+/**
+ * Item type alias for adaptors.
+ */
+typealias Item = Any?
+
+/**
  * An iterator that produces 1-combinations (single element tuples).
  */
 class Tuple1Combination<T>(
@@ -673,6 +683,15 @@ class TupleCombinations<T, C>(
     override fun hasNext(): Boolean = combination.hasNext()
 
     override fun next(): C = combination.next()
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint =
+        when (combination) {
+            is Tuple1Combination<*> -> combination.sizeHint()
+            is Tuple2Combination<*> -> combination.sizeHint()
+            is Tuple3Combination<*> -> combination.sizeHint()
+            else -> SizeHint(0, null)
+        }
 
     /** Count remaining elements. */
     fun count(): Int =
