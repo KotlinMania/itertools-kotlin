@@ -101,10 +101,8 @@ fun <T> takeWhileInclusive(iterable: Iterable<T>, predicate: (T) -> Boolean): Ta
 fun <T> takeWhileInclusive(iter: Iterator<T>, predicate: (T) -> Boolean): TakeWhileInclusive<T> =
     TakeWhileInclusive(iter, predicate)
 
-
 private fun sourceSizeHint(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-

@@ -1612,7 +1612,8 @@ fun <T, R> Iterable<T>.mapInto(transform: (T) -> R): Iterator<R> =
  * yielding pairs of [EitherOrBoth].
  */
 fun <T, U> Iterator<T>.zipLongest(other: Iterator<U>): ZipLongest<T, U> =
-    io.github.kotlinmania.itertools.zipLongest(this, other)
+    io.github.kotlinmania.itertools
+        .zipLongest(this, other)
 
 /**
  * Create an iterator that iterates over both this and the specified iterable simultaneously,
@@ -1626,7 +1627,8 @@ fun <T, U> Iterable<T>.zipLongest(other: Iterable<U>): ZipLongest<T, U> =
  * yielding pairs of elements.
  */
 fun <T, U> Iterator<T>.zipEq(other: Iterator<U>): ZipEq<T, U> =
-    io.github.kotlinmania.itertools.zipEq(this, other)
+    io.github.kotlinmania.itertools
+        .zipEq(this, other)
 
 /**
  * Create an iterator which iterates over both this and the specified iterable simultaneously,
@@ -1639,109 +1641,127 @@ fun <T, U> Iterable<T>.zipEq(other: Iterable<U>): ZipEq<T, U> =
  * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
  */
 fun <T> Iterator<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.tupleWindows(this, size)
+    io.github.kotlinmania.itertools
+        .tupleWindows(this, size)
 
 /**
  * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
  */
 fun <T> Iterable<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.tupleWindows(iterator(), size)
+    io.github.kotlinmania.itertools
+        .tupleWindows(iterator(), size)
 
 /**
  * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterator.
  */
 fun <T> Iterator<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.circularTupleWindows(this, size)
+    io.github.kotlinmania.itertools
+        .circularTupleWindows(this, size)
 
 /**
  * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterable.
  */
 fun <T> Iterable<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.circularTupleWindows(iterator(), size)
+    io.github.kotlinmania.itertools
+        .circularTupleWindows(iterator(), size)
 
 /**
  * Return an iterator that groups the items in tuples of a specific [size] (default 2).
  */
 fun <T> Iterator<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.tuples(this, size)
+    io.github.kotlinmania.itertools
+        .tuples(this, size)
 
 /**
  * Return an iterator that groups the items in tuples of a specific [size] (default 2).
  */
 fun <T> Iterable<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
-    io.github.kotlinmania.itertools.tuples(iterator(), size)
+    io.github.kotlinmania.itertools
+        .tuples(iterator(), size)
 
 /**
  * Split into an iterator pair that both yield all elements from the original iterator.
  */
 fun <T> Iterator<T>.tee(): Pair<Tee<T>, Tee<T>> =
-    io.github.kotlinmania.itertools.tee(this)
+    io.github.kotlinmania.itertools
+        .tee(this)
 
 /**
  * Split into an iterator pair that both yield all elements from the original iterable.
  */
 fun <T> Iterable<T>.tee(): Pair<Tee<T>, Tee<T>> =
-    io.github.kotlinmania.itertools.tee(this)
+    io.github.kotlinmania.itertools
+        .tee(this)
 
 /**
  * “Lift” a function of the values of the current iterator so as to process an iterator of [ItemResult] values instead.
  */
 fun <T, E, R> Iterator<ItemResult<T, E>>.processResults(processor: (Iterator<T>) -> R): ItemResult<R, E> =
-    io.github.kotlinmania.itertools.processResults(asSequence().asIterable(), processor)
+    io.github.kotlinmania.itertools
+        .processResults(asSequence().asIterable(), processor)
 
 /**
  * “Lift” a function of the values of the current iterable so as to process an iterator of [ItemResult] values instead.
  */
 fun <T, E, R> Iterable<ItemResult<T, E>>.processResults(processor: (Iterator<T>) -> R): ItemResult<R, E> =
-    io.github.kotlinmania.itertools.processResults(this, processor)
+    io.github.kotlinmania.itertools
+        .processResults(this, processor)
 
 /**
  * Filter duplicate elements from this iterator, keeping only elements seen more than once.
  */
 fun <T> Iterator<T>.duplicates(): Duplicates<T> =
-    io.github.kotlinmania.itertools.duplicates(this)
+    io.github.kotlinmania.itertools
+        .duplicates(this)
 
 /**
  * Filter duplicate elements from this iterable, keeping only elements seen more than once.
  */
 fun <T> Iterable<T>.duplicates(): Duplicates<T> =
-    io.github.kotlinmania.itertools.duplicates(this)
+    io.github.kotlinmania.itertools
+        .duplicates(this)
 
 /**
  * Filter duplicate elements from this iterator, keeping only elements seen more than once, compared by key produced by [f].
  */
 fun <T, K> Iterator<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
-    io.github.kotlinmania.itertools.duplicatesBy(this, SizeHint(0, null), f)
+    io.github.kotlinmania.itertools
+        .duplicatesBy(this, SizeHint(0, null), f)
 
 /**
  * Filter duplicate elements from this iterable, keeping only elements seen more than once, compared by key produced by [f].
  */
 fun <T, K> Iterable<T>.duplicatesBy(f: (T) -> K): DuplicatesBy<T, K> =
-    io.github.kotlinmania.itertools.duplicatesBy(this, f)
+    io.github.kotlinmania.itertools
+        .duplicatesBy(this, f)
 
 /**
  * Return an iterator adaptor that filters out elements that have already been produced once.
  */
 fun <T> Iterator<T>.unique(): Unique<T> =
-    io.github.kotlinmania.itertools.unique(this)
+    io.github.kotlinmania.itertools
+        .unique(this)
 
 /**
  * Return an iterator adaptor that filters out elements that have already been produced once.
  */
 fun <T> Iterable<T>.unique(): Unique<T> =
-    io.github.kotlinmania.itertools.unique(this)
+    io.github.kotlinmania.itertools
+        .unique(this)
 
 /**
  * Return an iterator adaptor that filters out elements that have already been produced once, comparing using the key returned by [f].
  */
 fun <T, V> Iterator<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
-    io.github.kotlinmania.itertools.uniqueBy(this, SizeHint(0, null), f)
+    io.github.kotlinmania.itertools
+        .uniqueBy(this, SizeHint(0, null), f)
 
 /**
  * Return an iterator adaptor that filters out elements that have already been produced once, comparing using the key returned by [f].
  */
 fun <T, V> Iterable<T>.uniqueBy(f: (T) -> V): UniqueBy<T, V> =
-    io.github.kotlinmania.itertools.uniqueBy(this, f)
+    io.github.kotlinmania.itertools
+        .uniqueBy(this, f)
 
 /**
  * An iterator adaptor that consumes elements while [predicate] returns `true`, including the element for which it first returns `false`.
@@ -1759,25 +1779,29 @@ fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean): TakeWhileIncl
  * Return an iterator adaptor that produces all k-combinations of elements in the iterator as tuples.
  */
 fun <T> Iterator<T>.tupleCombinations(): io.github.kotlinmania.itertools.adaptors.Tuple2Combination<T> =
-    io.github.kotlinmania.itertools.adaptors.tupleCombinations(asSequence().asIterable())
+    io.github.kotlinmania.itertools.adaptors
+        .tupleCombinations(asSequence().asIterable())
 
 /**
  * Return an iterator adaptor that produces all k-combinations of elements in the iterable as tuples.
  */
 fun <T> Iterable<T>.tupleCombinations(): io.github.kotlinmania.itertools.adaptors.Tuple2Combination<T> =
-    io.github.kotlinmania.itertools.adaptors.tupleCombinations(this)
+    io.github.kotlinmania.itertools.adaptors
+        .tupleCombinations(this)
 
 /**
  * An iterator adaptor that pads a sequence to a minimum length by filling missing elements using a function.
  */
 fun <T> Iterator<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
-    io.github.kotlinmania.itertools.padUsing(this, min, filler)
+    io.github.kotlinmania.itertools
+        .padUsing(this, min, filler)
 
 /**
  * An iterable adaptor that pads a sequence to a minimum length by filling missing elements using a function.
  */
 fun <T> Iterable<T>.padUsing(min: Int, filler: (Int) -> T): PadUsing<T> =
-    io.github.kotlinmania.itertools.padUsing(this, min, filler)
+    io.github.kotlinmania.itertools
+        .padUsing(this, min, filler)
 
 /**
  * An iterator adaptor that wraps each element in a [Positioned] value.

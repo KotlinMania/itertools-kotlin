@@ -39,16 +39,22 @@ internal class GroupInner<K, T>(
 ) {
     private var currentKey: K? = null
     private var currentElt: T? = null
+
     /** Flag set if iterator is exhausted */
     private var done: Boolean = false
+
     /** Index of group we are currently buffering or visiting */
     private var topGroup: Int = 0
+
     /** Least index for which we still have elements buffered */
     private var oldestBufferedGroup: Int = 0
+
     /** Group index for buffer[0] */
     private var bottomGroup: Int = 0
+
     /** Buffered groups */
     private val buffer: MutableList<MutableList<T>> = mutableListOf()
+
     /** Index of last group iter that was dropped */
     private var droppedGroup: Int = -1
 

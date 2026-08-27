@@ -42,7 +42,8 @@ class Interleave<T>(
     fun sizeHint(): SizeHint {
         val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
         val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
-        return io.github.kotlinmania.itertools.add(iHint, jHint)
+        return io.github.kotlinmania.itertools
+            .add(iHint, jHint)
     }
 
     /** Fold over elements. */
@@ -102,8 +103,12 @@ class InterleaveShortest<T>(
         val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
         val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
         val (currHint, nextHint) = if (nextComingFromJ) Pair(jHint, iHint) else Pair(iHint, jHint)
-        val minHint = io.github.kotlinmania.itertools.min(currHint, nextHint)
-        val combined = io.github.kotlinmania.itertools.mulScalar(minHint, 2)
+        val minHint =
+            io.github.kotlinmania.itertools
+                .min(currHint, nextHint)
+        val combined =
+            io.github.kotlinmania.itertools
+                .mulScalar(minHint, 2)
         val lower = if (currHint.lower > nextHint.lower) combined.lower + 1 else combined.lower
         val upper =
             if (currHint.upper != null && nextHint.upper != null && currHint.upper > nextHint.upper) {
@@ -480,7 +485,8 @@ typealias Item = Any?
  */
 class Tuple1Combination<T>(
     private val iter: Iterator<T>,
-) : Iterator<T>, HasCombination<T> {
+) : Iterator<T>,
+    HasCombination<T> {
     companion object {
         /** Create from an iterator. */
         fun <T> from(iter: Iterator<T>): Tuple1Combination<T> = Tuple1Combination(iter)
@@ -523,7 +529,8 @@ class Tuple1Combination<T>(
  */
 class Tuple2Combination<T>(
     private val items: List<T>,
-) : Iterator<Pair<T, T>>, HasCombination<T> {
+) : Iterator<Pair<T, T>>,
+    HasCombination<T> {
     private var i = 0
     private var j = 1
 
@@ -592,7 +599,8 @@ class Tuple2Combination<T>(
  */
 class Tuple3Combination<T>(
     private val items: List<T>,
-) : Iterator<Triple<T, T, T>>, HasCombination<T> {
+) : Iterator<Triple<T, T, T>>,
+    HasCombination<T> {
     private var i = 0
     private var j = 1
     private var k = 2
@@ -1096,10 +1104,13 @@ internal fun testCheckedBinomial() {
         for (k in 1..limit) {
             val a = row[k - 1]
             val b = row[k]
-            val sum = if (a != null && b != null) {
-                val s = a.toLong() + b.toLong()
-                if (s > Int.MAX_VALUE) null else s.toInt()
-            } else null
+            val sum =
+                if (a != null && b != null) {
+                    val s = a.toLong() + b.toLong()
+                    if (s > Int.MAX_VALUE) null else s.toInt()
+                } else {
+                    null
+                }
             nextRow.add(sum)
         }
         row = nextRow

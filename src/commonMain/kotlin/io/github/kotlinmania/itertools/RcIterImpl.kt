@@ -15,7 +15,8 @@ package io.github.kotlinmania.itertools
  */
 class RcIter<T>(
     private val shared: Iterator<T>,
-) : Iterator<T>, Iterable<T> {
+) : Iterator<T>,
+    Iterable<T> {
     override fun hasNext(): Boolean = shared.hasNext()
 
     override fun next(): T {
@@ -51,13 +52,12 @@ class RcIter<T>(
     /**
      * Yields the next element from the back of the iterator, if supported.
      */
-    fun nextBack(): T? {
-        return if (shared is ListIterator<T> && shared.hasPrevious()) {
+    fun nextBack(): T? =
+        if (shared is ListIterator<T> && shared.hasPrevious()) {
             shared.previous()
         } else {
             null
         }
-    }
 }
 
 /**
@@ -92,4 +92,3 @@ fun <T> Iterable<T>.intoRciter(): RcIter<T> =
  */
 fun <T> Iterator<T>.intoRciter(): RcIter<T> =
     rciter(this)
-

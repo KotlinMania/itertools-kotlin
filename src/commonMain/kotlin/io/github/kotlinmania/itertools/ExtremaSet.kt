@@ -38,4 +38,3 @@ internal fun <T, K> maxSetImpl(
     minSetImpl(it, keyFor) { it1, it2, key1, key2 ->
         compare(it2, it1, key2, key1)
     }
-

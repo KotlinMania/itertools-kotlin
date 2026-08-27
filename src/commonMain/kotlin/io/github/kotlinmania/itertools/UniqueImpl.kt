@@ -61,9 +61,7 @@ public class UniqueBy<T, V> internal constructor(
     /**
      * Returns the previous unique element from the back if supported.
      */
-    fun nextBack(): T? {
-        return null
-    }
+    fun nextBack(): T? = null
 
     companion object {
         fun <T, V> new(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null), f: (T) -> V): UniqueBy<T, V> =
@@ -107,10 +105,8 @@ public fun <T> unique(iter: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null
 public fun <T> unique(iterable: Iterable<T>): Unique<T> =
     unique(iterable.iterator(), hintOfIterable(iterable))
 
-
 private fun hintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
         else -> SizeHint(0, null)
     }
-
