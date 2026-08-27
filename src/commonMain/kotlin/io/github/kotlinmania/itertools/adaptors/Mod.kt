@@ -1086,38 +1086,6 @@ fun <T> update(iterable: Iterable<T>, action: (T) -> Unit): Update<T> =
     Update(iterable.iterator(), action)
 
 /**
- * Test checked binomial recurrence relation.
- */
-internal fun testCheckedBinomial() {
-    val limit = 500
-    var row = MutableList<Int?>(limit + 1) { 0 }
-    row[0] = 1
-    for (n in 0..limit) {
-        for (k in 0..limit) {
-            val expected = row[k]
-            val actual = checkedBinomial(n, k)
-            if (expected != actual) {
-                throw AssertionError("Mismatch at n=$n, k=$k: expected=$expected, actual=$actual")
-            }
-        }
-        val nextRow = mutableListOf<Int?>(1)
-        for (k in 1..limit) {
-            val a = row[k - 1]
-            val b = row[k]
-            val sum =
-                if (a != null && b != null) {
-                    val s = a.toLong() + b.toLong()
-                    if (s > Int.MAX_VALUE) null else s.toInt()
-                } else {
-                    null
-                }
-            nextRow.add(sum)
-        }
-        row = nextRow
-    }
-}
-
-/**
  * Transposes an ItemResult of an Iterator into an Iterator of ItemResult.
  */
 fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemResult<T, E>> =
