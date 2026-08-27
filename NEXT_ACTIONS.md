@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 490/504 matched (target 1272) — 97.2%
-- **Class/type parity:** 123/177 matched (target 236) — 69.5%
-- **Combined symbol parity:** 613/681 matched (target 1508) — 90.0%
+- **Function parity:** 490/504 matched (target 1276) — 97.2%
+- **Class/type parity:** 123/177 matched (target 237) — 69.5%
+- **Combined symbol parity:** 613/681 matched (target 1513) — 90.0%
 - **Average inline-code cosine:** 0.52 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -528,9 +528,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.19
 - **Dependents:** 0
 - **Priority Score:** 208.1
-- **Functions:** 1/1 matched (target 4)
+- **Functions:** 1/1 matched (target 8)
 - **Missing functions:** _none_
-- **Types:** 1/1 matched
+- **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
 
 ### 46. ziptuple
