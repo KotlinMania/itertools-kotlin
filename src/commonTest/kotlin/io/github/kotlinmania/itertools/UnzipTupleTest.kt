@@ -1,4 +1,4 @@
-// port-lint: ignore
+// port-lint: tests unziptuple.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
