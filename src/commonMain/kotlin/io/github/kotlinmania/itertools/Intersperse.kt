@@ -53,7 +53,9 @@ public fun <T> intersperse(iter: Iterator<T>, elt: T): Iterator<T> =
  * Upstream marks this adaptor as lazy; Kotlin callers carry the same
  * responsibility to consume it.
  */
-internal class IntersperseWith<T>(
+public typealias Intersperse<T> = IntersperseWith<T>
+
+public class IntersperseWith<T> internal constructor(
     private val element: IntersperseElement<T>,
     private val iter: Iterator<T>,
     private val initialSourceHint: SizeHint = SizeHint(0, null),
