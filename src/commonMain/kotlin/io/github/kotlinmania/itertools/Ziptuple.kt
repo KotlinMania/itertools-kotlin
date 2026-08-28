@@ -14,13 +14,42 @@ class Zip<T>(
 class Zip2<A, B>(
     private val a: Iterator<A>,
     private val b: Iterator<B>,
+    private val aList: List<A>? = null,
+    private val bList: List<B>? = null,
 ) : Iterator<Pair<A, B>> {
+    private var aStart: Int = 0
+    private var aEnd: Int = aList?.size ?: 0
+    private var bStart: Int = 0
+    private var bEnd: Int = bList?.size ?: 0
     private var peeked: Pair<A, B>? = null
     private var exhausted = false
+
+    init {
+        if (aList != null && bList != null) {
+            val minLen = minOf(aList.size, bList.size)
+            aEnd = minLen
+            bEnd = minLen
+        }
+    }
+
+    constructor(aList: List<A>, bList: List<B>) : this(
+        a = aList.iterator(),
+        b = bList.iterator(),
+        aList = aList,
+        bList = bList,
+    )
 
     private fun advance(): Boolean {
         if (peeked != null) return true
         if (exhausted) return false
+        if (aList != null && bList != null) {
+            if (aStart >= aEnd || bStart >= bEnd) {
+                exhausted = true
+                return false
+            }
+            peeked = Pair(aList[aStart++], bList[bStart++])
+            return true
+        }
         if (!a.hasNext()) {
             exhausted = true
             return false
@@ -44,6 +73,15 @@ class Zip2<A, B>(
         val result = peeked ?: throw NoSuchElementException("Zip2 exhausted")
         peeked = null
         return result
+    }
+
+    /**
+     * Returns the next element from the back when double-ended iteration is available.
+     */
+    fun nextBack(): Pair<A, B>? {
+        if (aList == null || bList == null) return null
+        if (aStart >= aEnd || bStart >= bEnd) return null
+        return Pair(aList[--aEnd], bList[--bEnd])
     }
 }
 
@@ -138,7 +176,13 @@ fun <A, B> multizip(a: Iterator<A>, b: Iterator<B>): Zip2<A, B> =
  * Multizip 2 iterables.
  */
 fun <A, B> multizip(a: Iterable<A>, b: Iterable<B>): Zip2<A, B> =
-    Zip2(a.iterator(), b.iterator())
+    if (a is List<A> && b is List<B>) Zip2(a, b) else Zip2(a.iterator(), b.iterator())
+
+/**
+ * Multizip a pair of iterables.
+ */
+fun <A, B> multizip(pair: Pair<Iterable<A>, Iterable<B>>): Zip2<A, B> =
+    multizip(pair.first, pair.second)
 
 /**
  * Multizip 3 iterators.
@@ -151,6 +195,12 @@ fun <A, B, C> multizip(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>): Zip3<A, 
  */
 fun <A, B, C> multizip(a: Iterable<A>, b: Iterable<B>, c: Iterable<C>): Zip3<A, B, C> =
     Zip3(a.iterator(), b.iterator(), c.iterator())
+
+/**
+ * Multizip a triple of iterables.
+ */
+fun <A, B, C> multizip(triple: Triple<Iterable<A>, Iterable<B>, Iterable<C>>): Zip3<A, B, C> =
+    multizip(triple.first, triple.second, triple.third)
 
 /**
  * Multizip a list of iterables of homogeneous type.

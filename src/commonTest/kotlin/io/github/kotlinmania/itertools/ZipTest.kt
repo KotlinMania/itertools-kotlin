@@ -1,9 +1,11 @@
-// port-lint: tests tests/zip.rs
+// port-lint: tests zip.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.batching
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class ZipTest {
     @Test
@@ -40,28 +42,27 @@ class ZipTest {
 
     @Test
     fun testDoubleEndedZipLongest() {
-        // Kotlin forward traversal test for zipLongest matching upstream values
         val xs = listOf(1, 2, 3, 4, 5, 6)
         val ys = listOf(1, 2, 3, 7)
-        val it = zipLongest(xs, ys)
+        val it = xs.zipLongest(ys)
         assertEquals(EitherOrBoth.Both(1, 1), it.next())
         assertEquals(EitherOrBoth.Both(2, 2), it.next())
+        assertEquals(EitherOrBoth.Left(6), it.nextBack())
+        assertEquals(EitherOrBoth.Left(5), it.nextBack())
+        assertEquals(EitherOrBoth.Both(4, 7), it.nextBack())
         assertEquals(EitherOrBoth.Both(3, 3), it.next())
-        assertEquals(EitherOrBoth.Both(4, 7), it.next())
-        assertEquals(EitherOrBoth.Left(5), it.next())
-        assertEquals(EitherOrBoth.Left(6), it.next())
-        assertEquals(false, it.hasNext())
+        assertFalse(it.hasNext())
     }
 
     @Test
     fun testDoubleEndedZip() {
         val xs = listOf(1, 2, 3, 4, 5, 6)
         val ys = listOf(1, 2, 3, 7)
-        val it = multizip(xs, ys)
-        assertEquals(Pair(1, 1), it.next())
-        assertEquals(Pair(2, 2), it.next())
-        assertEquals(Pair(3, 3), it.next())
-        assertEquals(Pair(4, 7), it.next())
-        assertEquals(false, it.hasNext())
+        val it = multizip(Pair(xs, ys))
+        assertEquals(Pair(4, 7), it.nextBack())
+        assertEquals(Pair(3, 3), it.nextBack())
+        assertEquals(Pair(2, 2), it.nextBack())
+        assertEquals(Pair(1, 1), it.nextBack())
+        assertNull(it.nextBack())
     }
 }
