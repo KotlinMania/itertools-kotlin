@@ -3,6 +3,9 @@ package io.github.kotlinmania.itertools
 
 /**
  * Head element and Tail iterator pair.
+ *
+ * Comparisons are based on first items (which are guaranteed to exist).
+ * The comparison logic turns the heap used in `KMerge` into a min-heap.
  */
 internal class HeadTail<T>(
     var head: T,
@@ -11,6 +14,10 @@ internal class HeadTail<T>(
 ) {
     private var tailConsumed: Int = 0
 
+    /**
+     * Get the next element and update [head], returning the old head in `Some`.
+     * Returns `null` when the tail is exhausted (only [head] then remains).
+     */
     fun next(): T? {
         if (tail.hasNext()) {
             val oldHead = head
@@ -26,12 +33,21 @@ internal class HeadTail<T>(
         addScalar(subScalar(tailHint, tailConsumed), 1)
 
     companion object {
+        /** Constructs a [HeadTail] from an [Iterator]. Returns `null` if the [Iterator] is empty. */
         fun <T> create(it: Iterator<T>, hint: SizeHint = SizeHint(0, null)): HeadTail<T>? {
             if (!it.hasNext()) return null
             return HeadTail(it.next(), it, hint)
         }
 
+        /** Constructs a [HeadTail] from an [Iterator]. Returns `null` if the [Iterator] is empty. */
         fun <T> new(it: Iterator<T>, hint: SizeHint = SizeHint(0, null)): HeadTail<T>? = create(it, hint)
+    }
+}
+
+/** Make list into a min-heap. */
+private fun <T> heapify(data: MutableList<HeadTail<T>>, lessThan: (T, T) -> Boolean) {
+    for (i in (data.size / 2 - 1) downTo 0) {
+        siftDown(data, i, lessThan)
     }
 }
 
@@ -59,22 +75,27 @@ private fun <T> siftDown(heap: MutableList<HeadTail<T>>, index: Int, lessThan: (
     }
 }
 
-/** Make list into a min-heap. */
-private fun <T> heapify(data: MutableList<HeadTail<T>>, lessThan: (T, T) -> Boolean) {
-    for (i in (data.size / 2 - 1) downTo 0) {
-        siftDown(data, i, lessThan)
-    }
-}
-
 /**
  * An iterator adaptor that merges an arbitrary number of base iterators in ascending order.
+ * If all base iterators are sorted (ascending), the result is sorted.
+ *
+ * Iterator element type is `T`.
+ *
+ * See [kmerge] for more information.
  */
 typealias KMerge<T> = KMergeBy<T>
 
+/**
+ * Predicate interface for comparing elements in [KMergeBy].
+ */
 fun interface KMergePredicate<T> {
+    /** Returns true if [a] should be ordered before [b]. */
     fun kmergePred(a: T, b: T): Boolean
 }
 
+/**
+ * Default ascending ordering predicate for [Comparable] elements.
+ */
 class KMergeByLt<T : Comparable<*>> : KMergePredicate<T> {
     override fun kmergePred(a: T, b: T): Boolean =
         compareValues(a, b) < 0
@@ -83,6 +104,8 @@ class KMergeByLt<T : Comparable<*>> : KMergePredicate<T> {
 /**
  * An iterator adaptor that merges an arbitrary number of base iterators
  * according to an ordering function.
+ *
+ * Iterator element type is `T`.
  *
  * See [kmerge] and [kmergeBy] for more information.
  */
@@ -127,6 +150,8 @@ class KMergeBy<T> internal constructor(
 
 /**
  * Create an iterator that merges elements of the contained iterators.
+ *
+ * See [kmerge] for more details.
  */
 fun <T : Comparable<*>> kmerge(iterable: Iterable<Iterable<T>>): KMergeBy<T> =
     kmergeBy(iterable) { a, b -> compareValues(a, b) < 0 }
