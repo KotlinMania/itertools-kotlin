@@ -683,6 +683,183 @@ class Tuple3Combination<T>(
 }
 
 /**
+ * Base class for k-combination iterators where k >= 4.
+ */
+abstract class BaseTupleKCombination<T>(
+    protected val items: List<T>,
+    protected val k: Int,
+) : Iterator<List<T>>,
+    HasCombination<T> {
+    protected var indices: IntArray? = if (items.size >= k) IntArray(k) { it } else null
+
+    override fun hasNext(): Boolean = indices != null
+
+    override fun next(): List<T> {
+        val idx = indices ?: throw NoSuchElementException("TupleCombination exhausted")
+        val result = List(k) { items[idx[it]] }
+
+        var i = k - 1
+        while (i >= 0 && idx[i] == i + items.size - k) {
+            i--
+        }
+        if (i < 0) {
+            indices = null
+        } else {
+            idx[i]++
+            for (j in i + 1 until k) {
+                idx[j] = idx[j - 1] + 1
+            }
+        }
+        return result
+    }
+
+    /** Returns the size hint for this iterator. */
+    fun sizeHint(): SizeHint {
+        val rem = countRemaining()
+        return SizeHint(rem, rem)
+    }
+
+    /** Count remaining elements. */
+    fun count(): Int = countRemaining()
+
+    protected open fun countRemaining(): Int {
+        val cur = indices ?: return 0
+        var total = 1
+        val cloneIdx = cur.copyOf()
+        while (true) {
+            var p = k - 1
+            while (p >= 0 && cloneIdx[p] == p + items.size - k) {
+                p--
+            }
+            if (p < 0) break
+            cloneIdx[p] = cloneIdx[p] + 1
+            for (j in p + 1 until k) {
+                cloneIdx[j] = cloneIdx[j - 1] + 1
+            }
+            total++
+        }
+        return total
+    }
+
+    /** Fold over elements. */
+    fun <B> fold(init: B, f: (B, List<T>) -> B): B {
+        var acc = init
+        while (hasNext()) {
+            acc = f(acc, next())
+        }
+        return acc
+    }
+}
+
+/** An iterator that produces 4-combinations from a sequence. */
+class Tuple4Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 4) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple4Combination<T> = Tuple4Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple4Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple4Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 5-combinations from a sequence. */
+class Tuple5Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 5) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple5Combination<T> = Tuple5Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple5Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple5Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 6-combinations from a sequence. */
+class Tuple6Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 6) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple6Combination<T> = Tuple6Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple6Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple6Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 7-combinations from a sequence. */
+class Tuple7Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 7) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple7Combination<T> = Tuple7Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple7Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple7Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 8-combinations from a sequence. */
+class Tuple8Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 8) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple8Combination<T> = Tuple8Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple8Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple8Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 9-combinations from a sequence. */
+class Tuple9Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 9) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple9Combination<T> = Tuple9Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple9Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple9Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 10-combinations from a sequence. */
+class Tuple10Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 10) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple10Combination<T> = Tuple10Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple10Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple10Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 11-combinations from a sequence. */
+class Tuple11Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 11) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple11Combination<T> = Tuple11Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple11Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple11Combination(list)
+        }
+    }
+}
+
+/** An iterator that produces 12-combinations from a sequence. */
+class Tuple12Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 12) {
+    companion object {
+        fun <T> from(items: List<T>): Tuple12Combination<T> = Tuple12Combination(items)
+        fun <T> from(iter: Iterator<T>): Tuple12Combination<T> {
+            val list = mutableListOf<T>()
+            while (iter.hasNext()) list.add(iter.next())
+            return Tuple12Combination(list)
+        }
+    }
+}
+
+/**
  * An iterator adaptor that produces combinations of elements.
  */
 class TupleCombinations<T, C>(
@@ -698,6 +875,7 @@ class TupleCombinations<T, C>(
             is Tuple1Combination<*> -> combination.sizeHint()
             is Tuple2Combination<*> -> combination.sizeHint()
             is Tuple3Combination<*> -> combination.sizeHint()
+            is BaseTupleKCombination<*> -> combination.sizeHint()
             else -> SizeHint(0, null)
         }
 
@@ -707,6 +885,7 @@ class TupleCombinations<T, C>(
             is Tuple1Combination<*> -> combination.count()
             is Tuple2Combination<*> -> combination.count()
             is Tuple3Combination<*> -> combination.count()
+            is BaseTupleKCombination<*> -> combination.count()
             else -> {
                 var c = 0
                 while (combination.hasNext()) {
@@ -744,6 +923,12 @@ fun <T> tupleCombinations2(iterable: Iterable<T>): Tuple2Combination<T> =
  */
 fun <T> tupleCombinations3(iterable: Iterable<T>): Tuple3Combination<T> =
     Tuple3Combination(iterable.toList())
+
+/**
+ * An iterator to iterate through all combinations in a sequence that produces tuples of size 4.
+ */
+fun <T> tupleCombinations4(iterable: Iterable<T>): Tuple4Combination<T> =
+    Tuple4Combination(iterable.toList())
 
 /**
  * Calculates binomial coefficient n choose k safely.

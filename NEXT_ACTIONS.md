@@ -6,8 +6,8 @@ Based on AST analysis, here are the concrete next steps.
 
 - **Files Present:** 50/50 (100.0%)
 - **Function parity:** 494/504 matched (target 1281) — 98.0%
-- **Class/type parity:** 124/177 matched (target 238) — 70.1%
-- **Combined symbol parity:** 618/681 matched (target 1519) — 90.7%
+- **Class/type parity:** 125/177 matched (target 239) — 70.6%
+- **Combined symbol parity:** 619/681 matched (target 1520) — 90.9%
 - **Average inline-code cosine:** 0.53 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -290,18 +290,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 6/8 matched (target 7)
 - **Missing types:** `Item`, `Out`
 
-### 24. intersperse
-
-- **Target:** `itertools.Intersperse`
-- **Similarity:** 0.50
-- **Dependents:** 0
-- **Priority Score:** 31105.0
-- **Functions:** 6/6 matched (target 24)
-- **Missing functions:** _none_
-- **Types:** 2/5 matched (target 6)
-- **Missing types:** `IntersperseElement`, `Intersperse`, `Item`
-
-### 25. kmerge_impl
+### 24. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl`
 - **Similarity:** 0.54
@@ -311,6 +300,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 4/6 matched (target 5)
 - **Missing types:** `KMergePredicate`, `Item`
+
+### 25. intersperse
+
+- **Target:** `itertools.Intersperse`
+- **Similarity:** 0.50
+- **Dependents:** 0
+- **Priority Score:** 21105.0
+- **Functions:** 6/6 matched (target 24)
+- **Missing functions:** _none_
+- **Types:** 3/5 matched (target 7)
+- **Missing types:** `IntersperseElement`, `Item`
 
 ### 26. exactly_one_err
 
