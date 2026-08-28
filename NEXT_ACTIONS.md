@@ -8,22 +8,22 @@ Based on AST analysis, here are the concrete next steps.
 - **Function parity:** 494/504 matched (target 1305) — 98.0%
 - **Class/type parity:** 126/177 matched (target 251) — 71.2%
 - **Combined symbol parity:** 620/681 matched (target 1556) — 91.0%
-- **Average inline-code cosine:** 0.53 (function body across 49 matched files)
-- **Average documentation cosine:** 0.65 (doc text across 49 matched files)
-- **Cheat-zeroed Files:** 1
-- **Critical Issues:** 37 files with <0.60 function similarity
+- **Average inline-code cosine:** 0.53 (function body across 50 matched files)
+- **Average documentation cosine:** 0.65 (doc text across 50 matched files)
+- **Cheat-zeroed Files:** 0
+- **Critical Issues:** 36 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
 ### 1. size_hint
-- **Similarity:** 0.55 (needs 30% improvement)
+- **Similarity:** 0.75 (needs 10% improvement)
 - **Dependencies:** 15
-- **Priority Score:** 15000905.0
+- **Priority Score:** 15000903.0
 - **Functions:** 8/8 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
-- **Action:** Deep review - likely missing major functionality
+- **Action:** Review and complete missing sections
 
 ## Priority 2: Port Missing High-Value Files
 
@@ -38,9 +38,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 1. size_hint
 
 - **Target:** `itertools.SizeHint`
-- **Similarity:** 0.55
+- **Similarity:** 0.75
 - **Dependents:** 15
-- **Priority Score:** 15000905.0
+- **Priority Score:** 15000903.0
 - **Functions:** 8/8 matched (target 15)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 2)
@@ -468,15 +468,18 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 40. adaptors.mod
 
-- **Target:** `adaptors.Mod [STUB]`
-- **Similarity:** 0.00
+- **Target:** `adaptors.Mod [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.54
 - **Dependents:** 0
-- **Priority Score:** 4410.0
+- **Priority Score:** 4404.6
 - **Functions:** 28/28 matched (target 150)
 - **Missing functions:** _none_
 - **Types:** 16/16 matched (target 30)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
+- **Provenance warning:** port-lint provenance header matched only by basename: `mod.rs` vs expected `adaptors/mod.rs`
+- **Proposed provenance header:** `// port-lint: source adaptors/mod.rs` (current: `// port-lint: source mod.rs`)
+- **Lint issues:** 1
 
 ### 41. format
 

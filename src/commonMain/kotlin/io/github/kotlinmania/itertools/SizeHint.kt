@@ -1,101 +1,107 @@
 // port-lint: source size_hint.rs
 package io.github.kotlinmania.itertools
 
-/**
- * Arithmetic on `Iterator.sizeHint()` values.
- */
+import kotlin.math.max as cmpMax
+import kotlin.math.min as cmpMin
 
 /**
- * The result of an [Iterator.sizeHint] call.
- *
- * [lower] is the minimum number of elements remaining; [upper] is the
- * maximum, or `null` when the upper bound is unknown (infinite or
- * uncomputable).
+ * `SizeHint` is the return type of `Iterator.sizeHint()`.
  */
 data class SizeHint(
     val lower: Int,
     val upper: Int?,
 )
 
-private fun saturatingAdd(a: Int, b: Int): Int {
-    val sum = a.toLong() + b.toLong()
+private fun Int.saturatingAdd(other: Int): Int {
+    val sum = this.toLong() + other.toLong()
     return if (sum > Int.MAX_VALUE.toLong()) Int.MAX_VALUE else sum.toInt()
 }
 
-private fun saturatingSub(a: Int, b: Int): Int {
-    val diff = a.toLong() - b.toLong()
+private fun Int.saturatingSub(other: Int): Int {
+    val diff = this.toLong() - other.toLong()
     return if (diff < 0L) 0 else diff.toInt()
 }
 
-private fun saturatingMul(a: Int, b: Int): Int {
-    val product = a.toLong() * b.toLong()
+private fun Int.saturatingMul(other: Int): Int {
+    val product = this.toLong() * other.toLong()
     return if (product > Int.MAX_VALUE.toLong()) Int.MAX_VALUE else product.toInt()
 }
 
-private fun checkedAdd(a: Int, b: Int): Int? {
-    val sum = a.toLong() + b.toLong()
+private fun Int.checkedAdd(other: Int): Int? {
+    val sum = this.toLong() + other.toLong()
     return if (sum > Int.MAX_VALUE.toLong()) null else sum.toInt()
 }
 
-private fun checkedMul(a: Int, b: Int): Int? {
-    val product = a.toLong() * b.toLong()
+private fun Int.checkedMul(other: Int): Int? {
+    val product = this.toLong() * other.toLong()
     return if (product > Int.MAX_VALUE.toLong()) null else product.toInt()
 }
 
 /** Add `SizeHint` correctly. */
 fun add(a: SizeHint, b: SizeHint): SizeHint {
-    val lo = saturatingAdd(a.lower, b.lower)
-    val hi =
+    val min = a.lower.saturatingAdd(b.lower)
+    val max =
         if (a.upper != null && b.upper != null) {
-            checkedAdd(a.upper, b.upper)
+            val x = a.upper
+            val y = b.upper
+            x.checkedAdd(y)
         } else {
             null
         }
-    return SizeHint(lo, hi)
+
+    return SizeHint(min, max)
 }
 
 /** Add `x` correctly to a `SizeHint`. */
 fun addScalar(sh: SizeHint, x: Int): SizeHint {
-    val lo = saturatingAdd(sh.lower, x)
-    val hi = sh.upper?.let { checkedAdd(it, x) }
-    return SizeHint(lo, hi)
+    var (low, hi) = sh
+    low = low.saturatingAdd(x)
+    hi = hi?.let { elt -> elt.checkedAdd(x) }
+    return SizeHint(low, hi)
 }
 
 /** Subtract `x` correctly from a `SizeHint`. */
 fun subScalar(sh: SizeHint, x: Int): SizeHint {
-    val lo = saturatingSub(sh.lower, x)
-    val hi = sh.upper?.let { saturatingSub(it, x) }
-    return SizeHint(lo, hi)
+    var (low, hi) = sh
+    low = low.saturatingSub(x)
+    hi = hi?.let { elt -> elt.saturatingSub(x) }
+    return SizeHint(low, hi)
 }
 
 /** Multiply `SizeHint` correctly */
 fun mul(a: SizeHint, b: SizeHint): SizeHint {
-    val lo = saturatingMul(a.lower, b.lower)
-    val au = a.upper
-    val bu = b.upper
+    val low = a.lower.saturatingMul(b.lower)
     val hi =
-        when {
-            au != null && bu != null -> checkedMul(au, bu)
-            (au == 0 && bu == null) || (au == null && bu == 0) -> 0
-            else -> null
+        if (a.upper != null && b.upper != null) {
+            val x = a.upper
+            val y = b.upper
+            x.checkedMul(y)
+        } else if ((a.upper == 0 && b.upper == null) || (a.upper == null && b.upper == 0)) {
+            0
+        } else {
+            null
         }
-    return SizeHint(lo, hi)
+    return SizeHint(low, hi)
 }
 
 /** Multiply `x` correctly with a `SizeHint`. */
 fun mulScalar(sh: SizeHint, x: Int): SizeHint {
-    val lo = saturatingMul(sh.lower, x)
-    val hi = sh.upper?.let { checkedMul(it, x) }
-    return SizeHint(lo, hi)
+    var (low, hi) = sh
+    low = low.saturatingMul(x)
+    hi = hi?.let { elt -> elt.checkedMul(x) }
+    return SizeHint(low, hi)
 }
 
 /** Return the maximum */
 fun max(a: SizeHint, b: SizeHint): SizeHint {
-    val lower = kotlin.math.max(a.lower, b.lower)
+    val (aLower, aUpper) = a
+    val (bLower, bUpper) = b
+
+    val lower = cmpMax(aLower, bLower)
 
     val upper =
-        if (a.upper != null && b.upper != null) {
-            kotlin.math.max(a.upper, b.upper)
+        if (aUpper != null && bUpper != null) {
+            cmpMax(aUpper, bUpper)
         } else {
             null
         }
@@ -105,12 +111,17 @@ fun max(a: SizeHint, b: SizeHint): SizeHint {
 
 /** Return the minimum */
 fun min(a: SizeHint, b: SizeHint): SizeHint {
-    val lower = kotlin.math.min(a.lower, b.lower)
+    val (aLower, aUpper) = a
+    val (bLower, bUpper) = b
+    val lower = cmpMin(aLower, bLower)
     val upper =
-        if (a.upper != null && b.upper != null) {
-            kotlin.math.min(a.upper, b.upper)
+        if (aUpper != null && bUpper != null) {
+            val u1 = aUpper
+            val u2 = bUpper
+            cmpMin(u1, u2)
         } else {
-            a.upper ?: b.upper
+            aUpper ?: bUpper
         }
     return SizeHint(lower, upper)
 }
+
