@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 494/504 matched (target 1281) — 98.0%
-- **Class/type parity:** 125/177 matched (target 239) — 70.6%
-- **Combined symbol parity:** 619/681 matched (target 1520) — 90.9%
+- **Function parity:** 494/504 matched (target 1306) — 98.0%
+- **Class/type parity:** 126/177 matched (target 251) — 71.2%
+- **Combined symbol parity:** 620/681 matched (target 1557) — 91.0%
 - **Average inline-code cosine:** 0.53 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -47,18 +47,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 2. lazy_buffer
-
-- **Target:** `itertools.LazyBuffer`
-- **Similarity:** 0.47
-- **Dependents:** 3
-- **Priority Score:** 3011105.2
-- **Functions:** 9/9 matched (target 20)
-- **Missing functions:** _none_
-- **Types:** 1/2 matched
-- **Missing types:** `Output`
-
-### 3. either_or_both
+### 2. either_or_both
 
 - **Target:** `itertools.EitherOrBoth`
 - **Similarity:** 0.57
@@ -67,6 +56,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Functions:** 35/35 matched (target 45)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
+- **Missing types:** _none_
+
+### 3. lazy_buffer
+
+- **Target:** `itertools.LazyBuffer`
+- **Similarity:** 0.47
+- **Dependents:** 3
+- **Priority Score:** 3001105.2
+- **Functions:** 9/9 matched (target 20)
+- **Missing functions:** _none_
+- **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 
 ### 4. peek_nth
@@ -88,7 +88,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Priority Score:** 2010805.9
 - **Functions:** 6/6 matched (target 8)
 - **Missing functions:** _none_
-- **Types:** 1/2 matched (target 1)
+- **Types:** 1/2 matched
 - **Missing types:** `Item`
 
 ### 6. adaptors.multi_product
@@ -472,9 +472,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 4410.0
-- **Functions:** 28/28 matched (target 125)
+- **Functions:** 28/28 matched (target 150)
 - **Missing functions:** _none_
-- **Types:** 16/16 matched (target 20)
+- **Types:** 16/16 matched (target 30)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
