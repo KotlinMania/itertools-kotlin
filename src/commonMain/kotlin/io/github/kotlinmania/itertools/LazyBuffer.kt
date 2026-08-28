@@ -54,33 +54,40 @@ internal class LazyBuffer<T>(
      * Drain the remaining source and return total length.
      */
     fun count(): Int {
-        while (pullOne()) { /* drain */ }
+        while (getNext()) { /* drain */ }
         return length
-    }
-
-    private fun pullOne(): Boolean {
-        if (sourceExhausted) return false
-        if (!it.hasNext()) {
-            sourceExhausted = true
-            return false
-        }
-        buffer.add(it.next())
-        consumed += 1
-        return true
     }
 
     /**
      * Pull one more element from the source into the buffer. Returns `true`
      * if an element was buffered, `false` if the source is exhausted.
      */
-    fun getNext(): Boolean = pullOne()
+    fun getNext(): Boolean {
+        if (sourceExhausted) return false
+        return if (it.hasNext()) {
+            val x = it.next()
+            buffer.add(x)
+            consumed += 1
+            true
+        } else {
+            sourceExhausted = true
+            false
+        }
+    }
 
     /**
      * Buffer up to [len] elements, pulling from the source as needed. After
      * this returns, [length] is at least `min(len, totalSourceSize)`.
      */
     fun prefill(len: Int) {
-        while (buffer.size < len && pullOne()) { /* fill */ }
+        val bufferLen = buffer.size
+        if (len > bufferLen) {
+            val delta = len - bufferLen
+            var count = 0
+            while (count < delta && getNext()) {
+                count += 1
+            }
+        }
     }
 
     /** Indexed access into the buffered prefix. */
