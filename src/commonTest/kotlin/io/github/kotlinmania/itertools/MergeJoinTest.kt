@@ -1,4 +1,4 @@
-// port-lint: tests tests/merge_join.rs
+// port-lint: tests merge_join.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

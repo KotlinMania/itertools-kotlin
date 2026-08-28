@@ -1,4 +1,4 @@
-// port-lint: tests tests/peeking_take_while.rs
+// port-lint: tests peeking_take_while.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
