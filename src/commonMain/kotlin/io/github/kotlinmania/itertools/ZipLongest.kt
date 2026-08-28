@@ -14,25 +14,45 @@ class ZipLongest<A, B>(
     private val b: Iterator<B>,
     private val aHint: SizeHint = SizeHint(0, null),
     private val bHint: SizeHint = SizeHint(0, null),
-    private val aDoubleEnded: ListIterator<A>? = null,
-    private val bDoubleEnded: ListIterator<B>? = null,
+    private val aList: List<A>? = null,
+    private val bList: List<B>? = null,
 ) : Iterator<EitherOrBoth<A, B>> {
+    private var aStart: Int = 0
+    private var aEnd: Int = aList?.size ?: 0
+    private var bStart: Int = 0
+    private var bEnd: Int = bList?.size ?: 0
     private var aExhausted: Boolean = false
     private var bExhausted: Boolean = false
     private var peeked: EitherOrBoth<A, B>? = null
     private var consumed: Int = 0
 
     constructor(aList: List<A>, bList: List<B>) : this(
-        aList.iterator(),
-        bList.iterator(),
-        SizeHint(aList.size, aList.size),
-        SizeHint(bList.size, bList.size),
-        aList.listIterator(aList.size),
-        bList.listIterator(bList.size),
+        a = aList.iterator(),
+        b = bList.iterator(),
+        aHint = SizeHint(aList.size, aList.size),
+        bHint = SizeHint(bList.size, bList.size),
+        aList = aList,
+        bList = bList,
     )
 
     private fun advance() {
-        if (peeked != null || (aExhausted && bExhausted)) return
+        if (peeked != null) return
+        if (aList != null && bList != null) {
+            val aHas = aStart < aEnd
+            val bHas = bStart < bEnd
+            if (!aHas && !bHas) return
+            val aVal = if (aHas) aList[aStart++] else null
+            val bVal = if (bHas) bList[bStart++] else null
+            peeked =
+                when {
+                    aVal != null && bVal != null -> EitherOrBoth.Both(aVal, bVal)
+                    aVal != null -> EitherOrBoth.Left(aVal)
+                    bVal != null -> EitherOrBoth.Right(bVal)
+                    else -> null
+                }
+            return
+        }
+        if (aExhausted && bExhausted) return
         val aNext = if (!aExhausted && a.hasNext()) a.next() else null.also { aExhausted = true }
         val bNext = if (!bExhausted && b.hasNext()) b.next() else null.also { bExhausted = true }
 
@@ -64,23 +84,33 @@ class ZipLongest<A, B>(
      * Returns the next element from the back when double-ended iteration is available.
      */
     fun nextBack(): EitherOrBoth<A, B>? {
-        val aDe = aDoubleEnded
-        val bDe = bDoubleEnded
-        if (aDe == null || bDe == null) {
+        if (aList == null || bList == null) {
             return null
         }
-        val aRemaining = aDe.previousIndex() + 1
-        val bRemaining = bDe.previousIndex() + 1
+        val aRemaining = aEnd - aStart
+        val bRemaining = bEnd - bStart
         return when {
-            aRemaining == 0 && bRemaining == 0 -> null
-            aRemaining > bRemaining -> EitherOrBoth.Left(aDe.previous())
-            bRemaining > aRemaining -> EitherOrBoth.Right(bDe.previous())
-            else -> EitherOrBoth.Both(aDe.previous(), bDe.previous())
+            aRemaining <= 0 && bRemaining <= 0 -> null
+            aRemaining > bRemaining -> EitherOrBoth.Left(aList[--aEnd])
+            bRemaining > aRemaining -> EitherOrBoth.Right(bList[--bEnd])
+            else -> {
+                val aVal = aList[--aEnd]
+                val bVal = bList[--bEnd]
+                EitherOrBoth.Both(aVal, bVal)
+            }
         }
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = max(subScalar(aHint, consumed), subScalar(bHint, consumed))
+    fun sizeHint(): SizeHint {
+        if (aList != null && bList != null) {
+            val aRemaining = (aEnd - aStart).coerceAtLeast(0)
+            val bRemaining = (bEnd - bStart).coerceAtLeast(0)
+            val maxRemaining = maxOf(aRemaining, bRemaining)
+            return SizeHint(maxRemaining, maxRemaining)
+        }
+        return max(subScalar(aHint, consumed), subScalar(bHint, consumed))
+    }
 
     /** Consumes the iterator and folds elements with [init] and [f]. */
     fun <R> fold(init: R, f: (R, EitherOrBoth<A, B>) -> R): R {
@@ -93,9 +123,7 @@ class ZipLongest<A, B>(
 
     /** Folds elements in reverse order. */
     fun <R> rfold(init: R, f: (R, EitherOrBoth<A, B>) -> R): R {
-        val aDe = aDoubleEnded
-        val bDe = bDoubleEnded
-        if (aDe != null && bDe != null) {
+        if (aList != null && bList != null) {
             var acc = init
             while (true) {
                 val item = nextBack() ?: break
