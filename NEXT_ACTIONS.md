@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 494/504 matched (target 1306) — 98.0%
+- **Function parity:** 494/504 matched (target 1305) — 98.0%
 - **Class/type parity:** 126/177 matched (target 251) — 71.2%
-- **Combined symbol parity:** 620/681 matched (target 1557) — 91.0%
+- **Combined symbol parity:** 620/681 matched (target 1556) — 91.0%
 - **Average inline-code cosine:** 0.53 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -61,10 +61,10 @@ Every matched file is listed below with function and type symbol parity.
 ### 3. lazy_buffer
 
 - **Target:** `itertools.LazyBuffer`
-- **Similarity:** 0.47
+- **Similarity:** 0.50
 - **Dependents:** 3
-- **Priority Score:** 3001105.2
-- **Functions:** 9/9 matched (target 20)
+- **Priority Score:** 3001105.0
+- **Functions:** 9/9 matched (target 19)
 - **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
