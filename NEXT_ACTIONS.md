@@ -8,9 +8,9 @@ Based on AST analysis, here are the concrete next steps.
 - **Function parity:** 494/795 matched (target 1308) — 62.1%
 - **Class/type parity:** 126/204 matched (target 252) — 61.8%
 - **Combined symbol parity:** 620/999 matched (target 1560) — 62.1%
-- **Average inline-code cosine:** 0.53 (function body across 50 matched files)
-- **Average documentation cosine:** 0.65 (doc text across 50 matched files)
-- **Cheat-zeroed Files:** 0
+- **Average inline-code cosine:** 0.53 (function body across 49 matched files)
+- **Average documentation cosine:** 0.65 (doc text across 49 matched files)
+- **Cheat-zeroed Files:** 1
 - **Critical Issues:** 36 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
@@ -221,9 +221,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 5)
 - **Missing types:** `Item`
 - **Provenance warning:** port-lint provenance header matched only after fallback normalization: `flatten_ok.rs` vs expected `flatten_ok.rs`
-- **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/flatten_ok.rs` vs expected `flatten_ok.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:flatten_ok.rs` vs expected `flatten_ok.rs`
 - **Proposed provenance header:** `// port-lint: source flatten_ok.rs` (current: `// port-lint: source flatten_ok.rs`)
-- **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests tests/flatten_ok.rs`)
+- **Proposed provenance header:** `// port-lint: tests flatten_ok.rs` (current: `// port-lint: tests flatten_ok.rs`)
 - **Lint issues:** 2
 
 ### 13. peeking_take_while
@@ -237,9 +237,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/3 matched (target 4)
 - **Missing types:** `Item`
 - **Provenance warning:** port-lint provenance header matched only after fallback normalization: `peeking_take_while.rs` vs expected `peeking_take_while.rs`
-- **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/peeking_take_while.rs` vs expected `peeking_take_while.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:peeking_take_while.rs` vs expected `peeking_take_while.rs`
 - **Proposed provenance header:** `// port-lint: source peeking_take_while.rs` (current: `// port-lint: source peeking_take_while.rs`)
-- **Proposed provenance header:** `// port-lint: tests peeking_take_while.rs` (current: `// port-lint: tests tests/peeking_take_while.rs`)
+- **Proposed provenance header:** `// port-lint: tests peeking_take_while.rs` (current: `// port-lint: tests peeking_take_while.rs`)
 - **Lint issues:** 2
 
 ### 14. with_position
@@ -396,9 +396,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 7/10 matched (target 8)
 - **Missing types:** `T`, `MergeResult`, `Item`
 - **Provenance warning:** port-lint provenance header matched only after fallback normalization: `merge_join.rs` vs expected `merge_join.rs`
-- **Provenance warning:** port-lint provenance header matched only by basename: `tests:tests/merge_join.rs` vs expected `merge_join.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:merge_join.rs` vs expected `merge_join.rs`
 - **Proposed provenance header:** `// port-lint: source merge_join.rs` (current: `// port-lint: source merge_join.rs`)
-- **Proposed provenance header:** `// port-lint: tests merge_join.rs` (current: `// port-lint: tests tests/merge_join.rs`)
+- **Proposed provenance header:** `// port-lint: tests merge_join.rs` (current: `// port-lint: tests merge_join.rs`)
 - **Lint issues:** 2
 
 ### 24. adaptors.map
@@ -659,18 +659,18 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 40. adaptors.mod
 
-- **Target:** `adaptors.Mod [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.54
+- **Target:** `adaptors.Mod [STUB] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 4404.6
+- **Priority Score:** 4410.0
 - **Functions:** 28/28 matched (target 150)
 - **Missing functions:** _none_
 - **Types:** 16/16 matched (target 30)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Provenance warning:** port-lint provenance header matched only by basename: `mod.rs` vs expected `adaptors/mod.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `adaptors/mod.rs` vs expected `adaptors/mod.rs`
 - **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:adaptors/mod.rs` vs expected `adaptors/mod.rs`
-- **Proposed provenance header:** `// port-lint: source adaptors/mod.rs` (current: `// port-lint: source mod.rs`)
+- **Proposed provenance header:** `// port-lint: source adaptors/mod.rs` (current: `// port-lint: source adaptors/mod.rs`)
 - **Proposed provenance header:** `// port-lint: tests adaptors/mod.rs` (current: `// port-lint: tests adaptors/mod.rs`)
 - **Lint issues:** 2
 
