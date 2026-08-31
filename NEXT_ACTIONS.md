@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 494/504 matched (target 1308) — 98.0%
+- **Function parity:** 494/504 matched (target 1316) — 98.0%
 - **Class/type parity:** 126/177 matched (target 252) — 71.2%
-- **Combined symbol parity:** 620/681 matched (target 1560) — 91.0%
+- **Combined symbol parity:** 620/681 matched (target 1568) — 91.0%
 - **Average inline-code cosine:** 0.53 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
@@ -252,7 +252,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.53
 - **Dependents:** 0
 - **Priority Score:** 44204.7
-- **Functions:** 137/137 matched (target 253)
+- **Functions:** 137/137 matched (target 254)
 - **Missing functions:** _none_
 - **Types:** 2/5 matched (target 14)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
@@ -384,7 +384,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.75
 - **Dependents:** 0
 - **Priority Score:** 11602.5
-- **Functions:** 15/15 matched (target 47)
+- **Functions:** 15/15 matched (target 50)
 - **Missing functions:** _none_
 - **Types:** 0/1 matched
 - **Missing types:** `VecIntoIter`
@@ -539,7 +539,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.20
 - **Dependents:** 0
 - **Priority Score:** 208.0
-- **Functions:** 1/1 matched (target 21)
+- **Functions:** 1/1 matched (target 25)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
