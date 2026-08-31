@@ -1,4 +1,4 @@
-// port-lint: source tee.rs
+// port-lint: source itertools/src/tee.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

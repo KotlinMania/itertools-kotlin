@@ -1,4 +1,4 @@
-// port-lint: tests tests/zip.rs
+// port-lint: tests itertools/tests/zip.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.batching

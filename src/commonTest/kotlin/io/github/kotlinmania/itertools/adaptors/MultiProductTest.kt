@@ -1,4 +1,4 @@
-// port-lint: tests adaptors/multi_product.rs
+// port-lint: tests itertools/src/adaptors/multi_product.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import kotlin.test.Test

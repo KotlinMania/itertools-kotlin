@@ -1,4 +1,4 @@
-// port-lint: source pad_tail.rs
+// port-lint: source itertools/src/pad_tail.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

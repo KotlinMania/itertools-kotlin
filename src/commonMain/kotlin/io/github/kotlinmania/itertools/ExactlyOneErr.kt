@@ -1,4 +1,4 @@
-// port-lint: source exactly_one_err.rs
+// port-lint: source itertools/src/exactly_one_err.rs
 package io.github.kotlinmania.itertools
 
 /**

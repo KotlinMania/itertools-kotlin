@@ -1,4 +1,4 @@
-// port-lint: source group_map.rs
+// port-lint: source itertools/src/group_map.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

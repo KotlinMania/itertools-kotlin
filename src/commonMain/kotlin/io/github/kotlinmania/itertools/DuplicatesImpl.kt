@@ -1,4 +1,4 @@
-// port-lint: source duplicates_impl.rs
+// port-lint: source itertools/src/duplicates_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

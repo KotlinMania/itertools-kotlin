@@ -1,4 +1,4 @@
-// port-lint: tests size_hint.rs
+// port-lint: tests itertools/src/size_hint.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

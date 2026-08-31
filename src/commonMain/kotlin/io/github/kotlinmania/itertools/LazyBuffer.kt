@@ -1,4 +1,4 @@
-// port-lint: source lazy_buffer.rs
+// port-lint: source itertools/src/lazy_buffer.rs
 package io.github.kotlinmania.itertools
 
 /**

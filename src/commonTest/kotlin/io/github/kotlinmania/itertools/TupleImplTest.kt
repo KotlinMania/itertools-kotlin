@@ -1,4 +1,4 @@
-// port-lint: tests tuple_impl.rs
+// port-lint: tests itertools/src/tuple_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: tests next_array.rs
+// port-lint: tests itertools/src/next_array.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

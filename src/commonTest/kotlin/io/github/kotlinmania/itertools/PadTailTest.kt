@@ -1,4 +1,4 @@
-// port-lint: tests pad_tail.rs
+// port-lint: tests itertools/src/pad_tail.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

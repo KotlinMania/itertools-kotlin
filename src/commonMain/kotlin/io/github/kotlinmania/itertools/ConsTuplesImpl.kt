@@ -1,4 +1,4 @@
-// port-lint: source cons_tuples_impl.rs
+// port-lint: source itertools/src/cons_tuples_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

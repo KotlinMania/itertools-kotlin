@@ -1,4 +1,4 @@
-// port-lint: tests duplicates_impl.rs
+// port-lint: tests itertools/src/duplicates_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

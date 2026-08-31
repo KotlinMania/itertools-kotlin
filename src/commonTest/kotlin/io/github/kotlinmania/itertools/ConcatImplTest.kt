@@ -1,4 +1,4 @@
-// port-lint: tests concat_impl.rs
+// port-lint: tests itertools/src/concat_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

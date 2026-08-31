@@ -1,4 +1,4 @@
-// port-lint: source put_back_n_impl.rs
+// port-lint: source itertools/src/put_back_n_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

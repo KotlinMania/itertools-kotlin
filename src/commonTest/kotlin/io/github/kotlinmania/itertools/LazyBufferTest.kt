@@ -1,4 +1,4 @@
-// port-lint: tests lazy_buffer.rs
+// port-lint: tests itertools/src/lazy_buffer.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

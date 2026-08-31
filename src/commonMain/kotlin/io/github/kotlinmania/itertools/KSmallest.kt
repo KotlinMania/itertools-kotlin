@@ -1,4 +1,4 @@
-// port-lint: source k_smallest.rs
+// port-lint: source itertools/src/k_smallest.rs
 package io.github.kotlinmania.itertools
 
 /** Consumes a given iterator, returning the minimum elements in **ascending** order. */
