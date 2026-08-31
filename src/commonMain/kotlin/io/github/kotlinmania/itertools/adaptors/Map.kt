@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/adaptors/map.rs
+// port-lint: source adaptors/map.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import io.github.kotlinmania.itertools.ItemResult

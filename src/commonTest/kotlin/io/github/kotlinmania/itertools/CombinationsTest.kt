@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/combinations.rs
+// port-lint: tests combinations.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

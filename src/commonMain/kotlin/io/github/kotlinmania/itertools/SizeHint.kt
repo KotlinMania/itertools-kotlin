@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/size_hint.rs
+// port-lint: source size_hint.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.math.max as cmpMax

@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/ziptuple.rs
+// port-lint: tests ziptuple.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

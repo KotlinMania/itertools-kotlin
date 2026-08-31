@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/rciter_impl.rs
+// port-lint: source rciter_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

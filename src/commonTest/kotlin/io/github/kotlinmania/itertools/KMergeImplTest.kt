@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/kmerge_impl.rs
+// port-lint: tests kmerge_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

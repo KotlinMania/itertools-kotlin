@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/adaptors_no_collect.rs
+// port-lint: tests tests/adaptors_no_collect.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

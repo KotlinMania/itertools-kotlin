@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/laziness.rs
+// port-lint: tests tests/laziness.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.batching

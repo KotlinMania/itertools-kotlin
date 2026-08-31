@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/test_std.rs
+// port-lint: tests tests/test_std.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/test_core.rs
+// port-lint: tests tests/test_core.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.batching

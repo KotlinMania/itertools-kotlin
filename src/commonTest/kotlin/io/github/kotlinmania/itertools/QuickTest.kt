@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/quick.rs
+// port-lint: tests tests/quick.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.interleave

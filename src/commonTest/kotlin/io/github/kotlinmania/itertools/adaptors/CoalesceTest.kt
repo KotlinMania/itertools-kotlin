@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/adaptors/coalesce.rs
+// port-lint: tests adaptors/coalesce.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import io.github.kotlinmania.itertools.SizeHint

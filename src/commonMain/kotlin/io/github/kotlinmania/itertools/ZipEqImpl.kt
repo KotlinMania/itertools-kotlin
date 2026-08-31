@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/zip_eq_impl.rs
+// port-lint: source zip_eq_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

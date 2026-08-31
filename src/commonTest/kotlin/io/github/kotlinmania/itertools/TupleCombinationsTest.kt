@@ -1,4 +1,4 @@
-// port-lint: tests itertools/tests/tuples.rs
+// port-lint: tests tests/tuples.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.Tuple1Combination

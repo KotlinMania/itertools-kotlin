@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/groupbylazy.rs
+// port-lint: source groupbylazy.rs
 package io.github.kotlinmania.itertools
 
 /**

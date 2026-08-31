@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/cons_tuples_impl.rs
+// port-lint: tests cons_tuples_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

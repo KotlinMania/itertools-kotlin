@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/zip_longest.rs
+// port-lint: source zip_longest.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName
