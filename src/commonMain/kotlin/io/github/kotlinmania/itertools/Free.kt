@@ -93,10 +93,28 @@ fun <T> chain(i: Iterable<T>, j: Iterable<T>): Iterator<T> =
     (i.asSequence() + j.asSequence()).iterator()
 
 /**
+ * Takes three iterables and creates a new iterator over all in sequence.
+ */
+fun <T> chain(i: Iterable<T>, j: Iterable<T>, k: Iterable<T>): Iterator<T> =
+    (i.asSequence() + j.asSequence() + k.asSequence()).iterator()
+
+/**
+ * Takes multiple iterables and creates a new iterator over all in sequence.
+ */
+fun <T> chain(vararg iterables: Iterable<T>): Iterator<T> =
+    iterables.asSequence().flatMap { it.asSequence() }.iterator()
+
+/**
  * Takes two iterators and creates a new iterator over both in sequence.
  */
 fun <T> chain(i: Iterator<T>, j: Iterator<T>): Iterator<T> =
     (i.asSequence() + j.asSequence()).iterator()
+
+/**
+ * Takes three iterators and creates a new iterator over all in sequence.
+ */
+fun <T> chain(i: Iterator<T>, j: Iterator<T>, k: Iterator<T>): Iterator<T> =
+    (i.asSequence() + j.asSequence() + k.asSequence()).iterator()
 
 /**
  * Create an iterator that clones each element.
@@ -283,22 +301,31 @@ fun <T> partitionInPlace(list: MutableList<T>, predicate: (T) -> Boolean): Int {
  * Returns the index of the first element of the second group.
  */
 fun partitionInPlace(array: IntArray, predicate: (Int) -> Boolean): Int {
+    var splitIndex = 0
     var left = 0
     var right = array.size - 1
     while (left <= right) {
-        if (predicate(array[left])) {
-            left++
-        } else if (!predicate(array[right])) {
-            right--
-        } else {
-            val tmp = array[left]
-            array[left] = array[right]
-            array[right] = tmp
-            left++
-            right--
+        if (!predicate(array[left])) {
+            var found = false
+            while (right > left) {
+                if (predicate(array[right])) {
+                    val tmp = array[left]
+                    array[left] = array[right]
+                    array[right] = tmp
+                    right--
+                    found = true
+                    break
+                }
+                right--
+            }
+            if (!found) {
+                break
+            }
         }
+        splitIndex++
+        left++
     }
-    return left
+    return splitIndex
 }
 
 /**

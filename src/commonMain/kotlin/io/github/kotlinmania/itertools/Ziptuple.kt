@@ -213,3 +213,24 @@ fun <T> multizip(iters: Iterable<Iterable<T>>): MultiZip<T> =
  */
 fun <A, B> Iterator<A>.zip(other: Iterator<B>): Zip2<A, B> =
     Zip2(this, other)
+
+/**
+ * Create an iterator running two iterators in lockstep into pairs.
+ */
+fun <A, B> izip(a: Iterator<A>, b: Iterator<B>): Zip2<A, B> = multizip(a, b)
+
+/**
+ * Create an iterator running two iterables in lockstep into pairs.
+ */
+fun <A, B> izip(a: Iterable<A>, b: Iterable<B>): Zip2<A, B> = multizip(a, b)
+
+/**
+ * Create an iterator running three iterators in lockstep into triples.
+ */
+fun <A, B, C> izip(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>): Zip3<A, B, C> = multizip(a, b, c)
+
+/**
+ * Create an iterator running three iterables in lockstep into triples.
+ */
+fun <A, B, C> izip(a: Iterable<A>, b: Iterable<B>, c: Iterable<C>): Zip3<A, B, C> = multizip(a, b, c)
+

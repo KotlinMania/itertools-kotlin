@@ -722,12 +722,16 @@ fun <T, E> Iterator<ItemResult<T, E>>.tryCollect(): ItemResult<List<T>, E> {
 /**
  * Set the elements of this mutable list from the given iterable.
  */
-fun <T> MutableList<T>.setFrom(from: Iterable<T>): Int {
+fun <T> MutableList<T>.setFrom(from: Iterable<T>): Int = setFrom(from.iterator())
+
+/**
+ * Set the elements of this mutable list from the given iterator.
+ */
+fun <T> MutableList<T>.setFrom(from: Iterator<T>): Int {
     var count = 0
-    val it = from.iterator()
     for (i in indices) {
-        if (it.hasNext()) {
-            this[i] = it.next()
+        if (from.hasNext()) {
+            this[i] = from.next()
             count += 1
         } else {
             break
