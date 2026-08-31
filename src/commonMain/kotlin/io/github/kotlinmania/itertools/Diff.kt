@@ -1,4 +1,4 @@
-// port-lint: source diff.rs
+// port-lint: source itertools/src/diff.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: source flatten_ok.rs
+// port-lint: source itertools/src/flatten_ok.rs
 package io.github.kotlinmania.itertools
 
 /**

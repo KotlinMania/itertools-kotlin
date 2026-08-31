@@ -1,4 +1,4 @@
-// port-lint: source grouping_map.rs
+// port-lint: source itertools/src/grouping_map.rs
 package io.github.kotlinmania.itertools
 
 /**

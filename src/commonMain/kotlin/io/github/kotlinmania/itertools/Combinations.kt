@@ -1,4 +1,4 @@
-// port-lint: source combinations.rs
+// port-lint: source itertools/src/combinations.rs
 package io.github.kotlinmania.itertools
 
 /**

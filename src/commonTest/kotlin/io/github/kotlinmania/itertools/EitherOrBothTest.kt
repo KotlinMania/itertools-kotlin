@@ -1,4 +1,4 @@
-// port-lint: tests either_or_both.rs
+// port-lint: tests itertools/src/either_or_both.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

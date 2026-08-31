@@ -1,4 +1,4 @@
-// port-lint: tests grouping_map.rs
+// port-lint: tests itertools/src/grouping_map.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source process_results_impl.rs
+// port-lint: source itertools/src/process_results_impl.rs
 package io.github.kotlinmania.itertools
 
 internal class ErrorHolder<E> {

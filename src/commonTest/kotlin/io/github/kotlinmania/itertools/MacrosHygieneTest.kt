@@ -1,4 +1,4 @@
-// port-lint: tests tests/macros_hygiene.rs
+// port-lint: tests itertools/tests/macros_hygiene.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

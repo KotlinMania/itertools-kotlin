@@ -1,4 +1,4 @@
-// port-lint: tests combinations_with_replacement.rs
+// port-lint: tests itertools/src/combinations_with_replacement.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source peek_nth.rs
+// port-lint: source itertools/src/peek_nth.rs
 package io.github.kotlinmania.itertools
 
 /**

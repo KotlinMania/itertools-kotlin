@@ -1,4 +1,4 @@
-// port-lint: tests tests/specializations.rs
+// port-lint: tests itertools/tests/specializations.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.CoalesceResult

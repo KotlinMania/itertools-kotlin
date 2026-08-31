@@ -1,4 +1,4 @@
-// port-lint: tests zip_longest.rs
+// port-lint: tests itertools/src/zip_longest.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

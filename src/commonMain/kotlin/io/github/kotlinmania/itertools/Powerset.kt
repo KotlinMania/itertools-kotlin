@@ -1,4 +1,4 @@
-// port-lint: source powerset.rs
+// port-lint: source itertools/src/powerset.rs
 package io.github.kotlinmania.itertools
 
 /**

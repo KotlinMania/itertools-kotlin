@@ -1,4 +1,4 @@
-// port-lint: source unziptuple.rs
+// port-lint: source itertools/src/unziptuple.rs
 package io.github.kotlinmania.itertools
 
 /**

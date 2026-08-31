@@ -1,4 +1,4 @@
-// port-lint: source kmerge_impl.rs
+// port-lint: source itertools/src/kmerge_impl.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: tests zip_eq_impl.rs
+// port-lint: tests itertools/src/zip_eq_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

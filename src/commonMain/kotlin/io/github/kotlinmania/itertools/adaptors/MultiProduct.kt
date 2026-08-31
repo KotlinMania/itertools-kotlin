@@ -1,4 +1,4 @@
-// port-lint: source adaptors/multi_product.rs
+// port-lint: source itertools/src/adaptors/multi_product.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import io.github.kotlinmania.itertools.SizeHint

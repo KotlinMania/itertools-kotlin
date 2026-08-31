@@ -1,4 +1,4 @@
-// port-lint: source next_array.rs
+// port-lint: source itertools/src/next_array.rs
 package io.github.kotlinmania.itertools
 
 /**
