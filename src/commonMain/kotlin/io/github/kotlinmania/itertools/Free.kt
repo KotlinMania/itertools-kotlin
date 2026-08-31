@@ -7,6 +7,7 @@ package io.github.kotlinmania.itertools
  * The benefit of free functions is that they accept any [Iterable] as
  * argument, so the resulting code may be easier to read.
  */
+public typealias VecIntoIter<T> = Iterator<T>
 
 /**
  * Iterate [iterable] with a particular value inserted between each element.
