@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 50/50 (100.0%)
-- **Function parity:** 494/504 matched (target 1316) — 98.0%
-- **Class/type parity:** 126/177 matched (target 252) — 71.2%
-- **Combined symbol parity:** 620/681 matched (target 1568) — 91.0%
+- **Files Present:** 49/50 (98.0%)
+- **Function parity:** 466/547 matched (target 1166) — 85.2%
+- **Class/type parity:** 110/177 matched (target 222) — 62.1%
+- **Combined symbol parity:** 576/724 matched (target 1388) — 79.6%
 - **Average inline-code cosine:** 0.53 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
-- **Cheat-zeroed Files:** 1
-- **Critical Issues:** 36 files with <0.60 function similarity
+- **Cheat-zeroed Files:** 0
+- **Critical Issues:** 35 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -466,19 +466,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/2 matched (target 3)
 - **Missing types:** `Item`
 
-### 40. adaptors.mod
-
-- **Target:** `adaptors.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 4410.0
-- **Functions:** 28/28 matched (target 150)
-- **Missing functions:** _none_
-- **Types:** 16/16 matched (target 30)
-- **Missing types:** _none_
-- **Tests:** 1/1 matched
-
-### 41. format
+### 40. format
 
 - **Target:** `itertools.Format`
 - **Similarity:** 0.53
@@ -489,7 +477,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/3 matched (target 5)
 - **Missing types:** _none_
 
-### 42. k_smallest
+### 41. k_smallest
 
 - **Target:** `itertools.KSmallest`
 - **Similarity:** 0.78
@@ -500,7 +488,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 43. minmax
+### 42. minmax
 
 - **Target:** `itertools.MinMax`
 - **Similarity:** 0.54
@@ -511,7 +499,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
 
-### 44. cons_tuples_impl
+### 43. cons_tuples_impl
 
 - **Target:** `itertools.ConsTuplesImpl`
 - **Similarity:** 0.71
@@ -522,7 +510,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 
-### 45. unziptuple
+### 44. unziptuple
 
 - **Target:** `itertools.UnzipTuple`
 - **Similarity:** 0.19
@@ -533,7 +521,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
 
-### 46. ziptuple
+### 45. ziptuple
 
 - **Target:** `itertools.Ziptuple`
 - **Similarity:** 0.20
@@ -544,7 +532,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 5)
 - **Missing types:** _none_
 
-### 47. group_map
+### 46. group_map
 
 - **Target:** `itertools.GroupMap`
 - **Similarity:** 0.71
@@ -555,7 +543,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched
 - **Missing types:** _none_
 
-### 48. extrema_set
+### 47. extrema_set
 
 - **Target:** `itertools.ExtremaSet`
 - **Similarity:** 0.88
@@ -566,7 +554,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched
 - **Missing types:** _none_
 
-### 49. concat_impl
+### 48. concat_impl
 
 - **Target:** `itertools.ConcatImpl`
 - **Similarity:** 0.67
@@ -577,7 +565,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 50. impl_macros
+### 49. impl_macros
 
 - **Target:** `itertools.ImplMacros`
 - **Similarity:** 1.00

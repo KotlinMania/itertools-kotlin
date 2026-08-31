@@ -1,4 +1,3 @@
-// port-lint: source adaptors/mod.rs
 package io.github.kotlinmania.itertools.adaptors
 
 import io.github.kotlinmania.itertools.ItemResult
