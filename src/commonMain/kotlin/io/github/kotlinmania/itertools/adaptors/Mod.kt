@@ -40,8 +40,8 @@ class Interleave<T>(
 
     /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint {
-        val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
-        val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
+        val iHint = sizeHintOf(i)
+        val jHint = sizeHintOf(j)
         return io.github.kotlinmania.itertools
             .add(iHint, jHint)
     }
@@ -100,8 +100,8 @@ class InterleaveShortest<T>(
 
     /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint {
-        val iHint = if (i is SizedIterator<*>) i.sizeHint() else SizeHint(0, null)
-        val jHint = if (j is SizedIterator<*>) j.sizeHint() else SizeHint(0, null)
+        val iHint = sizeHintOf(i)
+        val jHint = sizeHintOf(j)
         val (currHint, nextHint) = if (nextComingFromJ) Pair(jHint, iHint) else Pair(iHint, jHint)
         val minHint =
             io.github.kotlinmania.itertools
@@ -948,6 +948,32 @@ fun checkedBinomial(n: Int, k: Int): Int? {
     return c.toInt()
 }
 
+private const val LIMIT: Int = 500
+
+internal fun testCheckedBinomial() {
+    var row = MutableList<Int?>(LIMIT + 1) { 0 }
+    row[0] = 1
+    for (n in 0..LIMIT) {
+        for (k in 0..LIMIT) {
+            check(row[k] == checkedBinomial(n, k))
+        }
+        val newRow = mutableListOf<Int?>(1)
+        for (k in 1..LIMIT) {
+            val prev = row[k - 1]
+            val curr = row[k]
+            val sum =
+                if (prev != null && curr != null) {
+                    val s = prev.toLong() + curr.toLong()
+                    if (s > Int.MAX_VALUE) null else s.toInt()
+                } else {
+                    null
+                }
+            newRow.add(sum)
+        }
+        row = newRow
+    }
+}
+
 /**
  * An iterator adapter to filter values within a nested [ItemResult.Ok].
  */
@@ -1297,6 +1323,9 @@ fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemRes
             }
     }
 
-private interface SizedIterator<T> : Iterator<T> {
-    fun sizeHint(): SizeHint
-}
+private fun sizeHintOf(it: Any?): SizeHint =
+    when (it) {
+        is Collection<*> -> SizeHint(it.size, it.size)
+        else -> SizeHint(0, null)
+    }
+
