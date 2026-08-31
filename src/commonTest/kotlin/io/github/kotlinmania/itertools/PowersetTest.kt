@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/powerset.rs
+// port-lint: tests powerset.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

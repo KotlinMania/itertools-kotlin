@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/intersperse.rs
+// port-lint: source intersperse.rs
 package io.github.kotlinmania.itertools
 
 /**

@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/groupbylazy.rs
+// port-lint: tests groupbylazy.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

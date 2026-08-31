@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/take_while_inclusive.rs
+// port-lint: source take_while_inclusive.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

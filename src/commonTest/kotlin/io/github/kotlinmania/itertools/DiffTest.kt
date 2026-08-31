@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/diff.rs
+// port-lint: tests diff.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

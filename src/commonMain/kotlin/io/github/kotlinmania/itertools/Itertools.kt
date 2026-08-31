@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/lib.rs
+// port-lint: source lib.rs
 package io.github.kotlinmania.itertools
 
 import io.github.kotlinmania.itertools.adaptors.Batching

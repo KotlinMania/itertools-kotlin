@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/multipeek_impl.rs
+// port-lint: tests multipeek_impl.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/extrema_set.rs
+// port-lint: source extrema_set.rs
 package io.github.kotlinmania.itertools
 
 /** Implementation guts for `minSet`, `minSetBy`, and `minSetByKey`. */

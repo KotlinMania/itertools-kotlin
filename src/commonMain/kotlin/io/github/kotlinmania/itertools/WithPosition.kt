@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/with_position.rs
+// port-lint: source with_position.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.jvm.JvmName

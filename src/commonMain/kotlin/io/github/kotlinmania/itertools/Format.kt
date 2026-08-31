@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/format.rs
+// port-lint: source format.rs
 package io.github.kotlinmania.itertools
 
 /**

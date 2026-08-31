@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/impl_macros.rs
+// port-lint: source impl_macros.rs
 package io.github.kotlinmania.itertools
 
 /**

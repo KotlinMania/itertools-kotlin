@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/minmax.rs
+// port-lint: source minmax.rs
 package io.github.kotlinmania.itertools
 
 /**

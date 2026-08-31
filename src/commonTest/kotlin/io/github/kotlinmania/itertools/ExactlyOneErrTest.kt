@@ -1,4 +1,4 @@
-// port-lint: tests itertools/src/exactly_one_err.rs
+// port-lint: tests exactly_one_err.rs
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test

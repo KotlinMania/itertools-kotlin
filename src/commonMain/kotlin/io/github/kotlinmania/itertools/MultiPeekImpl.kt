@@ -1,4 +1,4 @@
-// port-lint: source itertools/src/multipeek_impl.rs
+// port-lint: source multipeek_impl.rs
 package io.github.kotlinmania.itertools
 
 /**
