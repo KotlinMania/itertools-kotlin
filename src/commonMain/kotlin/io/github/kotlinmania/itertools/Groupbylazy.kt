@@ -233,6 +233,9 @@ class ChunkBy<K, T>(
 
         return Pair(key, group)
     }
+
+    /** Convert into iterator of groups. */
+    fun intoIter(): Groups<K, T> = Groups(this)
 }
 
 /**
@@ -255,7 +258,10 @@ class Groups<K, T>(
 class Group<K, T>(
     val key: K,
     val elements: List<T>,
-) : Iterator<T> by elements.iterator()
+) : Iterator<T> by elements.iterator() {
+    /** Drop / close this group. */
+    fun drop() = Unit
+}
 
 /**
  * `IntoChunks` is the storage for a lazy chunking operation.
@@ -287,6 +293,9 @@ class IntoChunks<T>(
         }
         return chunk
     }
+
+    /** Convert into iterator of chunks. */
+    fun intoIter(): Chunks<T> = this
 }
 
 /**
@@ -305,7 +314,10 @@ typealias Chunks<T> = IntoChunks<T>
  */
 class Chunk<T>(
     val elements: List<T>,
-) : Iterator<T> by elements.iterator()
+) : Iterator<T> by elements.iterator() {
+    /** Drop / close this chunk. */
+    fun drop() = Unit
+}
 
 /**
  * Create a new [ChunkBy] instance.

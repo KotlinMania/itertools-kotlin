@@ -181,7 +181,11 @@ class PutBack<T>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(if (top.isNotEmpty()) 1 else 0, null)
+    fun sizeHint(): SizeHint {
+        val (lower, upper) = sizeHintOf(iter)
+        val x = if (top.isNotEmpty()) 1 else 0
+        return SizeHint(lower + x, upper?.plus(x))
+    }
 
     /** Count remaining elements. */
     fun count(): Int {
@@ -287,7 +291,15 @@ class Product<A, B>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        val aHint = sizeHintOf(iterA)
+        val bOrigHint = sizeHintOf(curIterB)
+        var sh = io.github.kotlinmania.itertools.mul(aHint, bOrigHint)
+        if (curA.isNotEmpty()) {
+            sh = io.github.kotlinmania.itertools.add(sh, sizeHintOf(curIterB))
+        }
+        return sh
+    }
 
     /** Fold over elements. */
     fun <Acc> fold(init: Acc, f: (Acc, Pair<A, B>) -> Acc): Acc {
@@ -386,7 +398,12 @@ class TakeWhileRef<T>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        if (done) return SizeHint(0, 0)
+        val x = if (peeked.isNotEmpty()) 1 else 0
+        val (_, upper) = sizeHintOf(iter)
+        return SizeHint(0, upper?.plus(x))
+    }
 }
 
 /**
@@ -443,7 +460,11 @@ class WhileSome<T : Any>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        if (exhausted) return SizeHint(0, 0)
+        val (_, upper) = sizeHintOf(iter)
+        return SizeHint(0, upper)
+    }
 
     /** Fold over elements. */
     fun <B> fold(init: B, f: (B, T) -> B): B {
@@ -502,7 +523,7 @@ class Tuple1Combination<T>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint = sizeHintOf(iter)
 
     /** Count remaining elements. */
     fun count(): Int {
@@ -948,31 +969,6 @@ fun checkedBinomial(n: Int, k: Int): Int? {
     return c.toInt()
 }
 
-private const val LIMIT: Int = 500
-
-internal fun testCheckedBinomial() {
-    var row = MutableList<Int?>(LIMIT + 1) { 0 }
-    row[0] = 1
-    for (n in 0..LIMIT) {
-        for (k in 0..LIMIT) {
-            check(row[k] == checkedBinomial(n, k))
-        }
-        val newRow = mutableListOf<Int?>(1)
-        for (k in 1..LIMIT) {
-            val prev = row[k - 1]
-            val curr = row[k]
-            val sum =
-                if (prev != null && curr != null) {
-                    val s = prev.toLong() + curr.toLong()
-                    if (s > Int.MAX_VALUE) null else s.toInt()
-                } else {
-                    null
-                }
-            newRow.add(sum)
-        }
-        row = newRow
-    }
-}
 
 /**
  * An iterator adapter to filter values within a nested [ItemResult.Ok].
@@ -1019,7 +1015,10 @@ class FilterOk<T, E> internal constructor(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        val (_, upper) = sizeHintOf(iter)
+        return SizeHint(0, upper)
+    }
 
     /** Fold over elements. */
     fun <Acc> fold(init: Acc, f: (Acc, ItemResult<T, E>) -> Acc): Acc {
@@ -1114,7 +1113,10 @@ class FilterMapOk<T, U, E> internal constructor(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        val (_, upper) = sizeHintOf(iter)
+        return SizeHint(0, upper)
+    }
 
     /** Fold over elements. */
     fun <Acc> fold(init: Acc, f: (Acc, ItemResult<U, E>) -> Acc): Acc {
@@ -1202,7 +1204,10 @@ class Positions<T>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint {
+        val (_, upper) = sizeHintOf(iter)
+        return SizeHint(0, upper)
+    }
 
     /** Yield the previous matching position from the back. */
     fun nextBack(): Int? {
@@ -1255,7 +1260,7 @@ class Update<T>(
     }
 
     /** Returns the size hint for this iterator. */
-    fun sizeHint(): SizeHint = SizeHint(0, null)
+    fun sizeHint(): SizeHint = sizeHintOf(iter)
 
     /** Fold over elements. */
     fun <Acc> fold(init: Acc, g: (Acc, T) -> Acc): Acc {
@@ -1326,6 +1331,21 @@ fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemRes
 private fun sizeHintOf(it: Any?): SizeHint =
     when (it) {
         is Collection<*> -> SizeHint(it.size, it.size)
+        is Interleave<*> -> it.sizeHint()
+        is InterleaveShortest<*> -> it.sizeHint()
+        is PutBack<*> -> it.sizeHint()
+        is Product<*, *> -> it.sizeHint()
+        is TakeWhileRef<*> -> it.sizeHint()
+        is WhileSome<*> -> it.sizeHint()
+        is Tuple1Combination<*> -> it.sizeHint()
+        is Tuple2Combination<*> -> it.sizeHint()
+        is Tuple3Combination<*> -> it.sizeHint()
+        is BaseTupleKCombination<*> -> it.sizeHint()
+        is TupleCombinations<*, *> -> it.sizeHint()
+        is FilterOk<*, *> -> it.sizeHint()
+        is FilterMapOk<*, *, *> -> it.sizeHint()
+        is Positions<*> -> it.sizeHint()
+        is Update<*> -> it.sizeHint()
         else -> SizeHint(0, null)
     }
 

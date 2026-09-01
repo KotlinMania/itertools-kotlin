@@ -15,6 +15,13 @@ internal class ArrayBuilder<T>(
     private val arr: MutableList<T> = ArrayList(n)
 
     /**
+     * Initializes a new, empty `ArrayBuilder`.
+     */
+    companion object {
+        fun <T> new(n: Int): ArrayBuilder<T> = ArrayBuilder(n)
+    }
+
+    /**
      * Pushes [value] onto the end of the list.
      *
      * Panics if `len >= n`.
@@ -43,6 +50,14 @@ internal class ArrayBuilder<T>(
 
     /** Returns a mutable view of the underlying list. */
     fun asMut(): MutableList<T> = arr
+
+    /** Assuming all elements are initialized, get a mutable slice to them. */
+    fun sliceAssumeInitMut(): MutableList<T> = arr
+
+    /** Explicit destructor for resources. */
+    fun drop() {
+        arr.clear()
+    }
 }
 
 /** Returns the next [n] elements from the iterator as a list, or null if fewer remain. */
