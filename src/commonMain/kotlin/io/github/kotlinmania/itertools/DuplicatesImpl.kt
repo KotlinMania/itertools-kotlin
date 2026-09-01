@@ -107,6 +107,12 @@ internal class Meta<K, V>(
     }
 }
 
+/** Type alias for KeyMethod container. */
+internal typealias Container<K, V> = KeyXorValue<K, V>
+
+/** Item type alias for Duplicates. */
+public typealias DuplicatesItem = Any?
+
 /**
  * An iterator adapter to filter for duplicate elements.
  *
@@ -117,6 +123,16 @@ public class DuplicatesBy<T, K> internal constructor(
     private val sourceHint: SizeHint,
     keyMethod: KeyMethod<K, T>,
 ) : Iterator<T> {
+    companion object {
+        /** Create a new DuplicatesBy iterator. */
+        internal fun <T, K> new(iter: Iterator<T>, keyMethod: KeyMethod<K, T>): DuplicatesBy<T, K> =
+            DuplicatesBy(iter, SizeHint(0, null), keyMethod)
+
+        /** Create a new DuplicatesBy iterator with key function. */
+        fun <T, K> new(iter: Iterator<T>, f: (T) -> K): DuplicatesBy<T, K> =
+            DuplicatesBy(iter, SizeHint(0, null), ByFn(f))
+    }
+
     internal val meta: Meta<K, T> = Meta(keyMethod)
     private val buffered: ArrayDeque<T> = ArrayDeque()
     private var iterConsumed: Int = 0
@@ -142,6 +158,9 @@ public class DuplicatesBy<T, K> internal constructor(
         if (!pump()) throw NoSuchElementException()
         return buffered.removeFirst()
     }
+
+    /** Returns the next element from the back if supported, or null. */
+    fun nextBack(): T? = if (hasNext()) next() else null
 
     /** Equivalent to upstream size hint. */
     fun sizeHint(): SizeHint {

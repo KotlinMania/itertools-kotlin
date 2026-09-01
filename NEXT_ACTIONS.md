@@ -5,10 +5,10 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 50/50 (100.0%)
-- **Function parity:** 501/504 matched (target 1326) — 99.4%
-- **Class/type parity:** 127/177 matched (target 252) — 71.8%
-- **Combined symbol parity:** 628/681 matched (target 1578) — 92.2%
-- **Average inline-code cosine:** 0.53 (function body across 49 matched files)
+- **Function parity:** 503/504 matched (target 1330) — 99.8%
+- **Class/type parity:** 129/177 matched (target 255) — 72.9%
+- **Combined symbol parity:** 632/681 matched (target 1585) — 92.8%
+- **Average inline-code cosine:** 0.54 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
 - **Critical Issues:** 36 files with <0.60 function similarity
@@ -234,18 +234,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/5 matched (target 14)
 - **Missing types:** `VecDequeIntoIter`, `VecIntoIter`, `Itertools`
 
-### 19. duplicates_impl
-
-- **Target:** `itertools.DuplicatesImpl`
-- **Similarity:** 0.61
-- **Dependents:** 0
-- **Priority Score:** 42203.9
-- **Functions:** 9/11 matched (target 27)
-- **Missing functions:** `new`, `next_back`
-- **Types:** 9/11 matched (target 10)
-- **Missing types:** `Item`, `Container`
-
-### 20. groupbylazy
+### 19. groupbylazy
 
 - **Target:** `itertools.Groupbylazy`
 - **Similarity:** 0.41
@@ -256,7 +245,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 10/13 matched (target 11)
 - **Missing types:** `Key`, `Item`, `IntoIter`
 
-### 21. merge_join
+### 20. merge_join
 
 - **Target:** `itertools.MergeJoin`
 - **Similarity:** 0.23
@@ -267,7 +256,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 7/10 matched (target 8)
 - **Missing types:** `T`, `MergeResult`, `Item`
 
-### 22. adaptors.map
+### 21. adaptors.map
 
 - **Target:** `adaptors.Map`
 - **Similarity:** 0.42
@@ -278,7 +267,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 6/8 matched (target 7)
 - **Missing types:** `Item`, `Out`
 
-### 23. kmerge_impl
+### 22. kmerge_impl
 
 - **Target:** `itertools.KMergeImpl`
 - **Similarity:** 0.54
@@ -289,19 +278,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/6 matched (target 5)
 - **Missing types:** `KMergePredicate`, `Item`
 
-### 24. next_array
-
-- **Target:** `itertools.NextArray`
-- **Similarity:** 0.46
-- **Dependents:** 0
-- **Priority Score:** 21305.4
-- **Functions:** 10/11 matched (target 10)
-- **Missing functions:** `tracked_drop`
-- **Types:** 1/2 matched
-- **Missing types:** `TrackedDrop`
-- **Tests:** 3/4 matched
-
-### 25. intersperse
+### 23. intersperse
 
 - **Target:** `itertools.Intersperse`
 - **Similarity:** 0.50
@@ -312,7 +289,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/5 matched (target 7)
 - **Missing types:** `IntersperseElement`, `Item`
 
-### 26. rciter_impl
+### 24. rciter_impl
 
 - **Target:** `itertools.RcIterImpl`
 - **Similarity:** 0.55
@@ -323,7 +300,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 2)
 - **Missing types:** `Item`, `IntoIter`
 
-### 27. iter_index
+### 25. iter_index
 
 - **Target:** `itertools.IterIndex`
 - **Similarity:** 0.48
@@ -334,7 +311,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/3 matched (target 8)
 - **Missing types:** `Sealed`, `Output`
 
-### 28. grouping_map
+### 26. grouping_map
 
 - **Target:** `itertools.GroupingMap`
 - **Similarity:** 0.64
@@ -345,7 +322,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/5 matched
 - **Missing types:** `Out`
 
-### 29. combinations
+### 27. combinations
 
 - **Target:** `itertools.Combinations`
 - **Similarity:** 0.67
@@ -356,7 +333,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/5 matched (target 7)
 - **Missing types:** `Item`
 
-### 30. tuple_impl
+### 28. duplicates_impl
+
+- **Target:** `itertools.DuplicatesImpl`
+- **Similarity:** 0.66
+- **Dependents:** 0
+- **Priority Score:** 12203.4
+- **Functions:** 11/11 matched (target 30)
+- **Missing functions:** _none_
+- **Types:** 10/11 matched (target 12)
+- **Missing types:** `Item`
+
+### 29. tuple_impl
 
 - **Target:** `itertools.TupleImpl`
 - **Similarity:** 0.53
@@ -366,6 +354,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 6/7 matched (target 15)
 - **Missing types:** `Item`
+
+### 30. next_array
+
+- **Target:** `itertools.NextArray`
+- **Similarity:** 0.47
+- **Dependents:** 0
+- **Priority Score:** 11305.3
+- **Functions:** 10/11 matched
+- **Missing functions:** `tracked_drop`
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
+- **Tests:** 3/4 matched
 
 ### 31. unique_impl
 
