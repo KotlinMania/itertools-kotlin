@@ -57,7 +57,9 @@ class TupleCombinationsTest {
     @Test
     fun testTuple4Combinations() {
         val v = listOf(1, 2, 3, 4, 5)
-        val comb = io.github.kotlinmania.itertools.adaptors.tupleCombinations4(v)
+        val comb =
+            io.github.kotlinmania.itertools.adaptors
+                .tupleCombinations4(v)
         assertEquals(5, comb.count())
         val list = comb.asSequence().toList()
         assertEquals(5, list.size)

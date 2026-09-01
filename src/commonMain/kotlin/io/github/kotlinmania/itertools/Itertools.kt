@@ -1624,7 +1624,8 @@ fun <T, U> Iterator<T>.zipLongest(other: Iterator<U>): ZipLongest<T, U> =
  * yielding pairs of [EitherOrBoth].
  */
 fun <T, U> Iterable<T>.zipLongest(other: Iterable<U>): ZipLongest<T, U> =
-    io.github.kotlinmania.itertools.zipLongest(this, other)
+    io.github.kotlinmania.itertools
+        .zipLongest(this, other)
 
 /**
  * Create an iterator which iterates over both this and the specified iterator simultaneously,
