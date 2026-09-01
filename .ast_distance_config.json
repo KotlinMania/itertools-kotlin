@@ -16,7 +16,5 @@
     "todos": true,
     "lint": true
   },
-  "reexport_modules": [
-    "adaptors/mod.rs"
-  ]
+  "reexport_modules": []
 }
