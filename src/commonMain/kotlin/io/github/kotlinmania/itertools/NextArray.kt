@@ -69,3 +69,10 @@ internal fun <T> nextArray(source: Iterator<T>, n: Int): List<T>? {
     }
     return builder.take()
 }
+
+/** Marker type for tracking drops. */
+internal class TrackedDrop
+
+/** Track drop helper function. */
+internal fun trackedDrop() {}
+
