@@ -85,6 +85,9 @@ class ExactlyOneError<T>(
         return acc
     }
 
+    /** Formats this error display string. */
+    fun fmt(): String = toString()
+
     override fun toString(): String =
         if (additionalLen() > 0) {
             "got at least 2 elements when exactly one was expected"

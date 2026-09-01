@@ -139,8 +139,10 @@ class AdaptorsTest {
 
     @Test
     fun testUpdate() {
+        var sideEffectCount = 0
         val list = mutableListOf(1, 2, 3)
-        val res = update(list) { /* no-op in test */ }.collect()
+        val res = update(list) { sideEffectCount += it }.collect()
         assertEquals(listOf(1, 2, 3), res)
+        assertEquals(6, sideEffectCount)
     }
 }

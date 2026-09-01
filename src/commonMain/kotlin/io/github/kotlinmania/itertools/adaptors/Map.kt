@@ -48,6 +48,9 @@ open class MapSpecialCase<T, Out>(
         return f.call(iter.next())
     }
 
+    /** Clone this iterator adaptor. */
+    fun clone(): MapSpecialCase<T, Out> = MapSpecialCase(iter, f)
+
     fun sizeHint(): io.github.kotlinmania.itertools.SizeHint =
         io.github.kotlinmania.itertools
             .SizeHint(0, null)
