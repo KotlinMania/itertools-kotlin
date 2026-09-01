@@ -205,9 +205,19 @@ class TestCore {
     @Test
     fun dropping() {
         val xs = listOf(1, 2, 3)
-        val it1 = xs.iterator().dropping(2).asSequence().toList()
+        val it1 =
+            xs
+                .iterator()
+                .dropping(2)
+                .asSequence()
+                .toList()
         assertEquals(listOf(3), it1)
-        val it2 = xs.iterator().dropping(5).asSequence().toList()
+        val it2 =
+            xs
+                .iterator()
+                .dropping(5)
+                .asSequence()
+                .toList()
         assertEquals(emptyList(), it2)
     }
 

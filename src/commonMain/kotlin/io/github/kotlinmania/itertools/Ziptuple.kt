@@ -233,4 +233,3 @@ fun <A, B, C> izip(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>): Zip3<A, B, C
  * Create an iterator running three iterables in lockstep into triples.
  */
 fun <A, B, C> izip(a: Iterable<A>, b: Iterable<B>, c: Iterable<C>): Zip3<A, B, C> = multizip(a, b, c)
-

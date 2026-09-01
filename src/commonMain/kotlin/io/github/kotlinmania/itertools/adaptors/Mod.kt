@@ -294,9 +294,13 @@ class Product<A, B>(
     fun sizeHint(): SizeHint {
         val aHint = sizeHintOf(iterA)
         val bOrigHint = sizeHintOf(curIterB)
-        var sh = io.github.kotlinmania.itertools.mul(aHint, bOrigHint)
+        var sh =
+            io.github.kotlinmania.itertools
+                .mul(aHint, bOrigHint)
         if (curA.isNotEmpty()) {
-            sh = io.github.kotlinmania.itertools.add(sh, sizeHintOf(curIterB))
+            sh =
+                io.github.kotlinmania.itertools
+                    .add(sh, sizeHintOf(curIterB))
         }
         return sh
     }
@@ -773,9 +777,12 @@ abstract class BaseTupleKCombination<T>(
 }
 
 /** An iterator that produces 4-combinations from a sequence. */
-class Tuple4Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 4) {
+class Tuple4Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 4) {
     companion object {
         fun <T> from(items: List<T>): Tuple4Combination<T> = Tuple4Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple4Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -785,9 +792,12 @@ class Tuple4Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 4) 
 }
 
 /** An iterator that produces 5-combinations from a sequence. */
-class Tuple5Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 5) {
+class Tuple5Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 5) {
     companion object {
         fun <T> from(items: List<T>): Tuple5Combination<T> = Tuple5Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple5Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -797,9 +807,12 @@ class Tuple5Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 5) 
 }
 
 /** An iterator that produces 6-combinations from a sequence. */
-class Tuple6Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 6) {
+class Tuple6Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 6) {
     companion object {
         fun <T> from(items: List<T>): Tuple6Combination<T> = Tuple6Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple6Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -809,9 +822,12 @@ class Tuple6Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 6) 
 }
 
 /** An iterator that produces 7-combinations from a sequence. */
-class Tuple7Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 7) {
+class Tuple7Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 7) {
     companion object {
         fun <T> from(items: List<T>): Tuple7Combination<T> = Tuple7Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple7Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -821,9 +837,12 @@ class Tuple7Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 7) 
 }
 
 /** An iterator that produces 8-combinations from a sequence. */
-class Tuple8Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 8) {
+class Tuple8Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 8) {
     companion object {
         fun <T> from(items: List<T>): Tuple8Combination<T> = Tuple8Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple8Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -833,9 +852,12 @@ class Tuple8Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 8) 
 }
 
 /** An iterator that produces 9-combinations from a sequence. */
-class Tuple9Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 9) {
+class Tuple9Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 9) {
     companion object {
         fun <T> from(items: List<T>): Tuple9Combination<T> = Tuple9Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple9Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -845,9 +867,12 @@ class Tuple9Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 9) 
 }
 
 /** An iterator that produces 10-combinations from a sequence. */
-class Tuple10Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 10) {
+class Tuple10Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 10) {
     companion object {
         fun <T> from(items: List<T>): Tuple10Combination<T> = Tuple10Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple10Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -857,9 +882,12 @@ class Tuple10Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 10
 }
 
 /** An iterator that produces 11-combinations from a sequence. */
-class Tuple11Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 11) {
+class Tuple11Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 11) {
     companion object {
         fun <T> from(items: List<T>): Tuple11Combination<T> = Tuple11Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple11Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -869,9 +897,12 @@ class Tuple11Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 11
 }
 
 /** An iterator that produces 12-combinations from a sequence. */
-class Tuple12Combination<T>(items: List<T>) : BaseTupleKCombination<T>(items, 12) {
+class Tuple12Combination<T>(
+    items: List<T>,
+) : BaseTupleKCombination<T>(items, 12) {
     companion object {
         fun <T> from(items: List<T>): Tuple12Combination<T> = Tuple12Combination(items)
+
         fun <T> from(iter: Iterator<T>): Tuple12Combination<T> {
             val list = mutableListOf<T>()
             while (iter.hasNext()) list.add(iter.next())
@@ -968,7 +999,6 @@ fun checkedBinomial(n: Int, k: Int): Int? {
     }
     return c.toInt()
 }
-
 
 /**
  * An iterator adapter to filter values within a nested [ItemResult.Ok].
@@ -1348,4 +1378,3 @@ private fun sizeHintOf(it: Any?): SizeHint =
         is Update<*> -> it.sizeHint()
         else -> SizeHint(0, null)
     }
-
