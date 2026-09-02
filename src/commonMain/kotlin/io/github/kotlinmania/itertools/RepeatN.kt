@@ -2,11 +2,6 @@
 package io.github.kotlinmania.itertools
 
 /**
- * Associated type marker for `Iterator::Item` on [RepeatN].
- */
-public interface RepeatNItem
-
-/**
  * An iterator that produces *n* repetitions of an element.
  *
  * See [repeatN] for more information.

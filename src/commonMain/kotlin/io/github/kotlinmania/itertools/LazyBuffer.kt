@@ -2,11 +2,6 @@
 package io.github.kotlinmania.itertools
 
 /**
- * Associated type marker for `Index::Output`.
- */
-public interface Output
-
-/**
  * Buffers the source iterator on demand. Each call to [getNext] pulls one
  * element from the source (if available) and appends it to the internal
  * buffer; previously buffered elements remain accessible via [get] and
