@@ -276,16 +276,33 @@ fun <L, R> Iterable<L>.mergeJoinBy(other: Iterable<R>, cmp: (L, R) -> Int): Merg
 /**
  * Merge multiple iterators into one sorted iterator.
  */
+@kotlin.jvm.JvmName("kmergeIterators")
 fun <T : Comparable<*>> Iterable<Iterator<T>>.kmerge(): KMergeBy<T> =
     io.github.kotlinmania.itertools
         .kmergeIterators(this)
 
 /**
+ * Merge multiple iterables into one sorted iterator.
+ */
+fun <T : Comparable<*>> Iterable<Iterable<T>>.kmerge(): KMergeBy<T> =
+    io.github.kotlinmania.itertools
+        .kmerge(this)
+
+/**
  * Merge multiple iterators using a custom comparison function.
  */
+@kotlin.jvm.JvmName("kmergeIteratorsBy")
 fun <T> Iterable<Iterator<T>>.kmergeBy(first: (T, T) -> Boolean): KMergeBy<T> =
     io.github.kotlinmania.itertools
         .kmergeIteratorsBy(this, first)
+
+/**
+ * Merge multiple iterables using a custom comparison function.
+ */
+fun <T> Iterable<Iterable<T>>.kmergeBy(first: (T, T) -> Boolean): KMergeBy<T> =
+    io.github.kotlinmania.itertools
+        .kmergeBy(this, first)
+
 
 /**
  * Return an iterator adaptor that iterates over the cartesian product of two iterators.
@@ -1645,44 +1662,45 @@ fun <T, U> Iterable<T>.zipEq(other: Iterable<U>): ZipEq<T, U> =
 /**
  * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
  */
-fun <T> Iterator<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
+fun <T> Iterator<T>.tupleWindows(size: Int = 2): TupleWindows<T> =
     io.github.kotlinmania.itertools
         .tupleWindows(this, size)
 
 /**
  * Return an iterator over all contiguous windows producing lists of a specific [size] (default 2).
  */
-fun <T> Iterable<T>.tupleWindows(size: Int = 2): TupleWindows<Iterator<T>, T> =
+fun <T> Iterable<T>.tupleWindows(size: Int = 2): TupleWindows<T> =
     io.github.kotlinmania.itertools
         .tupleWindows(iterator(), size)
 
 /**
  * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterator.
  */
-fun <T> Iterator<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+fun <T> Iterator<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<T> =
     io.github.kotlinmania.itertools
         .circularTupleWindows(this, size)
 
 /**
  * Return an iterator over all windows, wrapping back to the first elements when the window would otherwise exceed the length of the iterable.
  */
-fun <T> Iterable<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+fun <T> Iterable<T>.circularTupleWindows(size: Int = 2): CircularTupleWindows<T> =
     io.github.kotlinmania.itertools
         .circularTupleWindows(iterator(), size)
 
 /**
  * Return an iterator that groups the items in tuples of a specific [size] (default 2).
  */
-fun <T> Iterator<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
+fun <T> Iterator<T>.tuples(size: Int = 2): Tuples<T> =
     io.github.kotlinmania.itertools
         .tuples(this, size)
 
 /**
  * Return an iterator that groups the items in tuples of a specific [size] (default 2).
  */
-fun <T> Iterable<T>.tuples(size: Int = 2): Tuples<Iterator<T>, T> =
+fun <T> Iterable<T>.tuples(size: Int = 2): Tuples<T> =
     io.github.kotlinmania.itertools
         .tuples(iterator(), size)
+
 
 /**
  * Split into an iterator pair that both yield all elements from the original iterator.
@@ -2042,6 +2060,43 @@ fun <T> assertEqual(a: Iterable<T>, b: Iterable<T>) {
 }
 
 /**
+ * Assert that two iterators produce equal sequences.
+ */
+fun <T> assertEqual(ia: Iterator<T>, ib: Iterator<T>) {
+    var i = 0
+    while (true) {
+        when {
+            !ia.hasNext() && !ib.hasNext() -> return
+            ia.hasNext() && ib.hasNext() -> {
+                val va = ia.next()
+                val vb = ib.next()
+                if (va != vb) {
+                    throw AssertionError("Failed assertion $va == $vb for iteration $i")
+                }
+                i += 1
+            }
+            else -> {
+                throw AssertionError("Failed assertion: sequences have different lengths at iteration $i")
+            }
+        }
+    }
+}
+
+/**
+ * Assert that an iterator and iterable produce equal sequences.
+ */
+fun <T> assertEqual(ia: Iterator<T>, b: Iterable<T>) {
+    assertEqual(ia, b.iterator())
+}
+
+/**
+ * Assert that an iterable and iterator produce equal sequences.
+ */
+fun <T> assertEqual(a: Iterable<T>, ib: Iterator<T>) {
+    assertEqual(a.iterator(), ib)
+}
+
+/**
  * Partition a mutable list so that elements matching [predicate] are placed first.
  * Return the index of the split point.
  */
@@ -2068,3 +2123,32 @@ fun <T> partition(data: MutableList<T>, predicate: (T) -> Boolean): Int {
     }
     return splitIndex
 }
+
+/**
+ * Partition an IntArray in-place so that elements matching [predicate] are placed first.
+ * Return the index of the split point.
+ */
+fun partition(data: IntArray, predicate: (Int) -> Boolean): Int {
+    var splitIndex = 0
+    var rightIndex = data.size - 1
+    while (splitIndex <= rightIndex) {
+        if (predicate(data[splitIndex])) {
+            splitIndex += 1
+        } else {
+            while (rightIndex > splitIndex && !predicate(data[rightIndex])) {
+                rightIndex -= 1
+            }
+            if (rightIndex > splitIndex) {
+                val tmp = data[splitIndex]
+                data[splitIndex] = data[rightIndex]
+                data[rightIndex] = tmp
+                splitIndex += 1
+                rightIndex -= 1
+            } else {
+                break
+            }
+        }
+    }
+    return splitIndex
+}
+

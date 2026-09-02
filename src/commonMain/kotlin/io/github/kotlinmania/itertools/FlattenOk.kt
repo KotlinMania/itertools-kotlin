@@ -14,7 +14,32 @@ sealed class ItemResult<out T, out E> {
     data class Err<out E>(
         val error: E,
     ) : ItemResult<Nothing, E>()
+
+    /** Returns true if this is an [Ok] variant. */
+    fun isOk(): Boolean = this is Ok
+
+    /** Returns true if this is an [Err] variant. */
+    fun isErr(): Boolean = this is Err
+
+    /** Returns the value if [Ok], or null if [Err]. */
+    fun getOrNull(): T? = when (this) {
+        is Ok -> value
+        is Err -> null
+    }
+
+    /** Returns the value if [Ok], or throws NoSuchElementException if [Err]. */
+    fun unwrap(): T = when (this) {
+        is Ok -> value
+        is Err -> throw NoSuchElementException("Called unwrap on Err: $error")
+    }
+
+    /** Returns the error if [Err], or throws NoSuchElementException if [Ok]. */
+    fun unwrapErr(): E = when (this) {
+        is Ok -> throw NoSuchElementException("Called unwrapErr on Ok: $value")
+        is Err -> error
+    }
 }
+
 
 /**
  * An iterator adaptor that flattens `Ok` values and allows `Err` values through unchanged.
@@ -203,3 +228,18 @@ fun <T, E> flattenOk(iterable: Iterable<ItemResult<Iterable<T>, E>>): FlattenOk<
     } else {
         FlattenOk(iterable.iterator())
     }
+
+/**
+ * Collect items into a single [ItemResult.Ok] containing a list, or the first [ItemResult.Err].
+ */
+fun <T, E> Iterator<ItemResult<T, E>>.collectResult(): ItemResult<List<T>, E> {
+    val list = mutableListOf<T>()
+    while (hasNext()) {
+        when (val item = next()) {
+            is ItemResult.Ok -> list.add(item.value)
+            is ItemResult.Err -> return ItemResult.Err(item.error)
+        }
+    }
+    return ItemResult.Ok(list)
+}
+

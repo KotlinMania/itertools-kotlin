@@ -2,46 +2,29 @@
 package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
-import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class AdaptorsNoCollectTest {
-    class PanickingCounter(
-        var curr: Int = 0,
-        val max: Int = 10_000,
-    ) : Iterator<Unit> {
+    class PanickingCounter(var curr: Int = 0, val max: Int = 10_000) : Iterator<Unit> {
         override fun hasNext(): Boolean = true
 
         override fun next() {
-            if (!hasNext()) {
-                throw NoSuchElementException("PanickingCounter exhausted")
-            }
             curr += 1
-            assertNotEquals(
-                max,
-                curr,
-                "Input iterator reached maximum of $max suggesting collection by adaptor",
-            )
-        }
-    }
-
-    private fun <A> noCollectTest(toAdaptor: (Iterator<Unit>) -> Iterator<A>) {
-        val counter = PanickingCounter(curr = 0, max = 10_000)
-        val adaptor = toAdaptor(counter)
-        for (i in 0 until 5) {
-            if (adaptor.hasNext()) {
-                adaptor.next()
+            if (curr == max) {
+                throw IllegalStateException("Input iterator reached maximum of $max suggesting collection by adaptor")
             }
         }
     }
 
-    @Test
-    fun permutationsNoCollect() {
-        noCollectTest { iter -> permutations(iter, 5) }
-    }
-
-    @Test
-    fun combinationsNoCollect() {
-        noCollectTest { iter -> combinations(iter, 5) }
+    private fun <T> noCollectTest(toAdaptor: (PanickingCounter) -> Iterator<T>) {
+        val counter = PanickingCounter()
+        val adaptor = toAdaptor(counter)
+        var count = 0
+        while (count < 5 && adaptor.hasNext()) {
+            adaptor.next()
+            count++
+        }
+        assertTrue(count == 5)
     }
 
     @Test

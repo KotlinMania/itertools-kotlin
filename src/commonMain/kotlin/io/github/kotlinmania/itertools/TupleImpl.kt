@@ -57,7 +57,7 @@ fun bufferLen(buf: List<Any?>): Int = buf.count { it != null }
 /**
  * An iterator that groups items into tuples of a specific size.
  */
-class Tuples<I, T>(
+class Tuples<T>(
     private val iter: Iterator<T>,
     val size: Int,
 ) : Iterator<List<T>> {
@@ -99,7 +99,7 @@ class Tuples<I, T>(
 /**
  * An iterator over all contiguous windows of a specific size.
  */
-class TupleWindows<I, T>(
+class TupleWindows<T>(
     private val iter: Iterator<T>,
     val size: Int,
 ) : Iterator<List<T>> {
@@ -135,7 +135,7 @@ class TupleWindows<I, T>(
 /**
  * An iterator over all circular windows of a specific size.
  */
-class CircularTupleWindows<I, T>(
+class CircularTupleWindows<T>(
     private val iter: Iterator<T>,
     val size: Int,
 ) : Iterator<List<T>> {
@@ -163,20 +163,21 @@ class CircularTupleWindows<I, T>(
 /**
  * Create a new [Tuples] iterator.
  */
-fun <T> tuples(iter: Iterator<T>, size: Int = 2): Tuples<Iterator<T>, T> =
+fun <T> tuples(iter: Iterator<T>, size: Int = 2): Tuples<T> =
     Tuples(iter, size)
 
 /**
  * Create a new [TupleWindows] iterator.
  */
-fun <T> tupleWindows(iter: Iterator<T>, size: Int = 2): TupleWindows<Iterator<T>, T> =
+fun <T> tupleWindows(iter: Iterator<T>, size: Int = 2): TupleWindows<T> =
     TupleWindows(iter, size)
 
 /**
  * Create a new [CircularTupleWindows] iterator.
  */
-fun <T> circularTupleWindows(iter: Iterator<T>, size: Int = 2): CircularTupleWindows<Iterator<T>, T> =
+fun <T> circularTupleWindows(iter: Iterator<T>, size: Int = 2): CircularTupleWindows<T> =
     CircularTupleWindows(iter, size)
+
 
 /**
  * An iterator that groups the items in tuples of size 1.
