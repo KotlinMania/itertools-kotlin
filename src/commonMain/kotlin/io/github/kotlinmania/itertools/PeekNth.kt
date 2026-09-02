@@ -2,11 +2,6 @@
 package io.github.kotlinmania.itertools
 
 /**
- * Associated type marker for `Iterator::Item` on [PeekNth].
- */
-public interface PeekNthItem
-
-/**
  * A drop-in replacement for peekable iterators which adds a [peekNth]
  * method allowing the user to peek at a value several iterations forward
  * without advancing the base iterator.
