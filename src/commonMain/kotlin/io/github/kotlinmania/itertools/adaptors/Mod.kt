@@ -145,8 +145,20 @@ fun <T> interleaveShortest(i: Iterable<T>, j: Iterable<T>): InterleaveShortest<T
  */
 class PutBack<T>(
     private val iter: Iterator<T>,
-) : Iterator<T> {
+) : Iterator<T>, io.github.kotlinmania.itertools.PeekingNext<T> {
     private val top: ArrayDeque<T> = ArrayDeque(1)
+
+    override fun peekingNext(accept: (T) -> Boolean): T? {
+        if (hasNext()) {
+            val r = next()
+            if (!accept(r)) {
+                putBack(r)
+                return null
+            }
+            return r
+        }
+        return null
+    }
 
     /**
      * Put back value [value] (builder method).

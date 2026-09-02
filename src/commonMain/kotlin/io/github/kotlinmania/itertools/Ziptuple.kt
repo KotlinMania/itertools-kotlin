@@ -185,6 +185,13 @@ fun <A, B> multizip(pair: Pair<Iterable<A>, Iterable<B>>): Zip2<A, B> =
     multizip(pair.first, pair.second)
 
 /**
+ * Multizip a pair of iterators.
+ */
+@kotlin.jvm.JvmName("multizipPairIter")
+fun <A, B> multizip(pair: Pair<Iterator<A>, Iterator<B>>): Zip2<A, B> =
+    multizip(pair.first, pair.second)
+
+/**
  * Multizip 3 iterators.
  */
 fun <A, B, C> multizip(a: Iterator<A>, b: Iterator<B>, c: Iterator<C>): Zip3<A, B, C> =
