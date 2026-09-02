@@ -19,6 +19,24 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class SpecializationsTest {
+    fun <T> testSpecializations(items: List<T>) {
+        val it = items.iterator()
+        val collected = mutableListOf<T>()
+        while (it.hasNext()) {
+            collected.add(it.next())
+        }
+        assertEquals(items, collected)
+    }
+
+    fun <T> testDoubleEndedSpecializations(items: List<T>) {
+        val reversed = items.reversed()
+        val collected = mutableListOf<T>()
+        for (i in items.indices.reversed()) {
+            collected.add(items[i])
+        }
+        assertEquals(reversed, collected)
+    }
+
     @Test
     fun testInterleaveSpecializations() {
         val a = listOf(1, 3, 5)
