@@ -53,4 +53,17 @@ class RepeatNTest {
         val sum = it.fold(100) { acc, x -> acc + x }
         assertEquals(100, sum)
     }
+
+    @Test
+    fun countClones() {
+        for (n in 0 until 10) {
+            val it = repeatN("test", n)
+            var count = 0
+            while (it.hasNext()) {
+                assertEquals("test", it.next())
+                count++
+            }
+            assertEquals(n, count)
+        }
+    }
 }
