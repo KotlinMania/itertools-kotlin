@@ -11,7 +11,7 @@ Based on AST analysis, here are the concrete next steps.
 - **Average inline-code cosine:** 0.54 (function body across 49 matched files)
 - **Average documentation cosine:** 0.65 (doc text across 49 matched files)
 - **Cheat-zeroed Files:** 1
-- **Critical Issues:** 36 files with <0.60 function similarity
+- **Critical Issues:** 34 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -50,9 +50,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. lazy_buffer
 
 - **Target:** `itertools.LazyBuffer`
-- **Similarity:** 0.50
+- **Similarity:** 0.58
 - **Dependents:** 3
-- **Priority Score:** 3011105.0
+- **Priority Score:** 3011104.2
 - **Functions:** 9/9 matched (target 19)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched
@@ -61,9 +61,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 3. either_or_both
 
 - **Target:** `itertools.EitherOrBoth`
-- **Similarity:** 0.57
+- **Similarity:** 0.70
 - **Dependents:** 3
-- **Priority Score:** 3003604.2
+- **Priority Score:** 3003603.0
 - **Functions:** 35/35 matched (target 45)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 5)
@@ -83,9 +83,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 5. repeatn
 
 - **Target:** `itertools.RepeatN`
-- **Similarity:** 0.41
+- **Similarity:** 0.62
 - **Dependents:** 2
-- **Priority Score:** 2010805.9
+- **Priority Score:** 2010803.8
 - **Functions:** 6/6 matched (target 8)
 - **Missing functions:** _none_
 - **Types:** 1/2 matched (target 1)

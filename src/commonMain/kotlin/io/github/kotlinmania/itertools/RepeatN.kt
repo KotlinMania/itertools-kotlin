@@ -10,19 +10,19 @@ class RepeatN<A>(
     internal var elt: A?,
     private var n: Int,
 ) : PeekingNext<A> {
+
     override fun hasNext(): Boolean = n > 0
 
     override fun next(): A {
-        val current =
-            elt
-                ?: throw NoSuchElementException("RepeatN exhausted")
+        val elt = this.elt ?: throw NoSuchElementException("RepeatN exhausted")
         if (n > 1) {
             n -= 1
-            return current
+            return elt
+        } else {
+            n = 0
+            this.elt = null
+            return elt
         }
-        n = 0
-        elt = null
-        return current
     }
 
     override fun peekingNext(accept: (A) -> Boolean): A? {
@@ -38,33 +38,46 @@ class RepeatN<A>(
         get() = n
 
     /** `(n, n)` size hint. */
-    fun sizeHint(): SizeHint = SizeHint(n, n)
+    fun sizeHint(): SizeHint {
+        val n = this.n
+        return SizeHint(n, n)
+    }
 
     /** Fold over the remaining elements, consuming the iterator. */
-    fun <B> fold(initial: B, operation: (B, A) -> B): B {
-        val current = elt
-        if (current == null || n == 0) {
+    fun <B> fold(init: B, f: (B, A) -> B): B {
+        val elt = this.elt
+        if (elt != null && n > 0) {
+            var acc = init
+            for (i in 1 until n) {
+                acc = f(acc, elt)
+            }
             n = 0
-            elt = null
-            return initial
+            this.elt = null
+            return f(acc, elt)
         }
-        var acc = initial
-        val remaining = n
-        n = 0
-        elt = null
-        for (i in 1 until remaining) {
-            acc = operation(acc, current)
-        }
-        return operation(acc, current)
+        return init
     }
 
     /** Fold over the remaining elements in reverse order, consuming the iterator. */
-    fun <B> rfold(initial: B, operation: (B, A) -> B): B = fold(initial, operation)
+    fun <B> rfold(init: B, f: (B, A) -> B): B {
+        return fold(init, f)
+    }
 
     /** Returns the next element from the back; identical to [next]. */
-    fun nextBack(): A? = if (hasNext()) next() else null
+    fun nextBack(): A? {
+        val next = if (hasNext()) next() else null
+        return next
+    }
 }
 
 /** Create an iterator that produces `n` repetitions of `element`. */
-fun <A> repeatN(element: A, n: Int): RepeatN<A> =
-    if (n == 0) RepeatN(elt = null, n = 0) else RepeatN(elt = element, n = n)
+fun <A> repeatN(element: A, n: Int): RepeatN<A> {
+    return if (n == 0) {
+        RepeatN(elt = null, n = 0)
+    } else {
+        RepeatN(
+            elt = element,
+            n = n,
+        )
+    }
+}

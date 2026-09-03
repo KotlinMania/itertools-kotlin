@@ -30,20 +30,12 @@ sealed class EitherOrBoth<out A, out B> {
     /**
      * If `Left`, or `Both`, return true. Otherwise, return false.
      */
-    fun hasLeft(): Boolean =
-        when (this) {
-            is Left, is Both -> true
-            is Right -> false
-        }
+    fun hasLeft(): Boolean = asRef().left() != null
 
     /**
      * If `Right`, or `Both`, return true, otherwise, return false.
      */
-    fun hasRight(): Boolean =
-        when (this) {
-            is Right, is Both -> true
-            is Left -> false
-        }
+    fun hasRight(): Boolean = asRef().right() != null
 
     /**
      * If `Left`, return true. Otherwise, return false.
@@ -60,7 +52,7 @@ sealed class EitherOrBoth<out A, out B> {
     /**
      * If `Both`, return true. Otherwise, return false.
      */
-    fun isBoth(): Boolean = this is Both
+    fun isBoth(): Boolean = asRef().both() != null
 
     /**
      * If `Left`, or `Both`, return the left value. Otherwise, return null.
@@ -87,12 +79,9 @@ sealed class EitherOrBoth<out A, out B> {
      *
      * If `Left` return `(value, null)`, if `Right` return `(null, value)`, else return `(left, right)`.
      */
-    fun leftAndRight(): Pair<A?, B?> =
-        when (this) {
-            is Left -> Pair(this.value, null)
-            is Right -> Pair(null, this.value)
-            is Both -> Pair(this.left, this.right)
-        }
+    fun leftAndRight(): Pair<A?, B?> {
+        return Pair(left(), right())
+    }
 
     /**
      * If `Left`, return the left value. If `Right` or `Both`, return null.
@@ -281,22 +270,42 @@ sealed class EitherOrBoth<out A, out B> {
     /**
      * Converts from reference to self.
      */
-    fun asRef(): EitherOrBoth<A, B> = this
+    fun asRef(): EitherOrBoth<A, B> =
+        when (this) {
+            is Left -> Left(value)
+            is Right -> Right(value)
+            is Both -> Both(left, right)
+        }
 
     /**
      * Converts from mutable reference to self.
      */
-    fun asMut(): EitherOrBoth<A, B> = this
+    fun asMut(): EitherOrBoth<A, B> =
+        when (this) {
+            is Left -> Left(value)
+            is Right -> Right(value)
+            is Both -> Both(left, right)
+        }
 
     /**
      * Converts using dereferencing if applicable.
      */
-    fun asDeref(): EitherOrBoth<A, B> = this
+    fun asDeref(): EitherOrBoth<A, B> =
+        when (this) {
+            is Left -> Left(value)
+            is Right -> Right(value)
+            is Both -> Both(left, right)
+        }
 
     /**
      * Converts using mutable dereferencing if applicable.
      */
-    fun asDerefMut(): EitherOrBoth<A, B> = this
+    fun asDerefMut(): EitherOrBoth<A, B> =
+        when (this) {
+            is Left -> Left(value)
+            is Right -> Right(value)
+            is Both -> Both(left, right)
+        }
 
     /**
      * Returns a tuple consisting of the `l` and `r` in `Both(l, r)`, if present.
@@ -306,19 +315,24 @@ sealed class EitherOrBoth<out A, out B> {
     fun orDefault(
         defaultA: () -> @UnsafeVariance A,
         defaultB: () -> @UnsafeVariance B,
-    ): Pair<A, B> = orElse(defaultA, defaultB)
+    ): Pair<A, B> =
+        when (this) {
+            is Left -> Pair(value, defaultB())
+            is Right -> Pair(defaultA(), value)
+            is Both -> Pair(left, right)
+        }
 
     /**
      * Returns a reference to the left value. If the left value is not present,
      * it is replaced with `val`.
      */
-    fun leftOrInsert(value: @UnsafeVariance A): EitherOrBoth<A, B> = leftOrInsertWith { value }
+    fun leftOrInsert(valA: @UnsafeVariance A): EitherOrBoth<A, B> = leftOrInsertWith { valA }
 
     /**
      * Returns a reference to the right value. If the right value is not present,
      * it is replaced with `val`.
      */
-    fun rightOrInsert(value: @UnsafeVariance B): EitherOrBoth<A, B> = rightOrInsertWith { value }
+    fun rightOrInsert(valB: @UnsafeVariance B): EitherOrBoth<A, B> = rightOrInsertWith { valB }
 
     /**
      * If the left value is not present, replace it with the value computed by the closure `f`.

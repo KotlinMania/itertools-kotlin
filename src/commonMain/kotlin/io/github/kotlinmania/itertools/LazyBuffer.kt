@@ -12,11 +12,10 @@ package io.github.kotlinmania.itertools
  */
 internal class LazyBuffer<T>(
     private val it: Iterator<T>,
-    private val sourceHint: SizeHint,
+    private val sourceHint: SizeHint = SizeHint(0, null),
 ) {
     private val buffer: MutableList<T> = mutableListOf()
     private var consumed: Int = 0
-    private var sourceExhausted: Boolean = false
 
     constructor(iterable: Iterable<T>) : this(
         iterable.iterator(),
@@ -43,14 +42,18 @@ internal class LazyBuffer<T>(
         get() = buffer.size
 
     /** Returns the size hint for the buffer. */
-    fun sizeHint(): SizeHint = addScalar(subScalar(sourceHint, consumed), length)
+    fun sizeHint(): SizeHint {
+        val remaining = subScalar(sourceHint, consumed)
+        return addScalar(remaining, len())
+    }
 
     /**
      * Drain the remaining source and return total length.
      */
     fun count(): Int {
-        while (getNext()) { /* drain */ }
-        return length
+        while (getNext()) {
+        }
+        return len()
     }
 
     /**
@@ -58,53 +61,60 @@ internal class LazyBuffer<T>(
      * if an element was buffered, `false` if the source is exhausted.
      */
     fun getNext(): Boolean {
-        if (sourceExhausted) return false
         return if (it.hasNext()) {
             val x = it.next()
             buffer.add(x)
             consumed += 1
             true
         } else {
-            sourceExhausted = true
             false
         }
     }
 
     /**
-     * Buffer up to [len] elements, pulling from the source as needed. After
-     * this returns, [length] is at least `min(len, totalSourceSize)`.
+     * Buffer up to [len] elements, pulling from the source as needed.
      */
     fun prefill(len: Int) {
         val bufferLen = buffer.size
         if (len > bufferLen) {
             val delta = len - bufferLen
             var count = 0
-            while (count < delta && getNext()) {
+            while (count < delta && it.hasNext()) {
+                buffer.add(it.next())
+                consumed += 1
                 count += 1
             }
         }
     }
 
-    /** Indexed access into the buffered prefix. */
-    operator fun get(index: Int): T = buffer[index]
-
-    /** Index into the buffered prefix. */
-    fun index(index: Int): T = buffer[index]
-
     /**
      * Returns a fresh list of the buffered elements at the given indices.
      */
-    fun getAt(indices: IntArray): List<T> = indices.map { buffer[it] }
+    fun getAt(indices: IntArray): List<T> {
+        return indices.map { i -> buffer[i] }.toMutableList()
+    }
 
     /**
      * Returns a list of the buffered elements at the given indices array.
      */
-    fun getArray(indices: IntArray): List<T> = indices.map { buffer[it] }
+    fun getArray(indices: IntArray): List<T> {
+        return indices.map { i -> buffer[i] }
+    }
+
+    /** Index into the buffered prefix. */
+    fun index(index: Int): T {
+        return buffer[index]
+    }
+
+    /** Indexed access into the buffered prefix. */
+    operator fun get(index: Int): T = buffer[index]
 
     companion object {
         /** Create a new [LazyBuffer] from an iterator. */
-        fun <T> new(it: Iterator<T>, sourceHint: SizeHint = SizeHint(0, null)): LazyBuffer<T> =
-            LazyBuffer(it, sourceHint)
+        fun <T> new(it: Iterator<T>): LazyBuffer<T> {
+            val buffer = mutableListOf<T>()
+            return LazyBuffer(it)
+        }
 
         /** Create a new [LazyBuffer] from an iterable. */
         fun <T> new(iterable: Iterable<T>): LazyBuffer<T> = LazyBuffer(iterable)
