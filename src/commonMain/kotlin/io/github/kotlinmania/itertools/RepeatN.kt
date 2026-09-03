@@ -10,7 +10,6 @@ class RepeatN<A>(
     internal var elt: A?,
     private var n: Int,
 ) : PeekingNext<A> {
-
     override fun hasNext(): Boolean = n > 0
 
     override fun next(): A {
@@ -59,9 +58,7 @@ class RepeatN<A>(
     }
 
     /** Fold over the remaining elements in reverse order, consuming the iterator. */
-    fun <B> rfold(init: B, f: (B, A) -> B): B {
-        return fold(init, f)
-    }
+    fun <B> rfold(init: B, f: (B, A) -> B): B = fold(init, f)
 
     /** Returns the next element from the back; identical to [next]. */
     fun nextBack(): A? {
@@ -71,8 +68,8 @@ class RepeatN<A>(
 }
 
 /** Create an iterator that produces `n` repetitions of `element`. */
-fun <A> repeatN(element: A, n: Int): RepeatN<A> {
-    return if (n == 0) {
+fun <A> repeatN(element: A, n: Int): RepeatN<A> =
+    if (n == 0) {
         RepeatN(elt = null, n = 0)
     } else {
         RepeatN(
@@ -80,4 +77,3 @@ fun <A> repeatN(element: A, n: Int): RepeatN<A> {
             n = n,
         )
     }
-}

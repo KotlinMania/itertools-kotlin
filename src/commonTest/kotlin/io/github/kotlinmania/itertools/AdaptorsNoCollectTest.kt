@@ -5,7 +5,10 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AdaptorsNoCollectTest {
-    class PanickingCounter(var curr: Int = 0, val max: Int = 10_000) : Iterator<Unit> {
+    class PanickingCounter(
+        var curr: Int = 0,
+        val max: Int = 10_000,
+    ) : Iterator<Unit> {
         override fun hasNext(): Boolean = true
 
         override fun next() {

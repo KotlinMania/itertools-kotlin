@@ -145,7 +145,8 @@ fun <T> interleaveShortest(i: Iterable<T>, j: Iterable<T>): InterleaveShortest<T
  */
 class PutBack<T>(
     private val iter: Iterator<T>,
-) : Iterator<T>, io.github.kotlinmania.itertools.PeekingNext<T> {
+) : Iterator<T>,
+    io.github.kotlinmania.itertools.PeekingNext<T> {
     private val top: ArrayDeque<T> = ArrayDeque(1)
 
     override fun peekingNext(accept: (T) -> Boolean): T? {

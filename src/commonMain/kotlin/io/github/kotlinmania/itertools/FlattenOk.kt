@@ -22,24 +22,26 @@ sealed class ItemResult<out T, out E> {
     fun isErr(): Boolean = this is Err
 
     /** Returns the value if [Ok], or null if [Err]. */
-    fun getOrNull(): T? = when (this) {
-        is Ok -> value
-        is Err -> null
-    }
+    fun getOrNull(): T? =
+        when (this) {
+            is Ok -> value
+            is Err -> null
+        }
 
     /** Returns the value if [Ok], or throws NoSuchElementException if [Err]. */
-    fun unwrap(): T = when (this) {
-        is Ok -> value
-        is Err -> throw NoSuchElementException("Called unwrap on Err: $error")
-    }
+    fun unwrap(): T =
+        when (this) {
+            is Ok -> value
+            is Err -> throw NoSuchElementException("Called unwrap on Err: $error")
+        }
 
     /** Returns the error if [Err], or throws NoSuchElementException if [Ok]. */
-    fun unwrapErr(): E = when (this) {
-        is Ok -> throw NoSuchElementException("Called unwrapErr on Ok: $value")
-        is Err -> error
-    }
+    fun unwrapErr(): E =
+        when (this) {
+            is Ok -> throw NoSuchElementException("Called unwrapErr on Ok: $value")
+            is Err -> error
+        }
 }
-
 
 /**
  * An iterator adaptor that flattens `Ok` values and allows `Err` values through unchanged.
@@ -242,4 +244,3 @@ fun <T, E> Iterator<ItemResult<T, E>>.collectResult(): ItemResult<List<T>, E> {
     }
     return ItemResult.Ok(list)
 }
-

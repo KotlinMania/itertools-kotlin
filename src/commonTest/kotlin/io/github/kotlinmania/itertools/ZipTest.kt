@@ -11,10 +11,11 @@ class ZipTest {
         val a = listOf(1, null, 3, 4)
         val b = listOf(1, 2, 3)
 
-        val unfused = zipLongest(
-            a.filterNotNull(),
-            b,
-        ).asSequence().toList()
+        val unfused =
+            zipLongest(
+                a.filterNotNull(),
+                b,
+            ).asSequence().toList()
         assertEquals(
             listOf(
                 EitherOrBoth.Both(1, 1),

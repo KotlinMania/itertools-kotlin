@@ -79,9 +79,7 @@ sealed class EitherOrBoth<out A, out B> {
      *
      * If `Left` return `(value, null)`, if `Right` return `(null, value)`, else return `(left, right)`.
      */
-    fun leftAndRight(): Pair<A?, B?> {
-        return Pair(left(), right())
-    }
+    fun leftAndRight(): Pair<A?, B?> = Pair(left(), right())
 
     /**
      * If `Left`, return the left value. If `Right` or `Both`, return null.
