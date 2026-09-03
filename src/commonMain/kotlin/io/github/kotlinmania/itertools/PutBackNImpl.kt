@@ -87,13 +87,11 @@ fun <T> putBackN(iterable: Iterable<T>): PutBackN<T> =
 fun <T> putBackN(iterator: Iterator<T>): PutBackN<T> =
     PutBackN(iterator)
 
-
 /**
  * Create an iterator where you can put back multiple values to the front of the iteration.
  */
 fun <T> Iterator<T>.putBackN(): PutBackN<T> =
     PutBackN(this)
-
 
 private fun sizeHintOfIterable(it: Iterable<*>): SizeHint =
     when (it) {

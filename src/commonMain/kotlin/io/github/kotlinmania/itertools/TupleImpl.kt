@@ -178,7 +178,6 @@ fun <T> tupleWindows(iter: Iterator<T>, size: Int = 2): TupleWindows<T> =
 fun <T> circularTupleWindows(iter: Iterator<T>, size: Int = 2): CircularTupleWindows<T> =
     CircularTupleWindows(iter, size)
 
-
 /**
  * An iterator that groups the items in tuples of size 1.
  */

@@ -3,7 +3,6 @@ package io.github.kotlinmania.itertools
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -138,14 +137,19 @@ class TestCore {
         val xs = listOf(0, 1, 2, 1, 3)
         val ys = listOf(Pair(0, 1), Pair(2, 1))
 
-        val pit = xs.iterator().batching { it ->
-            if (it.hasNext()) {
-                val x = it.next()
+        val pit =
+            xs.iterator().batching { it ->
                 if (it.hasNext()) {
-                    Pair(x, it.next())
-                } else null
-            } else null
-        }
+                    val x = it.next()
+                    if (it.hasNext()) {
+                        Pair(x, it.next())
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
+            }
         assertEqual(pit, ys)
     }
 

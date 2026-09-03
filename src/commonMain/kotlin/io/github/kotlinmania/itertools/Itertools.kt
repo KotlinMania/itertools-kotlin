@@ -303,7 +303,6 @@ fun <T> Iterable<Iterable<T>>.kmergeBy(first: (T, T) -> Boolean): KMergeBy<T> =
     io.github.kotlinmania.itertools
         .kmergeBy(this, first)
 
-
 /**
  * Return an iterator adaptor that iterates over the cartesian product of two iterators.
  */
@@ -1701,7 +1700,6 @@ fun <T> Iterable<T>.tuples(size: Int = 2): Tuples<T> =
     io.github.kotlinmania.itertools
         .tuples(iterator(), size)
 
-
 /**
  * Split into an iterator pair that both yield all elements from the original iterator.
  */
@@ -2151,4 +2149,3 @@ fun partition(data: IntArray, predicate: (Int) -> Boolean): Int {
     }
     return splitIndex
 }
-

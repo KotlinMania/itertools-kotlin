@@ -10,7 +10,13 @@ import kotlin.test.assertTrue
 class TestStd {
     @Test
     fun product3() {
-        val prod = (0 until 3).toList().cartesianProduct((0 until 2).toList()).asSequence().toList().cartesianProduct((0 until 2).toList())
+        val prod =
+            (0 until 3)
+                .toList()
+                .cartesianProduct((0 until 2).toList())
+                .asSequence()
+                .toList()
+                .cartesianProduct((0 until 2).toList())
         var count = 0
         while (prod.hasNext()) {
             prod.next()
@@ -90,48 +96,54 @@ class TestStd {
     @Test
     fun coalesce() {
         val data = listOf(-1.0, -2.0, -3.0, 3.0, 1.0, 0.0, -1.0)
-        val it = data.coalesce { x, y ->
-            if ((x >= 0.0) == (y >= 0.0)) {
-                io.github.kotlinmania.itertools.adaptors.CoalesceResult.Merged(x + y)
-            } else {
-                io.github.kotlinmania.itertools.adaptors.CoalesceResult.Separate(x, y)
+        val it =
+            data.coalesce { x, y ->
+                if ((x >= 0.0) == (y >= 0.0)) {
+                    io.github.kotlinmania.itertools.adaptors.CoalesceResult
+                        .Merged(x + y)
+                } else {
+                    io.github.kotlinmania.itertools.adaptors.CoalesceResult
+                        .Separate(x, y)
+                }
             }
-        }
         assertEqual(listOf(-6.0, 4.0, -1.0), it)
     }
 
     @Test
     fun dedupBy() {
-        val xs = listOf(
-            Pair(0, 0),
-            Pair(0, 1),
-            Pair(1, 1),
-            Pair(2, 1),
-            Pair(0, 2),
-            Pair(3, 1),
-            Pair(0, 3),
-            Pair(1, 3),
-        )
-        val ys = listOf(
-            Pair(0, 0),
-            Pair(0, 1),
-            Pair(0, 2),
-            Pair(3, 1),
-            Pair(0, 3),
-        )
+        val xs =
+            listOf(
+                Pair(0, 0),
+                Pair(0, 1),
+                Pair(1, 1),
+                Pair(2, 1),
+                Pair(0, 2),
+                Pair(3, 1),
+                Pair(0, 3),
+                Pair(1, 3),
+            )
+        val ys =
+            listOf(
+                Pair(0, 0),
+                Pair(0, 1),
+                Pair(0, 2),
+                Pair(3, 1),
+                Pair(0, 3),
+            )
         assertEqual(ys, xs.dedupBy { x, y -> x.second == y.second })
     }
 
     @Test
     fun dedupWithCount() {
         val xs = listOf(0, 1, 1, 1, 2, 1, 3, 3)
-        val ys = listOf(
-            Pair(1, 0),
-            Pair(3, 1),
-            Pair(1, 2),
-            Pair(1, 1),
-            Pair(2, 3),
-        )
+        val ys =
+            listOf(
+                Pair(1, 0),
+                Pair(3, 1),
+                Pair(1, 2),
+                Pair(1, 1),
+                Pair(2, 3),
+            )
         assertEqual(ys, xs.dedupWithCount())
     }
 
@@ -195,14 +207,15 @@ class TestStd {
     fun mergeBy() {
         val odd = listOf(Pair(1, "hello"), Pair(3, "world"), Pair(5, "!"))
         val even = listOf(Pair(2, "foo"), Pair(4, "bar"), Pair(6, "baz"))
-        val expected = listOf(
-            Pair(1, "hello"),
-            Pair(2, "foo"),
-            Pair(3, "world"),
-            Pair(4, "bar"),
-            Pair(5, "!"),
-            Pair(6, "baz"),
-        )
+        val expected =
+            listOf(
+                Pair(1, "hello"),
+                Pair(2, "foo"),
+                Pair(3, "world"),
+                Pair(4, "bar"),
+                Pair(5, "!"),
+                Pair(6, "baz"),
+            )
         val results = odd.mergeBy(even) { a, b -> a.first <= b.first }
         assertEqual(results, expected)
     }
@@ -370,11 +383,12 @@ class TestStd {
 
     @Test
     fun whileSome() {
-        val ns = (1 until 10)
-            .map { if (it % 5 != 0) it else null }
-            .whileSome()
-            .asSequence()
-            .toList()
+        val ns =
+            (1 until 10)
+                .map { if (it % 5 != 0) it else null }
+                .whileSome()
+                .asSequence()
+                .toList()
         assertEquals(listOf(1, 2, 3, 4), ns)
     }
 
@@ -382,18 +396,22 @@ class TestStd {
     fun foldWhile() {
         var iterations = 0
         val vec = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        val sum = when (val res = vec.foldWhile(0) { acc, item ->
-            iterations++
-            val newSum = acc + item
-            if (newSum <= 20) {
-                FoldWhile.Continue(newSum)
-            } else {
-                FoldWhile.Done(acc)
+        val sum =
+            when (
+                val res =
+                    vec.foldWhile(0) { acc, item ->
+                        iterations++
+                        val newSum = acc + item
+                        if (newSum <= 20) {
+                            FoldWhile.Continue(newSum)
+                        } else {
+                            FoldWhile.Done(acc)
+                        }
+                    }
+            ) {
+                is FoldWhile.Continue -> res.value
+                is FoldWhile.Done -> res.value
             }
-        }) {
-            is FoldWhile.Continue -> res.value
-            is FoldWhile.Done -> res.value
-        }
         assertEquals(6, iterations)
         assertEquals(15, sum)
     }

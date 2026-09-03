@@ -60,8 +60,8 @@ internal class LazyBuffer<T>(
      * Pull one more element from the source into the buffer. Returns `true`
      * if an element was buffered, `false` if the source is exhausted.
      */
-    fun getNext(): Boolean {
-        return if (it.hasNext()) {
+    fun getNext(): Boolean =
+        if (it.hasNext()) {
             val x = it.next()
             buffer.add(x)
             consumed += 1
@@ -69,7 +69,6 @@ internal class LazyBuffer<T>(
         } else {
             false
         }
-    }
 
     /**
      * Buffer up to [len] elements, pulling from the source as needed.
@@ -90,21 +89,15 @@ internal class LazyBuffer<T>(
     /**
      * Returns a fresh list of the buffered elements at the given indices.
      */
-    fun getAt(indices: IntArray): List<T> {
-        return indices.map { i -> buffer[i] }.toMutableList()
-    }
+    fun getAt(indices: IntArray): List<T> = indices.map { i -> buffer[i] }.toMutableList()
 
     /**
      * Returns a list of the buffered elements at the given indices array.
      */
-    fun getArray(indices: IntArray): List<T> {
-        return indices.map { i -> buffer[i] }
-    }
+    fun getArray(indices: IntArray): List<T> = indices.map { i -> buffer[i] }
 
     /** Index into the buffered prefix. */
-    fun index(index: Int): T {
-        return buffer[index]
-    }
+    fun index(index: Int): T = buffer[index]
 
     /** Indexed access into the buffered prefix. */
     operator fun get(index: Int): T = buffer[index]
