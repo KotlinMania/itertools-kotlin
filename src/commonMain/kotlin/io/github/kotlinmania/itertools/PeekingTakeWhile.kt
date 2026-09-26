@@ -48,7 +48,6 @@ class PeekableIterator<T>(
             hasPeeked = false
             val item = peeked
             peeked = null
-            @Suppress("UNCHECKED_CAST")
             return item as T
         }
         return iter.next()
@@ -99,7 +98,6 @@ class PeekingTakeWhile<T>(
         hasPeeked = false
         val item = peeked
         peeked = null
-        @Suppress("UNCHECKED_CAST")
         return item as T
     }
 

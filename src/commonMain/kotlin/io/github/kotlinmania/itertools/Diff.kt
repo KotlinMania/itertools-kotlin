@@ -46,7 +46,6 @@ class PutBack<T>(
             hasTop = false
             val t = top
             top = null
-            @Suppress("UNCHECKED_CAST")
             return t as T
         }
         return iter.next()
