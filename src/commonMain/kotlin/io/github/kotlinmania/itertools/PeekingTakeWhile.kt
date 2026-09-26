@@ -21,16 +21,14 @@ interface PeekingNext<out T> : Iterator<T> {
 class PeekableIterator<T>(
     private val iter: Iterator<T>,
 ) : PeekingNext<T> {
-    private var peeked: T? = null
-    private var hasPeeked: Boolean = false
+    private val peeked: ArrayDeque<T> = ArrayDeque(1)
 
     /** Work like `peek` in `Peekable`. */
     fun peek(): T? {
-        if (!hasPeeked && iter.hasNext()) {
-            peeked = iter.next()
-            hasPeeked = true
+        if (peeked.isEmpty() && iter.hasNext()) {
+            peeked.addLast(iter.next())
         }
-        return if (hasPeeked) peeked else null
+        return peeked.firstOrNull()
     }
 
     override fun peekingNext(accept: (T) -> Boolean): T? {
@@ -41,15 +39,11 @@ class PeekableIterator<T>(
         return null
     }
 
-    override fun hasNext(): Boolean = hasPeeked || iter.hasNext()
+    override fun hasNext(): Boolean = peeked.isNotEmpty() || iter.hasNext()
 
     override fun next(): T {
-        if (hasPeeked) {
-            hasPeeked = false
-            val item = peeked
-            peeked = null
-            @Suppress("UNCHECKED_CAST")
-            return item as T
+        if (peeked.isNotEmpty()) {
+            return peeked.removeFirst()
         }
         return iter.next()
     }
@@ -77,30 +71,24 @@ class PeekingTakeWhile<T>(
     private val iter: PeekingNext<T>,
     private val predicate: (T) -> Boolean,
 ) : PeekingNext<T> {
-    private var peeked: T? = null
-    private var hasPeeked: Boolean = false
+    private val peeked: ArrayDeque<T> = ArrayDeque(1)
 
     override fun peekingNext(accept: (T) -> Boolean): T? =
         iter.peekingNext { predicate(it) && accept(it) }
 
     override fun hasNext(): Boolean {
-        if (!hasPeeked) {
+        if (peeked.isEmpty()) {
             val next = iter.peekingNext(predicate)
             if (next != null) {
-                peeked = next
-                hasPeeked = true
+                peeked.addLast(next)
             }
         }
-        return hasPeeked
+        return peeked.isNotEmpty()
     }
 
     override fun next(): T {
         if (!hasNext()) throw NoSuchElementException("PeekingTakeWhile exhausted")
-        hasPeeked = false
-        val item = peeked
-        peeked = null
-        @Suppress("UNCHECKED_CAST")
-        return item as T
+        return peeked.removeFirst()
     }
 
     /** Size hint for the iterator. */
