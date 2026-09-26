@@ -229,9 +229,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 13. peeking_take_while
 
 - **Target:** `itertools.PeekingTakeWhile [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.37
+- **Similarity:** 0.38
 - **Dependents:** 1
-- **Priority Score:** 1010706.3
+- **Priority Score:** 1010706.2
 - **Functions:** 4/4 matched (target 18)
 - **Missing functions:** _none_
 - **Types:** 2/3 matched (target 4)
