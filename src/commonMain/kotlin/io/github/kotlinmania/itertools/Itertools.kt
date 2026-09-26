@@ -21,16 +21,16 @@ import io.github.kotlinmania.itertools.adaptors.WhileSome
  *
  * See [foldWhile] for more information.
  */
-sealed interface FoldWhile<out T> {
+sealed class FoldWhile<out T> {
     /** Continue folding with this value. */
     data class Continue<T>(
         val value: T,
-    ) : FoldWhile<T>
+    ) : FoldWhile<T>()
 
     /** Fold is complete and will return this value. */
     data class Done<T>(
         val value: T,
-    ) : FoldWhile<T>
+    ) : FoldWhile<T>()
 
     /** Return the value in the continue or done. */
     fun intoInner(): T =
