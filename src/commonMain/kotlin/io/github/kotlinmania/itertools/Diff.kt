@@ -7,8 +7,7 @@ package io.github.kotlinmania.itertools
 class PutBack<T>(
     private val iter: Iterator<T>,
 ) : PeekingNext<T> {
-    private var top: T? = null
-    private var hasTop: Boolean = false
+    private val top: ArrayDeque<T> = ArrayDeque(1)
 
     /** Put back value (builder method). */
     fun withValue(value: T): PutBack<T> {
@@ -21,9 +20,8 @@ class PutBack<T>(
      * If a value is already in the slot, it is returned.
      */
     fun putBack(x: T): T? {
-        val old = if (hasTop) top else null
-        top = x
-        hasTop = true
+        val old = if (top.isNotEmpty()) top.removeFirst() else null
+        top.addLast(x)
         return old
     }
 
@@ -39,14 +37,11 @@ class PutBack<T>(
         return null
     }
 
-    override fun hasNext(): Boolean = hasTop || iter.hasNext()
+    override fun hasNext(): Boolean = top.isNotEmpty() || iter.hasNext()
 
     override fun next(): T {
-        if (hasTop) {
-            hasTop = false
-            val t = top
-            top = null
-            return t as T
+        if (top.isNotEmpty()) {
+            return top.removeFirst()
         }
         return iter.next()
     }
