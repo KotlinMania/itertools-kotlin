@@ -79,7 +79,7 @@ class Tuples<T>(
             throw NoSuchElementException("Tuples exhausted")
         }
         val result = mutableListOf<T>()
-        for (i in 0 until size) {
+        repeat(size) {
             result.add(buffer.removeFirst())
         }
         return result

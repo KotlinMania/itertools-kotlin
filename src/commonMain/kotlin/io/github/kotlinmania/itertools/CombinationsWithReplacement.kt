@@ -83,10 +83,10 @@ class CombinationsWithReplacement<T>(
      * Returns the n-th combination with replacement without iterating through the preceding ones manually.
      */
     fun nth(n: Int): List<T>? {
-        if (nextItem != null) {
-            val item = nextItem
+        val current = nextItem
+        if (current != null) {
             nextItem = null
-            if (n == 0) return item
+            if (n == 0) return current
             return nth(n - 1)
         }
         if (isExhausted) return null
@@ -106,7 +106,7 @@ class CombinationsWithReplacement<T>(
             isExhausted = true
             return null
         }
-        for (step in 0 until n) {
+        repeat(n) {
             if (incrementIndices()) {
                 isExhausted = true
                 return null

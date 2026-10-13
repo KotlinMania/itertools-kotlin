@@ -1575,7 +1575,7 @@ fun <T> Iterable<T>.get(index: Int): T? = iterator().get(index)
  */
 fun <T> Iterator<T>.nextArray(n: Int): List<T>? {
     val list = ArrayList<T>(n)
-    for (i in 0 until n) {
+    repeat(n) {
         if (!hasNext()) return null
         list.add(next())
     }

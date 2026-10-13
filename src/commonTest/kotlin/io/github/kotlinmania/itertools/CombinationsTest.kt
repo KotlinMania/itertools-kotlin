@@ -66,11 +66,7 @@ class CombinationsTest {
     @Test
     fun testCheckedBinomial() {
         val limit = 500
-        val row = ArrayList<Int?>()
-        row.add(1)
-        for (i in 1..limit) {
-            row.add(0)
-        }
+        val row = List(limit + 1) { if (it == 0) 1 else 0 }
         var currentRow: List<Int?> = row
 
         for (n in 0..limit) {

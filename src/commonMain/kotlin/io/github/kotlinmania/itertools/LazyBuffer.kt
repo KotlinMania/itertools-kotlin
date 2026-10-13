@@ -51,8 +51,9 @@ internal class LazyBuffer<T>(
      * Drain the remaining source and return total length.
      */
     fun count(): Int {
-        while (getNext()) {
-        }
+        do {
+            val hasMore = getNext()
+        } while (hasMore)
         return len()
     }
 
@@ -104,10 +105,7 @@ internal class LazyBuffer<T>(
 
     companion object {
         /** Create a new [LazyBuffer] from an iterator. */
-        fun <T> new(it: Iterator<T>): LazyBuffer<T> {
-            val buffer = mutableListOf<T>()
-            return LazyBuffer(it)
-        }
+        fun <T> new(it: Iterator<T>): LazyBuffer<T> = LazyBuffer(it)
 
         /** Create a new [LazyBuffer] from an iterable. */
         fun <T> new(iterable: Iterable<T>): LazyBuffer<T> = LazyBuffer(iterable)

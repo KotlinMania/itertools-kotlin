@@ -24,11 +24,11 @@ class PeekNth<T>(
     fun peekNth(n: Int): T? {
         val unbufferedItems = (n + 1) - buf.size
         if (unbufferedItems > 0) {
-            for (i in 0 until unbufferedItems) {
+            repeat(unbufferedItems) {
                 if (iter.hasNext()) {
                     buf.addLast(iter.next())
                 } else {
-                    break
+                    return if (n in 0 until buf.size) buf[n] else null
                 }
             }
         }

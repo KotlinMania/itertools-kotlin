@@ -368,7 +368,11 @@ class TestStd {
 
     @Test
     fun powerset() {
-        val it0 = (0 until 0).powerset().asSequence().toList()
+        val it0 =
+            IntRange.EMPTY
+                .powerset()
+                .asSequence()
+                .toList()
         assertEquals(listOf(emptyList<Int>()), it0)
 
         val it1 = (0 until 1).powerset().asSequence().toList()

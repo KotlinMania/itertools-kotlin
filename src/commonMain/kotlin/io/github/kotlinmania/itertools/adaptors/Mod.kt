@@ -723,7 +723,7 @@ class Tuple3Combination<T>(
 /**
  * Base class for k-combination iterators where k >= 4.
  */
-abstract class BaseTupleKCombination<T>(
+open class BaseTupleKCombination<T>(
     protected val items: List<T>,
     protected val k: Int,
 ) : Iterator<List<T>>,

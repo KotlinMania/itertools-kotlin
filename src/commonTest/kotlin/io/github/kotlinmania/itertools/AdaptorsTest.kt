@@ -21,8 +21,7 @@ class AdaptorsTest {
     @Test
     fun testCheckedBinomial() {
         val limit = 50
-        var row = MutableList<Int?>(limit + 1) { 0 }
-        row[0] = 1
+        var row: List<Int?> = List(limit + 1) { if (it == 0) 1 else 0 }
         for (n in 0..limit) {
             for (k in 0..limit) {
                 assertEquals(row[k], checkedBinomial(n, k))

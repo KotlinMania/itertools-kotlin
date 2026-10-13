@@ -47,7 +47,7 @@ class RepeatN<A>(
         val elt = this.elt
         if (elt != null && n > 0) {
             var acc = init
-            for (i in 1 until n) {
+            repeat(n - 1) {
                 acc = f(acc, elt)
             }
             n = 0
