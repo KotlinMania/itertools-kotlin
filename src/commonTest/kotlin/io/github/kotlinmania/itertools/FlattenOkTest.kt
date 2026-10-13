@@ -51,17 +51,6 @@ class FlattenOkTest {
                 ItemResult.Ok(1),
                 ItemResult.Ok(0),
             )
-        val actual =
-            mixData()
-                .asReversed()
-                .flattenOk()
-                .asSequence()
-                .map { res ->
-                    when (res) {
-                        is ItemResult.Ok -> ItemResult.Ok(res.value)
-                        is ItemResult.Err -> res
-                    }
-                }.toList()
         // Compare with list reversed
         val actualList =
             mixData()

@@ -65,7 +65,7 @@ class Permutations<T>(
                     val prevIterationCount = n - k + 1
                     val indices = IntArray(n) { it }
                     val cycles = IntArray(k) { n - 1 - it }
-                    for (step in 0 until prevIterationCount) {
+                    repeat(prevIterationCount) {
                         if (advance(indices, cycles)) {
                             state = PermutationState.End
                             return null

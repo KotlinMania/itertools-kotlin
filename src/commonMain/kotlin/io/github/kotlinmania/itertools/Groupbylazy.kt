@@ -47,10 +47,10 @@ internal class GroupInner<K, T>(
     private var topGroup: Int = 0
 
     /** Least index for which we still have elements buffered */
-    private var oldestBufferedGroup: Int = 0
+    private val oldestBufferedGroup: Int = 0
 
     /** Group index for buffer[0] */
-    private var bottomGroup: Int = 0
+    private val bottomGroup: Int = 0
 
     /** Buffered groups */
     private val buffer: MutableList<MutableList<T>> = mutableListOf()

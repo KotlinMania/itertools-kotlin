@@ -88,17 +88,13 @@ internal fun <T> kSmallestGeneral(
     // To achieve this, repeatedly,
     // 1) "pop" the largest item off the heap into the tail slot of the underlying storage,
     // 2) shrink the logical size of the heap by 1,
-    // 3) restore the heap property over the remaining items.
-    var heap: MutableList<T> = storage
-    while (heap.size > 1) {
-        val lastIdx = heap.size - 1
-        val tmp = heap[0]
-        heap[0] = heap[lastIdx]
-        heap[lastIdx] = tmp
+    for (lastIdx in storage.size - 1 downTo 1) {
+        val tmp = storage[0]
+        storage[0] = storage[lastIdx]
+        storage[lastIdx] = tmp
         // Sifting over a truncated slice means that the sifting will not disturb already
         // popped elements.
-        heap = heap.subList(0, lastIdx)
-        siftDown(heap, isLessThan, 0)
+        siftDown(storage.subList(0, lastIdx), isLessThan, 0)
     }
 
     return storage
