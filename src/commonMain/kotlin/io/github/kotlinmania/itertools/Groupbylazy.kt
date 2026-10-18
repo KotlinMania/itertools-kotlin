@@ -295,17 +295,8 @@ class IntoChunks<T>(
     }
 
     /** Convert into iterator of chunks. */
-    fun intoIter(): Chunks<T> = this
+    fun intoIter(): io.github.kotlinmania.itertools.IntoChunks<T> = this
 }
-
-/**
- * An iterator that yields the Chunk iterators.
- *
- * Iterator element type is `Chunk`.
- *
- * See [chunks] for more information.
- */
-typealias Chunks<T> = IntoChunks<T>
 
 /**
  * An iterator for the elements in a single chunk.
