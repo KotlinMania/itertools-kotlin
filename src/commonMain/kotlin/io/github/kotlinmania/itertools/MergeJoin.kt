@@ -1,6 +1,8 @@
 // port-lint: source merge_join.rs
 package io.github.kotlinmania.itertools
 
+import io.github.kotlinmania.either.Either
+
 /**
  * Marker object for less-than-or-equal comparison in [MergeBy].
  */
