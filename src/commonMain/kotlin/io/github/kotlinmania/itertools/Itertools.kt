@@ -1,6 +1,6 @@
-// port-lint: source lib.rs
 package io.github.kotlinmania.itertools
 
+import io.github.kotlinmania.either.Either
 import io.github.kotlinmania.itertools.adaptors.Batching
 import io.github.kotlinmania.itertools.adaptors.CoalesceBy
 import io.github.kotlinmania.itertools.adaptors.CoalesceResult
@@ -60,21 +60,6 @@ sealed class AllEqualValueResult<out T> {
         val first: T,
         val other: T,
     ) : AllEqualValueResult<T>()
-}
-
-/**
- * Alternate or simultaneous values of two types [L] and [R].
- */
-sealed class Either<out L, out R> {
-    /** The left value. */
-    data class Left<out L>(
-        val value: L,
-    ) : Either<L, Nothing>()
-
-    /** The right value. */
-    data class Right<out R>(
-        val value: R,
-    ) : Either<Nothing, R>()
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 // port-lint: tests tests/test_std.rs
 package io.github.kotlinmania.itertools
 
+import io.github.kotlinmania.either.Either
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

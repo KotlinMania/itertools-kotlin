@@ -1,6 +1,8 @@
 // port-lint: source either_or_both.rs
 package io.github.kotlinmania.itertools
 
+import io.github.kotlinmania.either.Either
+
 /**
  * Value that either holds a single `A` or `B`, or both.
  */
