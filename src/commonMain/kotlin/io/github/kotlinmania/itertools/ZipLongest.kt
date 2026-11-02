@@ -95,9 +95,18 @@ class ZipLongest<A, B>(
         val aRemaining = aEnd - aStart
         val bRemaining = bEnd - bStart
         return when {
-            aRemaining <= 0 && bRemaining <= 0 -> null
-            aRemaining > bRemaining -> EitherOrBoth.Left(aList[--aEnd])
-            bRemaining > aRemaining -> EitherOrBoth.Right(bList[--bEnd])
+            aRemaining <= 0 && bRemaining <= 0 -> {
+                if (peeked != null) next() else null
+            }
+
+            aRemaining > bRemaining -> {
+                EitherOrBoth.Left(aList[--aEnd])
+            }
+
+            bRemaining > aRemaining -> {
+                EitherOrBoth.Right(bList[--bEnd])
+            }
+
             else -> {
                 val aVal = aList[--aEnd]
                 val bVal = bList[--bEnd]
@@ -112,7 +121,8 @@ class ZipLongest<A, B>(
             val aRemaining = (aEnd - aStart).coerceAtLeast(0)
             val bRemaining = (bEnd - bStart).coerceAtLeast(0)
             val maxRemaining = maxOf(aRemaining, bRemaining)
-            return SizeHint(maxRemaining, maxRemaining)
+            val buffered = if (peeked != null) 1 else 0
+            return SizeHint(maxRemaining + buffered, maxRemaining + buffered)
         }
         return max(subScalar(aHint, consumed), subScalar(bHint, consumed))
     }

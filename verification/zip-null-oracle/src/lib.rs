@@ -116,3 +116,63 @@ mod peek_predicate_tests {
         assert_eq!(iterator.next(),None);
     }
 }
+
+#[cfg(test)]
+mod zip_cache_tests {
+    use itertools::{Itertools,EitherOrBoth};
+
+    #[test]
+    fn prefetched_singleton_remains_available_from_back() {
+        let mut iter = [None::<i32>].into_iter().zip_longest([None::<&str>]).peekable();
+        assert_eq!(iter.peek(),Some(&EitherOrBoth::Both(None,None)));
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Both(None,None)));
+        assert_eq!(iter.peek(),None);
+        assert_eq!(iter.next_back(),None);
+    }
+
+    #[test]
+    fn exact_hints_include_pending_front() {
+        let mut iter = [1,2,3].into_iter().zip_longest(["x"]).peekable();
+        assert_eq!(iter.size_hint(),(3,Some(3)));
+        assert!(iter.peek().is_some());assert!(iter.peek().is_some());
+        assert_eq!(iter.size_hint(),(3,Some(3)));
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Left(3)));
+        assert_eq!(iter.size_hint(),(2,Some(2)));
+        assert_eq!(iter.next(),Some(EitherOrBoth::Both(1,"x")));
+        assert_eq!(iter.size_hint(),(1,Some(1)));
+        assert!(iter.peek().is_some());
+        assert_eq!(iter.size_hint(),(1,Some(1)));
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Left(2)));
+        assert_eq!(iter.size_hint(),(0,Some(0)));
+        assert_eq!(iter.next(),None);
+    }
+
+    #[test]
+    fn reverse_fold_includes_prefetched_front() {
+        let mut iter = [1,2].into_iter().zip_longest(["x","y","z"]).peekable();
+        assert!(iter.peek().is_some());
+        let reversed = iter.by_ref().rfold(Vec::new(),|mut acc,item| {acc.push(item);acc});
+        assert_eq!(reversed,vec![EitherOrBoth::Right("z"),EitherOrBoth::Both(2,"y"),EitherOrBoth::Both(1,"x")]);
+        assert_eq!(iter.peek(),None);
+    }
+
+    #[test]
+    fn mixed_ends_preserve_nullable_tags() {
+        let mut iter = [None,Some(2),None].into_iter().zip_longest([None,Some("x")]).peekable();
+        assert!(iter.peek().is_some());
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Left(None)));
+        assert_eq!(iter.next(),Some(EitherOrBoth::Both(None,None)));
+        assert!(iter.peek().is_some());
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Both(Some(2),Some("x"))));
+        assert_eq!(iter.next(),None);assert_eq!(iter.next_back(),None);
+    }
+
+    #[test]
+    fn unprefetched_null_tail_and_empty_input() {
+        let mut iter = [None::<i32>].into_iter().zip_longest([None::<&str>;0]);
+        assert_eq!(iter.next_back(),Some(EitherOrBoth::Left(None)));
+        assert_eq!(iter.next_back(),None);
+        let mut empty = [None::<i32>;0].into_iter().zip_longest([None::<&str>;0]).peekable();
+        assert_eq!(empty.peek(),None);assert_eq!(empty.size_hint(),(0,Some(0)));assert_eq!(empty.next_back(),None);
+    }
+}

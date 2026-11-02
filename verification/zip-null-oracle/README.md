@@ -55,10 +55,11 @@ Receipts: build/rust-kotlin-zip-null/translator-attempt.txt and either-translato
 
 Nullable Option-returning accessors such as left()/right() still cannot
 represent every nested-option state with Kotlin nullable returns alone; this
-patch fixes tag queries, not that wider representation. Kotlin hasNext
-prefetch and mixed front/back iteration/size-hint behavior are separate
-existing contracts and not claimed fixed. Generic iterator cloning and Rust
-ownership/borrow enforcement also remain outside scope. No custom algorithm,
+patch fixes tag queries, not that wider representation. At the original nullable-item checkpoint, Kotlin hasNext
+prefetch and mixed front/back iteration/size-hint behavior were outside scope.
+The subsequent List-backed cache correction is documented in ZIP_CACHE.md.
+Generic iterator hints/cloning and Rust ownership/borrow enforcement remain
+outside scope. No custom algorithm,
 Unicode approximation, shared type duplicate, pin or settings change is added.
 No publication or downstream/other-platform completion is claimed.
 
