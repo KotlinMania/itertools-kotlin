@@ -32,12 +32,12 @@ sealed class EitherOrBoth<out A, out B> {
     /**
      * If `Left`, or `Both`, return true. Otherwise, return false.
      */
-    fun hasLeft(): Boolean = asRef().left() != null
+    fun hasLeft(): Boolean = this is Left || this is Both
 
     /**
      * If `Right`, or `Both`, return true, otherwise, return false.
      */
-    fun hasRight(): Boolean = asRef().right() != null
+    fun hasRight(): Boolean = this is Right || this is Both
 
     /**
      * If `Left`, return true. Otherwise, return false.

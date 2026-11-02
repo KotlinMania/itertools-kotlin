@@ -41,28 +41,33 @@ class ZipLongest<A, B>(
             val aHas = aStart < aEnd
             val bHas = bStart < bEnd
             if (!aHas && !bHas) return
-            val aVal = if (aHas) aList[aStart++] else null
-            val bVal = if (bHas) bList[bStart++] else null
             peeked =
                 when {
-                    aVal != null && bVal != null -> EitherOrBoth.Both(aVal, bVal)
-                    aVal != null -> EitherOrBoth.Left(aVal)
-                    bVal != null -> EitherOrBoth.Right(bVal)
+                    aHas && bHas -> EitherOrBoth.Both(aList[aStart++], bList[bStart++])
+                    aHas -> EitherOrBoth.Left(aList[aStart++])
+                    bHas -> EitherOrBoth.Right(bList[bStart++])
                     else -> null
                 }
             return
         }
         if (aExhausted && bExhausted) return
-        val aNext = if (!aExhausted && a.hasNext()) a.next() else null.also { aExhausted = true }
-        val bNext = if (!bExhausted && b.hasNext()) b.next() else null.also { bExhausted = true }
-
-        peeked =
-            when {
-                aNext != null && bNext != null -> EitherOrBoth.Both(aNext, bNext)
-                aNext != null -> EitherOrBoth.Left(aNext)
-                bNext != null -> EitherOrBoth.Right(bNext)
-                else -> null
+        if (!aExhausted && a.hasNext()) {
+            val aNext = a.next()
+            if (!bExhausted && b.hasNext()) {
+                peeked = EitherOrBoth.Both(aNext, b.next())
+            } else {
+                bExhausted = true
+                peeked = EitherOrBoth.Left(aNext)
             }
+        } else {
+            aExhausted = true
+            if (!bExhausted && b.hasNext()) {
+                peeked = EitherOrBoth.Right(b.next())
+            } else {
+                bExhausted = true
+                peeked = null
+            }
+        }
     }
 
     override fun hasNext(): Boolean {
