@@ -40,22 +40,23 @@ class PeekNth<T>(
 
     /** Returns the next item if [func] returns `true` for it. */
     fun nextIf(func: (T) -> Boolean): T? {
-        val item = peek() ?: return null
-        if (func(item)) {
-            return next()
+        if (!hasNext()) return null
+        val item = next()
+        return if (func(item)) {
+            item
+        } else {
+            buf.addFirst(item)
+            null
         }
-        return null
     }
 
     /** Returns the next item if it equals [expected]. */
     fun nextIfEq(expected: T): T? = nextIf { it == expected }
 
     override fun peekingNext(accept: (T) -> Boolean): T? {
-        val item = peek() ?: return null
-        if (accept(item)) {
-            return next()
-        }
-        return null
+        peek()
+        if (buf.isEmpty()) return null
+        return if (accept(buf.first())) next() else null
     }
 
     override fun hasNext(): Boolean = buf.isNotEmpty() || iter.hasNext()

@@ -56,3 +56,63 @@ mod tests {
         assert_eq!(reversed,expected().into_iter().rev().collect::<Vec<_>>());
     }
 }
+
+#[cfg(test)]
+mod peek_predicate_tests {
+    use itertools::{peek_nth, PeekingNext};
+    use std::panic::{catch_unwind,AssertUnwindSafe};
+
+    #[test]
+    fn next_if_preserves_present_none_and_predicate_calls() {
+        let mut iterator = peek_nth([None,Some(1)].into_iter());
+        let mut calls = 0;
+        assert_eq!(iterator.next_if(|item| {calls+=1;item.is_none()}),Some(None));
+        assert_eq!(calls,1);
+        assert_eq!(iterator.next(),Some(Some(1)));
+        assert_eq!(iterator.next(),None);
+        let mut iterator = peek_nth([None,Some(1)].into_iter());
+        let mut seen = Vec::new();
+        assert_eq!(iterator.next_if(|item| {seen.push(*item);false}),None);
+        assert_eq!(seen,vec![None]);
+        assert_eq!(iterator.next(),Some(None));
+        assert_eq!(iterator.next(),Some(Some(1)));
+        let mut iterator = peek_nth([None,Some(1)].into_iter());
+        assert_eq!(iterator.next_if_eq(&None),Some(None));
+        assert_eq!(iterator.next(),Some(Some(1)));
+    }
+
+    #[test]
+    fn next_if_panic_consumes_the_buffered_item() {
+        let mut iterator = peek_nth([1,2,3].into_iter());
+        assert_eq!(iterator.peek_nth(1),Some(&2));
+        assert!(catch_unwind(AssertUnwindSafe(|| iterator.next_if(|_| panic!("predicate failure")))).is_err());
+        assert_eq!(iterator.next(),Some(2));
+        assert_eq!(iterator.next(),Some(3));
+    }
+
+    #[test]
+    fn peeking_next_checks_present_none_without_consuming_rejection() {
+        let mut iterator = peek_nth([None,Some(7)].into_iter());
+        let mut seen = Vec::new();
+        assert_eq!(iterator.peeking_next(|item| {seen.push(*item);false}),None);
+        assert_eq!(seen,vec![None]);
+        assert_eq!(iterator.next(),Some(None));
+        assert_eq!(iterator.next(),Some(Some(7)));
+    }
+
+    #[test]
+    fn peeking_next_panic_retains_the_buffered_item() {
+        let mut iterator = peek_nth([1,2].into_iter());
+        assert!(catch_unwind(AssertUnwindSafe(|| iterator.peeking_next(|_| panic!("predicate failure")))).is_err());
+        assert_eq!(iterator.next(),Some(1));
+        assert_eq!(iterator.next(),Some(2));
+    }
+
+    #[test]
+    fn exhausted_input_skips_predicates() {
+        let mut iterator = peek_nth([None::<i32>;0].into_iter());
+        assert_eq!(iterator.next_if(|_| panic!("no item")),None);
+        assert_eq!(iterator.peeking_next(|_| panic!("no item")),None);
+        assert_eq!(iterator.next(),None);
+    }
+}
