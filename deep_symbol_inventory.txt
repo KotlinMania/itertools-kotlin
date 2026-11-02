@@ -572,15 +572,15 @@ EXTRA_TARGET_SYMBOL function EitherOrBoth::insertBoth at src/commonMain/kotlin/i
 EXTRA_TARGET_SYMBOL function EitherOrBoth::Companion::from at src/commonMain/kotlin/io/github/kotlinmania/itertools/EitherOrBoth.kt:418
 EXTRA_TARGET_SYMBOL function EitherOrBoth::Companion::from at src/commonMain/kotlin/io/github/kotlinmania/itertools/EitherOrBoth.kt:427
 EXTRA_TARGET_SYMBOL function toEither at src/commonMain/kotlin/io/github/kotlinmania/itertools/EitherOrBoth.kt:465
-EXTRA_TARGET_SYMBOL type EitherOrBothTest at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:12
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testVariantsAndPredicates at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:13
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testAccessors at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:38
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testTransformations at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:66
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testOrAndReduce at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:89
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testIntoAndAndThen at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:112
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testReferencesAndDefaults at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:135
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testInsertions at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:151
-EXTRA_TARGET_SYMBOL function EitherOrBothTest::testFromAndToEither at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:174
+EXTRA_TARGET_SYMBOL type EitherOrBothTest at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:11
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testVariantsAndPredicates at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:12
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testAccessors at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:37
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testTransformations at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:65
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testOrAndReduce at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:88
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testIntoAndAndThen at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:111
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testReferencesAndDefaults at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:134
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testInsertions at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:150
+EXTRA_TARGET_SYMBOL function EitherOrBothTest::testFromAndToEither at src/commonTest/kotlin/io/github/kotlinmania/itertools/EitherOrBothTest.kt:173
 PRESENT type ExactlyOneError at tmp/itertools/src/exactly_one_err.rs:20 -> src/commonMain/kotlin/io/github/kotlinmania/itertools/ExactlyOneErr.kt:12
 MISSING_SYMBOL function new at tmp/itertools/src/exactly_one_err.rs:33
 MISSING_SYMBOL function additional_len at tmp/itertools/src/exactly_one_err.rs:37
