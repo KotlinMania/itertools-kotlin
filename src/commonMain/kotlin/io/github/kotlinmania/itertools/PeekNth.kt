@@ -71,11 +71,11 @@ class PeekNth<T>(
     /** Returns the size hint. */
     fun sizeHint(): SizeHint = addScalar(sourceHint, buf.size)
 
-    /** Folds the elements of the iterator. */
+    /** Consumes buffered and underlying elements, folding in iteration order. */
     fun <B> fold(init: B, f: (B, T) -> B): B {
         var acc = init
-        for (item in buf) {
-            acc = f(acc, item)
+        while (buf.isNotEmpty()) {
+            acc = f(acc, buf.removeFirst())
         }
         while (iter.hasNext()) {
             acc = f(acc, iter.next())

@@ -176,3 +176,48 @@ mod zip_cache_tests {
         assert_eq!(empty.peek(),None);assert_eq!(empty.size_hint(),(0,Some(0)));assert_eq!(empty.next_back(),None);
     }
 }
+
+#[cfg(test)]
+mod peek_fold_tests {
+    use itertools::peek_nth;
+    use std::panic::{catch_unwind,AssertUnwindSafe};
+
+    #[test]
+    fn fold_drains_prefetched_and_underlying_items() {
+        let mut iter = peek_nth([1,2,3,4].into_iter());
+        assert_eq!(iter.peek_nth(2),Some(&3));
+        let output = iter.by_ref().fold(Vec::new(),|mut acc,item| {acc.push(item);acc});
+        assert_eq!(output,vec![1,2,3,4]);
+        assert_eq!(iter.next(),None);
+    }
+
+    #[test]
+    fn buffered_none_payload_is_consumed_once() {
+        let mut iter = peek_nth([None,Some(2)].into_iter());
+        assert_eq!(iter.peek(),Some(&None));
+        let output = iter.by_ref().fold(Vec::new(),|mut acc,item| {acc.push(item);acc});
+        assert_eq!(output,vec![None,Some(2)]);
+        assert_eq!(iter.next(),None);
+    }
+
+    #[test]
+    fn callback_panic_does_not_replay_processed_or_failing_items() {
+        let mut iter = peek_nth([1,2,3].into_iter());
+        assert_eq!(iter.peek_nth(1),Some(&2));
+        let mut visited = Vec::new();
+        assert!(catch_unwind(AssertUnwindSafe(|| {
+            iter.by_ref().fold(0,|acc,item| {visited.push(item);if item==2 {panic!("fold callback")} acc+item})
+        })).is_err());
+        assert_eq!(visited,vec![1,2]);
+        assert_eq!(iter.next(),Some(3));
+        assert_eq!(iter.next(),None);
+    }
+
+    #[test]
+    fn empty_fold_preserves_initial_value_and_skips_callback() {
+        let mut iter = peek_nth([None::<i32>;0].into_iter());
+        assert_eq!(iter.peek(),None);
+        assert_eq!(iter.by_ref().fold(42,|_,_| panic!("no item")),42);
+        assert_eq!(iter.next(),None);
+    }
+}
