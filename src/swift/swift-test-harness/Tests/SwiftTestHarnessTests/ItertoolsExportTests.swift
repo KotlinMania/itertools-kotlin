@@ -30,8 +30,20 @@ import Itertools
 // canary that the pipeline is green for this repo.
 @Suite("Itertools Swift Export Tests")
 struct ItertoolsExportTests {
-    @Test("Swift module loads and exports cleanly")
-    func testSwiftModuleLoads() throws {
-        #expect(Bool(true), "Itertools swift module imported cleanly")
+    @Test("SizeHint arithmetic and addThenDiv work through Swift Export")
+    func testSizeHintAndAddThenDiv() {
+        let left = SizeHint(lower: 2, upper: 5)
+        let right = SizeHint(lower: 3, upper: 7)
+        let combined = add(a: left, b: right)
+        #expect(combined.lower == 5)
+        #expect(combined.upper == 12)
+
+        let unbounded = SizeHint(lower: 4, upper: nil)
+        let shifted = addScalar(sh: unbounded, x: 3)
+        #expect(shifted.lower == 7)
+        #expect(shifted.upper == nil)
+
+        #expect(addThenDiv(n: 7, a: 2, d: 3) == 3)
+        #expect(addThenDiv(n: 7, a: 2, d: 0) == nil)
     }
 }
