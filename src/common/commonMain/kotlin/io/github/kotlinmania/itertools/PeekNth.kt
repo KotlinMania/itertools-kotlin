@@ -1,0 +1,103 @@
+// port-lint: source peek_nth.rs
+package io.github.kotlinmania.itertools
+
+/**
+ * A drop-in replacement for peekable iterators which adds a [peekNth]
+ * method allowing the user to peek at a value several iterations forward
+ * without advancing the base iterator.
+ *
+ * See [peekNth] for more information.
+ */
+class PeekNth<T>(
+    private val iter: Iterator<T>,
+    private val sourceHint: SizeHint = SizeHint(0, null),
+) : PeekingNext<T> {
+    private val buf: ArrayDeque<T> = ArrayDeque()
+
+    /** Works like the `peek` method in peekable iterators. */
+    fun peek(): T? = peekNth(0)
+
+    /** Works like the `peekMut` method in peekable iterators. */
+    fun peekMut(): T? = peek()
+
+    /** Returns the `nth` value without advancing the iterator. */
+    fun peekNth(n: Int): T? {
+        val unbufferedItems = (n + 1) - buf.size
+        if (unbufferedItems > 0) {
+            repeat(unbufferedItems) {
+                if (iter.hasNext()) {
+                    buf.addLast(iter.next())
+                } else {
+                    return if (n in 0 until buf.size) buf[n] else null
+                }
+            }
+        }
+        return if (n in 0 until buf.size) buf[n] else null
+    }
+
+    /** Returns a mutable reference to the `nth` value without advancing the iterator. */
+    fun peekNthMut(n: Int): T? = peekNth(n)
+
+    /** Returns the next item if [func] returns `true` for it. */
+    fun nextIf(func: (T) -> Boolean): T? {
+        if (!hasNext()) return null
+        val item = next()
+        return if (func(item)) {
+            item
+        } else {
+            buf.addFirst(item)
+            null
+        }
+    }
+
+    /** Returns the next item if it equals [expected]. */
+    fun nextIfEq(expected: T): T? = nextIf { it == expected }
+
+    override fun peekingNext(accept: (T) -> Boolean): T? {
+        peek()
+        if (buf.isEmpty()) return null
+        return if (accept(buf.first())) next() else null
+    }
+
+    override fun hasNext(): Boolean = buf.isNotEmpty() || iter.hasNext()
+
+    override fun next(): T {
+        if (buf.isNotEmpty()) {
+            return buf.removeFirst()
+        }
+        return iter.next()
+    }
+
+    /** Returns the size hint. */
+    fun sizeHint(): SizeHint = addScalar(sourceHint, buf.size)
+
+    /** Consumes buffered and underlying elements, folding in iteration order. */
+    fun <B> fold(init: B, f: (B, T) -> B): B {
+        var acc = init
+        while (buf.isNotEmpty()) {
+            acc = f(acc, buf.removeFirst())
+        }
+        while (iter.hasNext()) {
+            acc = f(acc, iter.next())
+        }
+        return acc
+    }
+}
+
+/**
+ * Create a new [PeekNth] iterator.
+ */
+fun <T> peekNth(iterable: Iterable<T>): PeekNth<T> {
+    val hint =
+        when (iterable) {
+            is Collection<*> -> SizeHint(iterable.size, iterable.size)
+            else -> SizeHint(0, null)
+        }
+    return PeekNth(iterable.iterator(), hint)
+}
+
+/**
+ * Create a new [PeekNth] iterator from an iterator.
+ */
+fun <T> peekNth(iter: Iterator<T>, hint: SizeHint = SizeHint(0, null)): PeekNth<T> =
+    PeekNth(iter, hint)

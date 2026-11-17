@@ -7,7 +7,7 @@
     "lang": "rust"
   },
   "target": {
-    "path": "src/commonMain/kotlin/io/github/kotlinmania/itertools",
+    "path": "src/common/commonMain/kotlin/io/github/kotlinmania/itertools",
     "lang": "kotlin"
   },
   "checks": {

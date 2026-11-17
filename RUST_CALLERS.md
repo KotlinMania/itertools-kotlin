@@ -16,29 +16,29 @@ For every Rust crate this repo owns (under `tmp/`), this file lists every **cros
 
 | package | module | inbound use sites | distinct caller crates | distinct caller repos | codex sites |
 |---|---|---:|---:|---:|---:|
-| `itertools` | `itertools` | 61 | 21 | 11 | 4 |
+| `itertools` | `itertools` | 85 | 27 | 16 | 4 |
 
 ## `itertools`
 
-### Inbound symbols (3 distinct, 61 total `use` sites)
+### Inbound symbols (4 distinct, 85 total `use` sites)
 
 Sorted by codex demand, then total demand. The first symbols are the priority queue for porting `itertools`.
 
-#### `itertools::Itertools` — 57 site(s) (4 codex, 53 other, 20 caller crates)
+#### `itertools::Itertools` — 80 site(s) (4 codex, 76 other, 26 caller crates)
 
 - ✅ `codex-kotlin/codex-tui` `src/bottom_pane/list_selection_view.rs:4` — `use itertools::Itertools as _`
 - ✅ `codex-kotlin/codex-tui` `src/bottom_pane/title_setup.rs:1` — `use itertools::Itertools`
 - ✅ `codex-kotlin/codex-tui` `src/exec_cell/render.rs:22` — `use itertools::Itertools`
 - ✅ `codex-kotlin/codex-tui` `src/wrapping.rs:885` — `use itertools::Itertools as _`
 - `arc-swap-kotlin/arc-swap` `tests/stress.rs:13` — `use itertools::Itertools`
+- `criterion-kotlin/criterion` `src/plot/gnuplot_backend/summary.rs:9` — `use itertools::Itertools`
+- `criterion-kotlin/criterion` `src/plot/plotters_backend/summary.rs:3` — `use itertools::Itertools`
+- `gemm-kotlin/gemm` `benches/bench.rs:83` — `use itertools::Itertools`
+- `imageproc-kotlin/imageproc` `src/haar.rs:7` — `use itertools::Itertools`
+- `imageproc-kotlin/imageproc` `src/morphology.rs:10` — `use itertools::Itertools`
+- `imageproc-kotlin/imageproc` `src/utils.rs:7` — `use itertools::Itertools`
 - `indexmap-kotlin/indexmap` `tests/quick.rs:2` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/build/mod.rs:17` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/lr1/build_lalr/mod.rs:9` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/lr1/codegen/parse_table.rs:10` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/lr1/core/mod.rs:6` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/lr1/error/mod.rs:13` — `use itertools::Itertools`
-- `lalrpop-kotlin/lalrpop` `src/message/horiz.rs:3` — `use itertools::Itertools`
-- _… and 45 more site(s)._
+- _… and 68 more site(s)._
 
 #### `itertools::Either` — 2 site(s) (0 codex, 2 other, 1 caller crates)
 
@@ -49,3 +49,7 @@ Sorted by codex demand, then total demand. The first symbols are the priority qu
 
 - `ratatui-kotlin/ratatui-widgets` `src/barchart.rs:721` — `use itertools::iproduct`
 - `ratatui-kotlin/ratatui-widgets` `src/block.rs:1124` — `use itertools::iproduct`
+
+#### `itertools::multizip` — 1 site(s) (0 codex, 1 other, 1 caller crates)
+
+- `imageproc-kotlin/imageproc` `src/gradients.rs:11` — `use itertools::multizip`

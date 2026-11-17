@@ -1,0 +1,8 @@
+[package]
+name = "itertools-zip-null-parity-oracle"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+itertools = { path = "../../tmp/itertools" }
