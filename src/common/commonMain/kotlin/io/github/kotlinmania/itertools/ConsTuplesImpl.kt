@@ -18,6 +18,9 @@ class ConsTuples<A, B, C> internal constructor(
     override fun hasNext(): Boolean = iter.hasNext()
 
     override fun next(): Triple<A, B, C> {
+        if (!hasNext()) {
+            throw NoSuchElementException("ConsTuples exhausted")
+        }
         val (pairAB, c) = iter.next()
         val (a, b) = pairAB
         return Triple(a, b, c)

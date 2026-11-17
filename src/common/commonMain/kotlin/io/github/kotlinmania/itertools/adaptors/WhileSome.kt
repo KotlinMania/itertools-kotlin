@@ -13,7 +13,7 @@ class WhileSome<T : Any>(
     private var hasNextCalculated = false
     private var exhausted = false
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (exhausted) return false
         if (!hasNextCalculated) {
             if (iter.hasNext()) {
@@ -32,6 +32,8 @@ class WhileSome<T : Any>(
         }
         return true
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): T {
         if (!hasNext()) {

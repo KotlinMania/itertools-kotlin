@@ -12,6 +12,9 @@ class Update<T>(
     override fun hasNext(): Boolean = iter.hasNext()
 
     override fun next(): T {
+        if (!hasNext()) {
+            throw NoSuchElementException("Update exhausted")
+        }
         val item = iter.next()
         action(item)
         return item

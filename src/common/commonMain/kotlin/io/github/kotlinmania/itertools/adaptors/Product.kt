@@ -12,7 +12,7 @@ class Product<A, B>(
     private val curA: ArrayDeque<A> = ArrayDeque(1)
     private var curIterB: Iterator<B> = iterBFactory()
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (curA.isEmpty()) {
             if (iterA.hasNext()) {
                 curA.addLast(iterA.next())
@@ -32,6 +32,8 @@ class Product<A, B>(
         }
         return true
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): Pair<A, B> {
         if (!hasNext()) {

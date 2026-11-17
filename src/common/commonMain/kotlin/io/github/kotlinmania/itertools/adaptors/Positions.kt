@@ -13,7 +13,7 @@ class Positions<T>(
     private var nextIndex: Int? = null
     private var hasNextCalculated = false
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (!hasNextCalculated) {
             while (iter.hasNext()) {
                 val item = iter.next()
@@ -29,6 +29,8 @@ class Positions<T>(
         }
         return true
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): Int {
         if (!hasNext()) {

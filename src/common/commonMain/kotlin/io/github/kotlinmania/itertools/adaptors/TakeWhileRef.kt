@@ -12,7 +12,7 @@ class TakeWhileRef<T>(
     private val peeked: ArrayDeque<T> = ArrayDeque(1)
     private var done: Boolean = false
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (done) return false
         if (peeked.isNotEmpty()) return true
         if (!iter.hasNext()) {
@@ -27,6 +27,8 @@ class TakeWhileRef<T>(
         done = true
         return false
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): T {
         if (!hasNext()) {

@@ -53,6 +53,9 @@ class ExactlyOneError<T>(
                 current.second
             }
             null -> {
+                if (!inner.hasNext()) {
+                    throw NoSuchElementException("ExactlyOneError exhausted")
+                }
                 consumed += 1
                 inner.next()
             }

@@ -173,7 +173,12 @@ class DedupBy<T>(
 
     override fun hasNext(): Boolean = coalesceIter.hasNext()
 
-    override fun next(): T = coalesceIter.next()
+    override fun next(): T {
+        if (!hasNext()) {
+            throw NoSuchElementException("DedupBy exhausted")
+        }
+        return coalesceIter.next()
+    }
 
     /** Size hint for the dedup iterator. */
     fun sizeHint(): SizeHint = coalesceIter.sizeHint()

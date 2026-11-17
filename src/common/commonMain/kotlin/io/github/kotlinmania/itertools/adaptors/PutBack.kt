@@ -52,6 +52,9 @@ class PutBack<T>(
         if (top.isNotEmpty()) {
             return top.removeFirst()
         }
+        if (!iter.hasNext()) {
+            throw NoSuchElementException("PutBack exhausted")
+        }
         return iter.next()
     }
 

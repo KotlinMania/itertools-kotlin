@@ -51,6 +51,9 @@ public class Tee<T> internal constructor(
         if (buffer.owner == id && buffer.backlog.isNotEmpty()) {
             return buffer.backlog.removeFirst()
         }
+        if (!buffer.iter.hasNext()) {
+            throw NoSuchElementException("Tee exhausted")
+        }
         val element = buffer.iter.next()
         buffer.iterConsumed += 1
         buffer.backlog.addLast(element)

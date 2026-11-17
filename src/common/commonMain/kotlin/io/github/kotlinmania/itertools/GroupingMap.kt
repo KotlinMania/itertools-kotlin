@@ -235,6 +235,11 @@ internal fun <K, V> newMapForGrouping(iter: Iterator<V>, keyMapper: (V) -> K): I
     return object : Iterator<Pair<K, V>> {
         override fun hasNext(): Boolean = iter.hasNext()
 
-        override fun next(): Pair<K, V> = fn.call(iter.next())
+        override fun next(): Pair<K, V> {
+            if (!hasNext()) {
+                throw NoSuchElementException("MapForGrouping exhausted")
+            }
+            return fn.call(iter.next())
+        }
     }
 }

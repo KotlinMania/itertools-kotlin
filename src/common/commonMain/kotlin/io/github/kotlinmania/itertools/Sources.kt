@@ -110,6 +110,9 @@ internal class Iterate<St>(
     override fun hasNext(): Boolean = true
 
     override fun next(): St {
+        if (!hasNext()) {
+            throw NoSuchElementException("Iterate exhausted")
+        }
         val nextState = f(state)
         val ret = state
         state = nextState

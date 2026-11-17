@@ -13,7 +13,7 @@ class FilterOk<T, E> internal constructor(
     private var nextItem: ItemResult<T, E>? = null
     private var hasNextCalculated = false
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (!hasNextCalculated) {
             while (iter.hasNext()) {
                 val item = iter.next()
@@ -36,6 +36,8 @@ class FilterOk<T, E> internal constructor(
         }
         return true
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): ItemResult<T, E> {
         if (!hasNext()) {
@@ -110,7 +112,7 @@ class FilterMapOk<T, U, E> internal constructor(
     private var nextItem: ItemResult<U, E>? = null
     private var hasNextCalculated = false
 
-    override fun hasNext(): Boolean {
+    private fun computeHasNext(): Boolean {
         if (!hasNextCalculated) {
             while (iter.hasNext()) {
                 val item = iter.next()
@@ -134,6 +136,8 @@ class FilterMapOk<T, U, E> internal constructor(
         }
         return true
     }
+
+    override fun hasNext(): Boolean = computeHasNext()
 
     override fun next(): ItemResult<U, E> {
         if (!hasNext()) {
@@ -209,7 +213,12 @@ fun <T, E> transposeResult(result: ItemResult<Iterator<T>, E>): Iterator<ItemRes
 
                 override fun hasNext(): Boolean = it.hasNext()
 
-                override fun next(): ItemResult<T, E> = ItemResult.Ok(it.next())
+                override fun next(): ItemResult<T, E> {
+                    if (!it.hasNext()) {
+                        throw NoSuchElementException("transposeResult exhausted")
+                    }
+                    return ItemResult.Ok(it.next())
+                }
             }
         is ItemResult.Err ->
             object : Iterator<ItemResult<T, E>> {

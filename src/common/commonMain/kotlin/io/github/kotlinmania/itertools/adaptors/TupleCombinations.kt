@@ -431,7 +431,12 @@ class TupleCombinations<T, C>(
 ) : Iterator<C> {
     override fun hasNext(): Boolean = combination.hasNext()
 
-    override fun next(): C = combination.next()
+    override fun next(): C {
+        if (!hasNext()) {
+            throw NoSuchElementException("TupleCombinations exhausted")
+        }
+        return combination.next()
+    }
 
     /** Returns the size hint for this iterator. */
     fun sizeHint(): SizeHint =

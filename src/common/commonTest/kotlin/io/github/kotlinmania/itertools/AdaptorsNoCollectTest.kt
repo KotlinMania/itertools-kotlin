@@ -12,6 +12,9 @@ class AdaptorsNoCollectTest {
         override fun hasNext(): Boolean = true
 
         override fun next() {
+            if (!hasNext()) {
+                throw NoSuchElementException("PanickingCounter exhausted")
+            }
             curr += 1
             if (curr == max) {
                 throw IllegalStateException("Input iterator reached maximum of $max suggesting collection by adaptor")
